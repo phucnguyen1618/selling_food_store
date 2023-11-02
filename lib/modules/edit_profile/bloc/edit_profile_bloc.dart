@@ -1,0 +1,27 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selling_food_store/modules/edit_profile/bloc/edit_profile_event.dart';
+import 'package:selling_food_store/modules/edit_profile/bloc/edit_profile_state.dart';
+import 'package:selling_food_store/shared/services/firebase_service.dart';
+
+class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
+  EditProfileBloc() : super(InitEditProfileState()) {
+    on<OnInitEditProfileEvent>(_onHandlerUserInfo);
+    on<OnChooseBirthDayEvent>(_onChooseBirthDay);
+    on<OnUpdateUserInfoEvent>(_onUpdateUserInfo);
+  }
+
+  void _onHandlerUserInfo(
+      OnInitEditProfileEvent event, Emitter<EditProfileState> emitter) {
+    emitter(DisplayEditProfileState(event.userInfo));
+  }
+
+  void _onChooseBirthDay(
+      OnChooseBirthDayEvent event, Emitter<EditProfileState> emitter) {
+    emitter(ChooseBirthDayState(event.dateTime));
+  }
+
+  void _onUpdateUserInfo(
+      OnUpdateUserInfoEvent event, Emitter<EditProfileState> emitter) {
+    FirebaseService.updateUserInfo(event.name, event.address, event.dateTime);
+  }
+}
