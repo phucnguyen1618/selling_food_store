@@ -4,6 +4,7 @@ import 'package:selling_food_store/models/cart.dart';
 
 import '../../utils/app_color.dart';
 import '../../utils/app_utils.dart';
+import '../../utils/strings.dart';
 
 class ItemProductOrderInfo extends StatefulWidget {
   final Cart cart;
@@ -94,7 +95,7 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
                     ),
                     const SizedBox(height: 4.0),
                     const Text(
-                      'Sản phầm làm đẹp',
+                      Strings.textDemo,
                       maxLines: 1,
                       style: TextStyle(
                         fontSize: 12.0,
@@ -174,7 +175,7 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
           ),
           const SizedBox(height: 12.0),
           Text(
-            'Ngày giao hàng: ${AppUtils.formatDateTime(shippingDateTime)}',
+            '${Strings.shippingOrderDate} ${AppUtils.formatDateTime(shippingDateTime)}',
             maxLines: 1,
             style: const TextStyle(
               fontSize: 14.0,

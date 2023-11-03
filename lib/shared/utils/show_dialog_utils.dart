@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:selling_food_store/shared/widgets/dialog/feedback_product_dialog.dart';
 import 'package:selling_food_store/shared/widgets/dialog/notify_dialog.dart';
 import 'package:selling_food_store/shared/widgets/dialog/request_signIn_dialog.dart';
 
@@ -32,5 +33,12 @@ class ShowDialogUtils {
         }
       }
     });
+  }
+
+  static void showDialogFeedback(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => const FeedbackProductDialog(),
+    );
   }
 }

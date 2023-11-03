@@ -237,15 +237,15 @@ class _SignUpViewState extends State<SignUpView> {
                 items: const [
                   DropdownMenuItem(
                     value: 0,
-                    child: Text('Nam'),
+                    child: Text(Strings.male),
                   ),
                   DropdownMenuItem(
                     value: 1,
-                    child: Text('Nữ'),
+                    child: Text(Strings.female),
                   ),
                   DropdownMenuItem(
                     value: 2,
-                    child: Text('Giới tính khác'),
+                    child: Text(Strings.otherSex),
                   )
                 ],
                 onChanged: (value) {

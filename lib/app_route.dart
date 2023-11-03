@@ -91,12 +91,22 @@ final GoRouter appRouter = GoRouter(
                       },
                     ),
                     GoRoute(
-                      path: 'profle/orderList',
-                      name: 'orderList',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const OrderListPage();
-                      },
-                    ),
+                        path: 'profle/orderList',
+                        name: 'orderList',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const OrderListPage();
+                        },
+                        routes: [
+                          GoRoute(
+                            path: 'requestOrder',
+                            name: 'requestOrderToBuyNow',
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              final dataValue = state.extra as List<Cart>;
+                              return RequestOrderPage(carts: dataValue);
+                            },
+                          ),
+                        ]),
                   ]),
               GoRoute(
                   path: 'home/requestOrder',

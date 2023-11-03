@@ -4,6 +4,7 @@ class Strings {
       'https://selling-food-store-default-rtdb.firebaseio.com/';
   static const String avatarDemo =
       "https://firebasestorage.googleapis.com/v0/b/selling-food-store.appspot.com/o/avatars%2Favatar_demo.jpg?alt=media&token=c1a8b378-8418-4003-95c3-8b198f412fe9&_gl=1*zfukfw*_ga*MTE4MjY2ODMxNi4xNjkwMTk5MTA1*_ga_CW55HF8NVT*MTY5ODI0NTQwOS4xNDMuMS4xNjk4MjQ4Nzk1LjM0LjAuMA..";
+  static const String facebookId = '61552908609033';
 
   static const String titleRecommendedProduct = 'SẢN PHẨM ĐỀ XUẤT';
   static const String titleHotCosmetics = 'MỸ PHẨM BÁN CHẠY';
@@ -69,6 +70,13 @@ class Strings {
   static const String hintPhoneText = 'Nhập số điện thoại của bạn';
   static const String productListEmpty = 'Danh sách sản phẩm trống';
 
+  //Cart
+  static const String searchCartText = 'Tìm kiếm giỏ hàng...';
+  static const String cancelDeleteCartText = 'Huỷ bỏ';
+  static const String confirmDeleteCartText = 'Xác nhận';
+  static const String recentSearch = 'TÌM KIẾM GẦN ĐÂY';
+  static const String youWant = 'CÓ THỂ BẠN CŨNG MUỐN';
+
   //Product Detail
   static const String descProduct = 'Mô tả';
   static const String maybeProduct = 'Có thể bạn cũng muốn';
@@ -80,6 +88,7 @@ class Strings {
   static const String ingredient = 'Thành phần: ';
   static const String uses = 'Công dụng: ';
   static const String howToUse = 'Hướng dẫn sử dụng: ';
+  static const String addCartSuccess = 'Thêm giỏ hàng thành công';
 
   //Sign Up
   static const String titleInputUserInfo = 'Nhập thông tin cá nhân';
@@ -94,6 +103,7 @@ class Strings {
   static const String confirmInputUserInfo = 'Xác nhận';
   static const String emptyInputData =
       'E-mail hoặc mật khẩu không được để trống';
+  static const String signUpSuccess = 'Đăng ký thành công';
 
   //Profile
   static const String sexProfile = 'Giới tính:';
@@ -105,6 +115,10 @@ class Strings {
   static const String changeLanguage = 'Thay đổi ngôn ngữ';
   static const String paymentManage = 'Quản lý thanh toán';
   static const String orderManage = 'Quản lý đơn hàng';
+  static const String signOutRequest =
+      'Bạn có chắc chắn muốn đăng xuất không ?';
+  static const String male = 'Nam';
+  static const String female = 'Nữ';
 
   //Edit Profile
   static const String titleUpdateProfileInfo = 'Chỉnh sửa thông tin cá nhân';
@@ -113,6 +127,9 @@ class Strings {
   static const String hintTextEmailProfile = 'Nhập e-mail';
   static const String sexEditProfile = 'Giới tính';
   static const String hintSexEditProfile = 'Chọn giới tính';
+  static const String otherSex = 'Giới tính khác';
+  static const String chooseBirthDay = 'Chọn ngày sinh của bạn';
+  static const String choose = 'Chọn';
 
   //Request Order
   static const String order = 'Đặt hàng';
@@ -125,6 +142,30 @@ class Strings {
   static const String paymentMethod = 'Phương thức thanh toán';
   static const String codPaymentMethod = 'Thanh toán khi nhận hàng';
   static const String momoPaymentMethod = 'Ví điện tử MOMO';
+  static const String phone = '039263**00';
+  static const String shippingOrderDate = 'Ngày giao hàng: ';
+  static const String textDemo = 'Sản phầm làm đẹp';
+
+  //Confirm Request Order
+  static const String titleConfirmOrder = 'Đã xác nhận đơn hàng của bạn';
+  static const String shippingInfoOrder =
+      'Thông tin vận chuyển đơn hàng của bạn: ';
+  static const String homeComeBack = 'Quay lại màn hình chính';
+
+  //Order List
+  static const String titleOrderList = 'Đơn hàng của bạn';
+  static const String allTab = 'Tất cả';
+  static const String confirmOrderTab = 'Đơn hàng xác nhận';
+  static const String shippingTab = 'Đang giao hàng';
+  static const String shippingSuccessTab = 'Giao hàng thành công';
+  static const String cancelOrderTab = 'Huỷ đơn hàng';
+  static const String cancelOrderText = 'Huỷ đơn hàng';
+  static const String repurchase = 'Mua lại';
+  static const String feedback = 'Đánh giá';
+  static const String buyNow = 'Mua ngay';
+  static const String sendFeedback = 'Gửi';
+  static const String inputFeedback = 'Viết đánh giá sản phẩm...';
+  static const String titleFeedbackProduct = 'Đánh giá sản phẩm';
 
   //Khác
   static const String youNotLogin = 'Bạn chưa đăng nhập';

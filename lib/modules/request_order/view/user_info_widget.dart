@@ -4,6 +4,7 @@ import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc
 import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
 
 import '../../../shared/utils/app_color.dart';
+import '../../../shared/utils/strings.dart';
 
 class UserInfoWidget extends StatefulWidget {
   const UserInfoWidget({super.key});
@@ -30,7 +31,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
         horizontalTitleGap: 12.0,
         leading: const Icon(Icons.location_on_outlined),
         title: Text(
-          '$name - 039263**00',
+          '$name - ${Strings.phone}',
           style: const TextStyle(
             fontSize: 16.0,
             color: AppColor.blackColor,

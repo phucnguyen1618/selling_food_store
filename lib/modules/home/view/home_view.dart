@@ -1,9 +1,11 @@
 import 'dart:core';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/modules/home/bloc/home_bloc.dart';
 import 'package:selling_food_store/modules/home/bloc/home_event.dart';
@@ -16,6 +18,7 @@ import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/utils/image_constants.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import 'package:selling_food_store/shared/widgets/banner/slide_banner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/strings.dart';
@@ -134,6 +137,13 @@ class HomeView extends StatelessWidget {
             ],
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _openChatBot();
+          },
+          backgroundColor: AppColor.transparentColor,
+          child: Image.asset(ImageConstants.iconChatBot),
+        ),
       );
     }, listener: (context, state) {
       if (state is RequestSignInState) {
@@ -144,6 +154,19 @@ class HomeView extends StatelessWidget {
         log('Dialog is closed');
       }
     });
+  }
+
+  Future<void> _openChatBot() async {
+    String uri = '';
+    if (Platform.isAndroid) {
+      uri = 'fb-messenger://user/${Strings.facebookId}';
+    } else if (Platform.isIOS) {
+      uri = 'https://m.me/${Strings.facebookId}';
+    }
+    final Uri url = Uri.parse(uri);
+    if (!await launchUrl(url)) {
+      EasyLoading.showError('Could not launch $url');
+    }
   }
 }
 

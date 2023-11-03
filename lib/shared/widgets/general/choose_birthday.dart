@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../utils/app_color.dart';
+import '../../utils/strings.dart';
 
 class ChooseBirthDay extends StatefulWidget {
   const ChooseBirthDay({super.key});
@@ -31,7 +32,7 @@ class _ChooseBirthDayState extends State<ChooseBirthDay> {
                 icon: const Icon(Icons.close)),
             const Expanded(
               child: Text(
-                'Chọn ngày sinh của bạn',
+                Strings.chooseBirthDay,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16.0,
@@ -45,7 +46,7 @@ class _ChooseBirthDayState extends State<ChooseBirthDay> {
                 context.pop(dateTime);
               },
               child: const Text(
-                'Chọn',
+                Strings.choose,
                 style: TextStyle(
                   color: AppColor.primaryAppColor,
                   fontWeight: FontWeight.bold,

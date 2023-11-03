@@ -50,6 +50,7 @@ dependencies:
   image_picker: ^1.0.4
   flutter_easyloading: ^3.0.5
   momo_vn: ^2.0.2
+  url_launcher: ^6.1.11
 
   #Hive Library for save local data
   hive_flutter: ^1.1.0
@@ -104,6 +105,7 @@ flutter:
     - assets/images/banner_seven.jpg
     - assets/images/avatar_demo.jpg
     - assets/images/image_unlogin.png
+    - assets/images/icon_messenger.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -56,7 +56,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     final userInfo =
         UserInfo(idUser, event.name, null, event.dateTime, event.address, event.sex);
     FirebaseService.insertUserInfoToDb(userInfo, () {
-      EasyLoading.showSuccess('Đăng ký thành công');
+      EasyLoading.showSuccess(Strings.signUpSuccess);
     }, (error) {
       add(OnErrorEvent(error));
     });

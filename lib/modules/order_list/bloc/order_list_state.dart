@@ -1,12 +1,20 @@
+import 'package:equatable/equatable.dart';
 import 'package:selling_food_store/models/request_order.dart';
 
-class OrderListState {
-  List<RequestOrder> orders;
-  String? error;
-
-  OrderListState(this.orders, this.error);
-
-  OrderListState copyWith(List<RequestOrder>? dataList, String? error) {
-    return OrderListState(dataList ?? orders, error);
-  }
+abstract class OrderListState extends Equatable {
+  @override
+  List<Object?> get props => [];
 }
+
+class LoadingOrderListState extends OrderListState {}
+
+class DisplayOrderListState extends OrderListState {
+  final List<RequestOrder> orders;
+
+  DisplayOrderListState(this.orders);
+
+  @override
+  List<Object?> get props => [orders];
+}
+
+class CancelOrderState extends OrderListState {}

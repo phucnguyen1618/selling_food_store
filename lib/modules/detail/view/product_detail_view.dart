@@ -203,7 +203,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
               product: state.product,
               onAdd: (productSelected, quantity) {
                 productSelected.addCart(quantity, DateTime.now(), () {
-                  EasyLoading.showSuccess('Thêm giỏ hàng thành công');
+                  EasyLoading.showSuccess(Strings.addCartSuccess);
                 }, (error) {
                   context.read<ProductDetailBloc>().add(OnFailureEvent(error));
                 });

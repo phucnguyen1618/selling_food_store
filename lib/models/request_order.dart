@@ -38,4 +38,8 @@ class RequestOrder {
   double getTotalPrice() {
     return orderPrice + shippingFee;
   }
+
+  void updateStatusRequestOrder(int value) {
+    status = value;
+  }
 }

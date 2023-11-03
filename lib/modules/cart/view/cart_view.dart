@@ -1,14 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_bloc.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
+import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/search_bar.dart';
+import 'package:selling_food_store/shared/widgets/items/item_product.dart';
 import 'package:selling_food_store/shared/widgets/items/item_result_search.dart';
 
 import '../../../models/cart.dart';
@@ -55,7 +60,7 @@ class _CartViewState extends State<CartView> {
                 color: AppColor.blackColor,
               )),
           title: SearchBar(
-            hintText: 'Tìm kiếm giỏ hàng...',
+            hintText: Strings.searchCartText,
             backgroundColor: AppColor.shimer200Color,
             onSearch: () {
               showSearch(
@@ -207,7 +212,7 @@ class _CartViewState extends State<CartView> {
             color: AppColor.shimer200Color,
             elevation: 0.0,
             child: const Text(
-              'Huỷ bỏ',
+              Strings.cancelDeleteCartText,
               style: TextStyle(
                 color: AppColor.blackColor,
               ),
@@ -223,7 +228,7 @@ class _CartViewState extends State<CartView> {
             elevation: 0.0,
             color: Colors.redAccent,
             child: const Text(
-              'Xác nhận',
+              Strings.confirmDeleteCartText,
               style: TextStyle(
                 color: AppColor.whiteColor,
               ),
@@ -236,6 +241,16 @@ class _CartViewState extends State<CartView> {
 }
 
 class CartDelegate extends SearchDelegate<Cart> {
+  List<String> keywords = HiveService.getKeywords();
+
+  List<Product> productList = [];
+
+  CartDelegate() {
+    FirebaseService.fetchDataRecommendProducts(onLoadComplete: (dataList) {
+      productList = dataList;
+    });
+  }
+
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
@@ -255,7 +270,7 @@ class CartDelegate extends SearchDelegate<Cart> {
     return [
       IconButton(
           onPressed: () {
-            if (query.isEmpty) {
+            if (query.isNotEmpty) {
               query = '';
             } else {
               context.pop();
@@ -280,6 +295,7 @@ class CartDelegate extends SearchDelegate<Cart> {
 
   @override
   Widget buildResults(BuildContext context) {
+    log('build Results');
     HiveService.addKeyword(query);
     List<Cart> resultList = HiveService.getCartList()
         .where((item) =>
@@ -294,28 +310,28 @@ class CartDelegate extends SearchDelegate<Cart> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> keywords = HiveService.getKeywords();
+    log('build Suggestions');
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: AppColor.whiteColor,
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
       child: keywords.isNotEmpty
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'TÌM KIẾM GẦN ĐÂY',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: AppColor.blackColor,
-                    fontWeight: FontWeight.bold,
+          ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    Strings.recentSearch,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8.0),
-                Expanded(
-                  child: Wrap(
+                  const SizedBox(height: 8.0),
+                  Wrap(
                     children: List.generate(
                       keywords.length,
                       (index) => Container(
@@ -336,8 +352,33 @@ class CartDelegate extends SearchDelegate<Cart> {
                       ),
                     ).toList(),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16.0),
+                  const Text(
+                    Strings.youWant,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  GridView.builder(
+                    itemCount: productList.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.65,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 8.0,
+                      mainAxisSpacing: 8.0,
+                    ),
+                    itemBuilder: ((context, index) {
+                      return ItemProduct(product: productList[index]);
+                    }),
+                  )
+                ],
+              ),
             )
           : const SizedBox(),
     );

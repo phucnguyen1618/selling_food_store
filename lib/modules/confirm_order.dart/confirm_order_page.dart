@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../shared/utils/app_color.dart';
+import '../../shared/utils/strings.dart';
 
 class ConfirmOrderPage extends StatelessWidget {
   const ConfirmOrderPage({super.key});
@@ -35,7 +36,7 @@ class ConfirmOrderPage extends StatelessWidget {
             ),
             const SizedBox(height: 12.0),
             const Text(
-              'Đã xác nhận đơn hàng của bạn',
+              Strings.titleConfirmOrder,
               style: TextStyle(
                 fontSize: 18.0,
                 color: AppColor.blackColor,
@@ -44,7 +45,7 @@ class ConfirmOrderPage extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             const Text(
-              'Thông tin vận chuyển đơn hàng của bạn: ',
+              Strings.shippingInfoOrder,
               style: TextStyle(
                 fontSize: 16.0,
                 color: AppColor.blackColor,
@@ -76,7 +77,7 @@ class ConfirmOrderPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: const Text(
-                  'Quay lại màn hình chính',
+                  Strings.homeComeBack,
                   style: TextStyle(color: AppColor.primaryAppColor),
                 ),
               ),

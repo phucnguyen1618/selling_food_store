@@ -22,4 +22,5 @@ class ImageConstants {
       '${AssetConstants.imageConstants}avatar_demo.jpg';
   static const String imageUnLogin =
       '${AssetConstants.imageConstants}image_unlogin.png';
+  static const String iconChatBot = '${AssetConstants.imageConstants}icon_messenger.png';
 }

@@ -120,7 +120,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        '${Strings.sexProfile} ${userInfo!.sex == 0 ? 'Nam' : 'Nữ'}',
+                                        '${Strings.sexProfile} ${userInfo!.sex == 0 ? Strings.male : Strings.female}',
                                         style: TextStyle(
                                           fontSize: 14.0,
                                           color: Colors.grey.shade400,
@@ -196,7 +196,7 @@ class _ProfileViewState extends State<ProfileView> {
           ShowDialogUtils.showDialogNotify(
               context: context,
               typeDialog: NotifyTypeDialog.notifyConfirmSignOut,
-              message: 'Bạn có chắc chắn muốn đăng xuất không ?',
+              message: Strings.signOutRequest,
               onConfirm: () {
                 context.read<ProfileBloc>().add(OnConfirmSignOutEvent());
               });

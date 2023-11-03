@@ -42,7 +42,8 @@ class _EditProfileViewState extends State<EditProfileView> {
         dateTime = state.userInfo.birthDay;
         birthDayController.text = AppUtils.formatDateTime(dateTime);
         emailController.text = prefs.getString(Strings.email) ?? '';
-        sexController.text = state.userInfo.sex == 0 ? 'Nam' : 'Nữ';
+        sexController.text =
+            state.userInfo.sex == 0 ? Strings.male : Strings.female;
       } else if (state is ChooseBirthDayState) {
         dateTime = state.dateTime;
         birthDayController.text = AppUtils.formatDateTime(state.dateTime);
@@ -119,7 +120,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         items: [
                           PopupMenuItem(
                             value: 1,
-                            child: const Text("Nam"),
+                            child: const Text(Strings.male),
                             onTap: () {
                               setState(() {
                                 sex = 1;
@@ -128,7 +129,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ),
                           PopupMenuItem(
                             value: 2,
-                            child: const Text("Nữ"),
+                            child: const Text(Strings.female),
                             onTap: () {
                               setState(() {
                                 sex = 2;
@@ -137,7 +138,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           ),
                           PopupMenuItem(
                             value: 3,
-                            child: const Text("Giới tính khác"),
+                            child: const Text(Strings.otherSex),
                             onTap: () {
                               setState(() {
                                 sex = 3;
@@ -149,16 +150,16 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ).then((value) {
                         switch (value) {
                           case 1:
-                            sexController.text = 'Nam';
+                            sexController.text = Strings.male;
                             break;
                           case 2:
-                            sexController.text = 'Nữ';
+                            sexController.text = Strings.female;
                             break;
                           case 3:
-                            sexController.text = 'Giới tính khác';
+                            sexController.text = Strings.otherSex;
                             break;
                           default:
-                            sexController.text = 'Nam';
+                            sexController.text = Strings.male;
                         }
                       });
                     },

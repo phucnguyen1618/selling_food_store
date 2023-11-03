@@ -23,13 +23,13 @@ class AppUtils {
   static String formatOrderStatus(int status) {
     switch (status) {
       case 0:
-        return 'Đang vận chuyển';
+        return 'Đã đặt hàng';
       case 1:
         return 'Đã hoàn thành';
       case 2:
         return 'Đã huỷ';
       default:
-        return 'Đang vận chuyển';
+        return 'Đang giao hàng';
     }
   }
 
@@ -43,6 +43,23 @@ class AppUtils {
         return 'Đơn hàng bị huỷ';
       default:
         return 'Đơn hàng đang vận chuyển';
+    }
+  }
+
+  static String formatFeedbackStatus(double rating) {
+    switch (rating.toInt()) {
+      case 1:
+        return 'Rất kém';
+      case 2:
+        return 'Kém';
+      case 3:
+        return 'Bình thường';
+      case 4:
+        return 'Tốt';
+      case 5:
+        return 'Rất tốt';
+      default:
+        return 'Bình thường';
     }
   }
 }
