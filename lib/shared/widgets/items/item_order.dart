@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
@@ -6,7 +7,6 @@ import 'package:selling_food_store/shared/widgets/items/item_product_in_order.da
 
 import '../../../models/request_order.dart';
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 
 class ItemOrder extends StatelessWidget {
   final RequestOrder requestOrder;
@@ -29,7 +29,9 @@ class ItemOrder extends StatelessWidget {
         requestOrder.status == 0
             ? InkWell(
                 onTap: () {
-                  context.read<OrderListBloc>().add(OnCancelOrderEvent());
+                  context
+                      .read<OrderListBloc>()
+                      .add(OnCancelOrderEvent(requestOrder.idOrder));
                 },
                 child: Container(
                   width: baseWidth - 2 * 12,
@@ -41,9 +43,9 @@ class ItemOrder extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4.0),
                       border: Border.all(width: 1.0, color: Colors.black12)),
-                  child: const Text(
-                    Strings.cancelOrderText,
-                    style: TextStyle(
+                  child: Text(
+                    'cancelOrderText'.tr(),
+                    style: const TextStyle(
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.bold,
                     ),

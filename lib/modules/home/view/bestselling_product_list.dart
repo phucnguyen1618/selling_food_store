@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/items/item_best_selling.dart';
 
 class BestSellingProductList extends StatelessWidget {
@@ -14,13 +14,13 @@ class BestSellingProductList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.0),
+         Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              Strings.bestSellingProduct,
-              style: TextStyle(
+              'bestSellingProduct'.tr(),
+              style: const TextStyle(
                 fontSize: 18.0,
                 color: AppColor.sologanColor,
                 fontWeight: FontWeight.bold,

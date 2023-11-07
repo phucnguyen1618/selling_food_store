@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,9 +45,9 @@ class _SignInViewState extends State<SignInView> {
                         onTap: () {
                           context.goNamed('forgotPassword');
                         },
-                        child: const Text(
-                          Strings.forgotPassword,
-                          style: TextStyle(
+                        child: Text(
+                          'forgotPassword'.tr(),
+                          style: const TextStyle(
                             fontSize: 14.0,
                             color: AppColor.primaryAppColor,
                           ),
@@ -58,7 +59,7 @@ class _SignInViewState extends State<SignInView> {
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: GeneralButton(
-                        title: Strings.textSignIn,
+                        title: 'textSignIn'.tr(),
                         radius: 100.0,
                         onClick: () {
                           context.read<SignInBloc>().add(OnUserSignInEvent(
@@ -67,7 +68,7 @@ class _SignInViewState extends State<SignInView> {
                   ),
                   RichText(
                       text: TextSpan(
-                          text: Strings.dontHaveAnAccount,
+                          text: 'dontHaveAnAccount'.tr(),
                           style: const TextStyle(
                             color: AppColor.blackColor,
                             fontSize: 14.0,
@@ -78,7 +79,7 @@ class _SignInViewState extends State<SignInView> {
                             ..onTap = () {
                               context.goNamed('signUp');
                             },
-                          text: Strings.textSignUp,
+                          text: 'textSignUp'.tr(),
                           style: const TextStyle(
                             color: AppColor.primaryAppColor,
                             fontSize: 14.0,
@@ -144,15 +145,15 @@ class _SignInViewState extends State<SignInView> {
           child: TextField(
             autofocus: true,
             controller: emailController,
-            decoration: const InputDecoration(
-              labelText: Strings.email,
-              labelStyle: TextStyle(color: AppColor.primaryAppColor),
-              hintText: Strings.hintEmailText,
-              prefixIcon: Icon(
+            decoration: InputDecoration(
+              labelText: 'email'.tr(),
+              labelStyle: const TextStyle(color: AppColor.primaryAppColor),
+              hintText: 'hintEmailText'.tr(),
+              prefixIcon: const Icon(
                 Icons.email_outlined,
                 color: AppColor.primaryAppColor,
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primaryAppColor)),
             ),
           ),
@@ -163,15 +164,15 @@ class _SignInViewState extends State<SignInView> {
           child: TextField(
             autofocus: true,
             controller: passwordController,
-            decoration: const InputDecoration(
-              labelText: Strings.password,
-              labelStyle: TextStyle(color: AppColor.primaryAppColor),
-              hintText: Strings.hintPasswordText,
-              prefixIcon: Icon(
+            decoration: InputDecoration(
+              labelText: 'password'.tr(),
+              labelStyle: const TextStyle(color: AppColor.primaryAppColor),
+              hintText: 'hintPasswordText'.tr(),
+              prefixIcon: const Icon(
                 Icons.lock_outline,
                 color: AppColor.primaryAppColor,
               ),
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primaryAppColor)),
             ),
           ),

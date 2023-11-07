@@ -63,8 +63,17 @@ class HiveService {
   }
 
   static void addKeyword(String input) {
+    List<String> keyList = getKeywords();
     var keywordBox = Hive.box<String>('keywords');
-    keywordBox.add(input);
+    if (keyList.isEmpty) {
+      keywordBox.add(input);
+    } else {
+      for (var key in keyList) {
+        if (!key.contains(input)) {
+          keywordBox.add(input);
+        }
+      }
+    }
   }
 
   static List<String> getKeywords() {

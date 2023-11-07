@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/shared/widgets/general/general_button.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 
 class NotifyDialog extends StatelessWidget {
   final String? message;
@@ -30,14 +30,14 @@ class NotifyDialog extends StatelessWidget {
   Widget _buildNotifyErrorDialog(BuildContext context) {
     return AlertDialog(
       elevation: 0.0,
-      title: const Text(Strings.titleNotifyDialog),
-      content: Text(message ?? Strings.unknown),
+      title: Text('titleNotifyDialog'.tr()),
+      content: Text(message ?? 'unknown'.tr()),
       actions: [
         TextButton(
             onPressed: () {
               context.pop();
             },
-            child: Text(Strings.close.toUpperCase()))
+            child: Text('close'.tr().toUpperCase()))
       ],
     );
   }
@@ -45,21 +45,21 @@ class NotifyDialog extends StatelessWidget {
   Widget _buildNotifyConfirmSignOutDialog(BuildContext context) {
     return AlertDialog(
       elevation: 0.0,
-      title: const Text(
-        Strings.signOut,
-        style: TextStyle(
+      title: Text(
+        'signOut'.tr(),
+        style: const TextStyle(
           color: AppColor.blackColor,
           fontWeight: FontWeight.bold,
         ),
       ),
-      content: Text(message ?? Strings.unknown),
+      content: Text(message ?? 'unknown'.tr()),
       actions: [
         TextButton(
             onPressed: () {
               context.pop(true);
             },
             child: Text(
-              Strings.confirmSignOut.toUpperCase(),
+              'confirmSignOut'.tr().toUpperCase(),
               style: const TextStyle(
                 color: Colors.redAccent,
               ),
@@ -68,7 +68,7 @@ class NotifyDialog extends StatelessWidget {
             onPressed: () {
               context.pop();
             },
-            child: Text(Strings.close.toUpperCase()))
+            child: Text('close'.tr().toUpperCase()))
       ],
     );
   }
@@ -116,9 +116,9 @@ class NotifyDialog extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 32.0),
-                  const Text(
-                    Strings.titleForgotSuccess,
-                    style: TextStyle(
+                  Text(
+                    'titleForgotSuccess'.tr(),
+                    style: const TextStyle(
                       fontSize: 24.0,
                       color: AppColor.primaryAppColor,
                       fontWeight: FontWeight.bold,
@@ -126,7 +126,7 @@ class NotifyDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 12.0),
                   Text(
-                    message ?? Strings.contentForgotPasswordSuccess,
+                    message ?? 'contentForgotPasswordSuccess'.tr(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 14.0,
@@ -135,7 +135,7 @@ class NotifyDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 48.0),
                   GeneralButton(
-                      title: 'Tiếp tục',
+                      title: 'continue'.tr(),
                       onClick: () {
                         context.pop();
                       })

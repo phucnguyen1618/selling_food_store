@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -49,9 +50,9 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                   Icons.arrow_back,
                   color: AppColor.blackColor,
                 )),
-            title: const Text(
-              Strings.detailRequestOrder,
-              style: TextStyle(
+            title: Text(
+              'detailRequestOrder'.tr(),
+              style: const TextStyle(
                 color: AppColor.blackColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
@@ -78,9 +79,9 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
-                        Strings.requestOrder,
-                        style: TextStyle(
+                      Text(
+                        'requestOrder'.tr(),
+                        style: const TextStyle(
                           fontSize: 16.0,
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.bold,
@@ -92,9 +93,9 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            Strings.totalProductPrice,
-                            style: TextStyle(
+                          Text(
+                            'totalProductPrice'.tr(),
+                            style: const TextStyle(
                               fontSize: 14.0,
                               color: Colors.grey,
                             ),
@@ -115,9 +116,9 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            Strings.shippingFee,
-                            style: TextStyle(
+                          Text(
+                            'shippingFee'.tr(),
+                            style: const TextStyle(
                               fontSize: 14.0,
                               color: Colors.grey,
                             ),
@@ -138,9 +139,9 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            Strings.totalPrice,
-                            style: TextStyle(
+                          Text(
+                            'totalPrice'.tr(),
+                            style: const TextStyle(
                               fontSize: 16.0,
                               color: AppColor.blackColor,
                               fontWeight: FontWeight.bold,
@@ -179,9 +180,9 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        Strings.totalPrice,
-                        style: TextStyle(
+                      Text(
+                        'totalPrice'.tr(),
+                        style: const TextStyle(
                           fontSize: 16.0,
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.bold,
@@ -199,7 +200,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                   ),
                   const SizedBox(height: 12.0),
                   GeneralButton(
-                    title: Strings.order,
+                    title: 'order'.tr(),
                     onClick: () {
                       context
                           .read<RequestOrderBloc>()
@@ -215,9 +216,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
       listener: (context, state) {
         if (state is RequestOrderProductSuccessState) {
           context.goNamed('confirmOrder');
-        } else if(state is IncreaseNumberProductState) {
-          
-        }
+        } else if (state is IncreaseNumberProductState) {}
       },
     );
   }

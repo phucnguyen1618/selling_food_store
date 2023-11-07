@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selling_food_store/models/brand.dart';
 import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/models/type_product.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,6 +18,7 @@ class Product {
   double cost;
   double? discount;
   Brand brand;
+  List<TypeProduct> typeProducts;
 
   Product(
     this.idProduct,
@@ -26,6 +28,7 @@ class Product {
     this.cost,
     this.discount,
     this.brand,
+    this.typeProducts,
   );
 
   factory Product.fromJson(Map<String, dynamic> json) =>

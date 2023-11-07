@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selling_food_store/models/cart.dart';
 
 import '../../utils/app_color.dart';
 import '../../utils/app_utils.dart';
-import '../../utils/strings.dart';
 
 class ItemProductOrderInfo extends StatefulWidget {
   final Cart cart;
@@ -95,7 +95,7 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
                     ),
                     const SizedBox(height: 4.0),
                     const Text(
-                      Strings.textDemo,
+                      'Strings.textDemo',
                       maxLines: 1,
                       style: TextStyle(
                         fontSize: 12.0,
@@ -175,7 +175,7 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
           ),
           const SizedBox(height: 12.0),
           Text(
-            '${Strings.shippingOrderDate} ${AppUtils.formatDateTime(shippingDateTime)}',
+            '${'shippingOrderDate'.tr()} ${AppUtils.formatDateTime(shippingDateTime)}',
             maxLines: 1,
             style: const TextStyle(
               fontSize: 14.0,

@@ -1,4 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -6,12 +7,14 @@ import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/modules/profile/bloc/profile_bloc.dart';
 import 'package:selling_food_store/modules/profile/bloc/profile_event.dart';
 import 'package:selling_food_store/modules/profile/bloc/profile_state.dart';
+import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
 
 import '../../../models/user_info.dart';
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
+import '../../../shared/utils/image_constants.dart';
 import '../../../shared/utils/show_dialog_utils.dart';
 import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/dialog/notify_dialog.dart';
@@ -26,6 +29,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   bool isDisplay = false;
+  bool isChooseLanguage = true;
   UserInfo? userInfo;
 
   @override
@@ -73,24 +77,11 @@ class _ProfileViewState extends State<ProfileView> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CachedNetworkImage(
+                              const AvatarProfile(
+                                avatar: Strings.avatarDemo,
                                 width: 64.0,
                                 height: 64.0,
-                                imageUrl: Strings.avatarDemo,
-                                fit: BoxFit.cover,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                        decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(image: imageProvider),
-                                )),
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        CircularProgressIndicator(
-                                            value: downloadProgress.progress),
-                                errorWidget: (context, url, error) => Icon(
-                                    Icons.error,
-                                    color: AppColor.hintGreyColor),
+                                isEdit: false,
                               ),
                               const SizedBox(width: 12.0),
                               Column(
@@ -120,7 +111,7 @@ class _ProfileViewState extends State<ProfileView> {
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        '${Strings.sexProfile} ${userInfo!.sex == 0 ? Strings.male : Strings.female}',
+                                        '${'sexProfile'.tr()} ${userInfo!.sex == 0 ? 'male'.tr() : 'female'.tr()}',
                                         style: TextStyle(
                                           fontSize: 14.0,
                                           color: Colors.grey.shade400,
@@ -128,7 +119,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       ),
                                       const SizedBox(width: 12.0),
                                       Text(
-                                        '${Strings.birthDayProfile} ${AppUtils.formatDateTime(userInfo!.birthDay)}',
+                                        '${'birthDayProfile'.tr()} ${AppUtils.formatDateTime(userInfo!.birthDay)}',
                                         style: TextStyle(
                                           fontSize: 14.0,
                                           color: Colors.grey.shade400,
@@ -142,28 +133,44 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           const SizedBox(height: 24.0),
                           _buildLabel(
-                              Strings.orderManage, Icons.assessment_outlined,
-                              () {
-                            context.goNamed('orderList');
-                          }),
-                          const SizedBox(height: 12.0),
-                          _buildLabel(Strings.paymentManage,
-                              Icons.attach_money_outlined, () {}),
+                              name: 'orderManage'.tr(),
+                              icon: Icons.assessment_outlined,
+                              onClicked: () {
+                                context.goNamed('orderList');
+                              }),
                           const SizedBox(height: 12.0),
                           _buildLabel(
-                              Strings.yourCart, Icons.shopping_bag_outlined,
-                              () {
-                            context.goNamed('yourCart');
-                          }),
+                              name: 'paymentManage'.tr(),
+                              icon: Icons.attach_money_outlined,
+                              onClicked: () {}),
                           const SizedBox(height: 12.0),
                           _buildLabel(
-                              Strings.changeLanguage, Icons.language, () {}),
+                              name: 'yourCart'.tr(),
+                              icon: Icons.shopping_bag_outlined,
+                              onClicked: () {
+                                context.goNamed('yourCart');
+                              }),
                           const SizedBox(height: 12.0),
                           _buildLabel(
-                              Strings.changePassword, Icons.autorenew, () {}),
+                            name: 'changeLanguage'.tr(),
+                            icon: Icons.language,
+                            isExpand: true,
+                            onSelect: (locale) {
+                              context
+                                  .read<ProfileBloc>()
+                                  .add(OnChangeLanguageEvent(locale));
+                            },
+                          ),
+                          const SizedBox(height: 12.0),
+                          _buildLabel(
+                              name: 'changePassword'.tr(),
+                              icon: Icons.autorenew,
+                              onClicked: () {
+                                context.goNamed('changePassword');
+                              }),
                           const SizedBox(height: 24.0),
                           GeneralButton(
-                            title: Strings.signOut,
+                            title: 'signOut'.tr(),
                             backgroundColor: Colors.red,
                             onClick: () {
                               context.read<ProfileBloc>().add(OnSignOutEvent());
@@ -171,7 +178,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                           const SizedBox(height: 8.0),
                           GeneralButton(
-                            title: Strings.deleteAccount,
+                            title: 'deleteAccount'.tr(),
                             isStroke: true,
                             isTransparent: true,
                             borderColor: Colors.red,
@@ -196,41 +203,146 @@ class _ProfileViewState extends State<ProfileView> {
           ShowDialogUtils.showDialogNotify(
               context: context,
               typeDialog: NotifyTypeDialog.notifyConfirmSignOut,
-              message: Strings.signOutRequest,
+              message: 'signOutRequest'.tr(),
               onConfirm: () {
                 context.read<ProfileBloc>().add(OnConfirmSignOutEvent());
               });
         } else if (state is ErrorState) {
           EasyLoading.showError(state.error);
+        } else if (state is ChangeLanguageState) {
+          context.setLocale(state.locale);
         }
       },
     );
   }
 
-  Widget _buildLabel(String name, IconData icon, Function() onClicked) {
-    return ListTile(
-      leading: Icon(icon),
-      contentPadding: EdgeInsets.zero,
-      horizontalTitleGap: 0.0,
-      title: Text(
-        name,
-        style: const TextStyle(
-          color: AppColor.blackColor,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          onClicked();
-        },
-        icon: const Icon(
-          Icons.chevron_right_outlined,
-          size: 32.0,
-        ),
-      ),
-      onTap: () {
-        onClicked();
-      },
-    );
+  Widget _buildLabel({
+    required String name,
+    required IconData icon,
+    Function()? onClicked,
+    Function(Locale)? onSelect,
+    bool isExpand = false,
+  }) {
+    return isExpand
+        ? ExpandablePanel(
+            theme: ExpandableThemeData(
+              tapBodyToExpand: true,
+              hasIcon: true,
+              expandIcon: Icons.chevron_right_outlined,
+              iconColor: AppColor.hintBlackColor,
+              iconSize: 32.0,
+            ),
+            header: ListTile(
+              leading: Icon(icon),
+              contentPadding: EdgeInsets.zero,
+              horizontalTitleGap: 0.0,
+              title: Text(
+                name,
+                style: const TextStyle(
+                  color: AppColor.blackColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            collapsed: const SizedBox(),
+            expanded: Column(
+              children: [
+                ListTile(
+                  leading: Image.asset(
+                    ImageConstants.flagOfVietNam,
+                    width: 24.0,
+                    height: 24.0,
+                  ),
+                  contentPadding: EdgeInsets.zero,
+                  horizontalTitleGap: 12.0,
+                  title: const Text(
+                    'Vietnam',
+                    style: TextStyle(
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: Radio(
+                    value: true,
+                    groupValue: isChooseLanguage,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChooseLanguage = value ?? false;
+                        if (onSelect != null) {
+                          onSelect(const Locale('vi', 'VN'));
+                        }
+                      });
+                    },
+                  ),
+                  onTap: () {
+                    if (onSelect != null) {
+                      onSelect(const Locale('vi', 'VN'));
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: Image.asset(
+                    ImageConstants.flagOfEngland,
+                    width: 24.0,
+                    height: 24.0,
+                  ),
+                  contentPadding: EdgeInsets.zero,
+                  horizontalTitleGap: 12.0,
+                  title: const Text(
+                    'English',
+                    style: TextStyle(
+                      color: AppColor.blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: Radio(
+                    value: false,
+                    groupValue: isChooseLanguage,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChooseLanguage = value ?? false;
+                        if (onSelect != null) {
+                          onSelect(const Locale('en', 'US'));
+                        }
+                      });
+                    },
+                  ),
+                  onTap: () {
+                    if (onSelect != null) {
+                      onSelect(const Locale('en', 'US'));
+                    }
+                  },
+                ),
+              ],
+            ),
+          )
+        : ListTile(
+            leading: Icon(icon),
+            contentPadding: EdgeInsets.zero,
+            horizontalTitleGap: 0.0,
+            title: Text(
+              name,
+              style: const TextStyle(
+                color: AppColor.blackColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                if (onClicked != null) {
+                  onClicked();
+                }
+              },
+              icon: const Icon(
+                Icons.chevron_right_outlined,
+                size: 32.0,
+              ),
+            ),
+            onTap: () {
+              if (onClicked != null) {
+                onClicked();
+              }
+            },
+          );
   }
 }

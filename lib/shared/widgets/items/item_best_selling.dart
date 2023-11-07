@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 
 class ItemBestSelling extends StatelessWidget {
   final Product product;
@@ -76,9 +76,9 @@ class ItemBestSelling extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4.0),
               ),
               color: AppColor.buttonBuyColor,
-              child: const Text(
-                Strings.textbuyNow,
-                style: TextStyle(
+              child: Text(
+                'textbuyNow'.tr(),
+                style: const TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
                 ),

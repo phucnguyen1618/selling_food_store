@@ -18,6 +18,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<OnConfirmSignOutEvent>(_onConfirmSignOut);
     on<OnSignOutSuccessEvent>(_onSignOutSuccess);
     on<OnErrorEvent>(_onError);
+    on<OnChangeLanguageEvent>(_onChangeLanguage);
   }
 
   void _getUserInfo(
@@ -60,5 +61,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onError(OnErrorEvent event, Emitter<ProfileState> emitter) {
     emitter(ErrorState(event.error));
+  }
+
+  void _onChangeLanguage(
+      OnChangeLanguageEvent event, Emitter<ProfileState> emitter) {
+    emitter(ChangeLanguageState(event.locale));
   }
 }

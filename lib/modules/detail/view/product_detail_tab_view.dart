@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/models/product_detail.dart';
@@ -6,7 +7,6 @@ import 'package:selling_food_store/modules/detail/view/introduct_text_view.dart'
 import 'package:selling_food_store/shared/widgets/items/item_use.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 
 class ProductDetailTabView extends StatelessWidget {
   final ProductDetail detail;
@@ -25,11 +25,11 @@ class ProductDetailTabView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 12.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
                   child: Text(
-                    Strings.introduce,
-                    style: TextStyle(
+                    'introduce'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: AppColor.blackColor,
@@ -46,9 +46,9 @@ class ProductDetailTabView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              Strings.ingredient,
-                              style: TextStyle(
+                            Text(
+                              'ingredient'.tr(),
+                              style: const TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
                                 color: AppColor.blackColor,
@@ -76,11 +76,11 @@ class ProductDetailTabView extends StatelessWidget {
                       )
                     : const SizedBox(),
                 const SizedBox(height: 12.0),
-                const Padding(
-                  padding: EdgeInsets.only(left: 12.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
                   child: Text(
-                    Strings.uses,
-                    style: TextStyle(
+                    'uses'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: AppColor.blackColor,
@@ -95,11 +95,11 @@ class ProductDetailTabView extends StatelessWidget {
                     itemBuilder: (context, index) =>
                         ItemUse(use: detail.uses[index])),
                 const SizedBox(height: 12.0),
-                const Padding(
-                  padding: EdgeInsets.only(left: 12.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
                   child: Text(
-                    Strings.howToUse,
-                    style: TextStyle(
+                    'howToUse'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                       color: AppColor.blackColor,

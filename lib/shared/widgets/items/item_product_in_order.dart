@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/cart.dart';
@@ -6,7 +7,6 @@ import 'package:selling_food_store/shared/utils/app_utils.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 
 class ItemProductInOrder extends StatelessWidget {
   final Cart cart;
@@ -127,7 +127,7 @@ class ItemProductInOrder extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16.0),
-          status == 1
+          status == 2
               ? Align(
                   alignment: Alignment.centerRight,
                   child: Row(
@@ -135,20 +135,26 @@ class ItemProductInOrder extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        width: baseWidth / 3,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0, vertical: 6.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
-                            border:
-                                Border.all(width: 1.0, color: Colors.black12)),
-                        child: const Text(
-                          Strings.repurchase,
-                          style: TextStyle(
-                            color: AppColor.blackColor,
-                            fontWeight: FontWeight.bold,
+                      InkWell(
+                        onTap: () {
+                          context
+                              .goNamed('requestOrderToBuyNow', extra: [cart]);
+                        },
+                        child: Container(
+                          width: baseWidth / 3,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 6.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              border: Border.all(
+                                  width: 1.0, color: Colors.black12)),
+                          child: Text(
+                            'repurchase'.tr(),
+                            style: const TextStyle(
+                              color: AppColor.blackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -165,9 +171,9 @@ class ItemProductInOrder extends StatelessWidget {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4.0),
                               color: Colors.redAccent),
-                          child: const Text(
-                            Strings.feedback,
-                            style: TextStyle(
+                          child: Text(
+                            'feedback'.tr(),
+                            style: const TextStyle(
                               color: AppColor.whiteColor,
                               fontWeight: FontWeight.bold,
                             ),
@@ -177,7 +183,7 @@ class ItemProductInOrder extends StatelessWidget {
                     ],
                   ),
                 )
-              : status == 2
+              : status == 3
                   ? InkWell(
                       onTap: () {
                         context.goNamed('requestOrderToBuyNow', extra: [cart]);
@@ -193,9 +199,9 @@ class ItemProductInOrder extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4.0),
                               border: Border.all(
                                   width: 1.0, color: Colors.black12)),
-                          child: const Text(
-                            Strings.buyNow,
-                            style: TextStyle(
+                          child: Text(
+                            'buyNow'.tr(),
+                            style: const TextStyle(
                               color: AppColor.blackColor,
                               fontWeight: FontWeight.bold,
                             ),

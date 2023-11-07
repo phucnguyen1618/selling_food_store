@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -60,7 +61,7 @@ class _CartViewState extends State<CartView> {
                 color: AppColor.blackColor,
               )),
           title: SearchBar(
-            hintText: Strings.searchCartText,
+            hintText: 'searchCartText'.tr(),
             backgroundColor: AppColor.shimer200Color,
             onSearch: () {
               showSearch(
@@ -151,9 +152,9 @@ class _CartViewState extends State<CartView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    Strings.titleTotalPrice,
-                    style: TextStyle(
+                  Text(
+                    'titleTotalPrice'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -180,9 +181,9 @@ class _CartViewState extends State<CartView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: const Text(
-                Strings.payment,
-                style: TextStyle(
+              child: Text(
+                'payment'.tr(),
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -211,9 +212,9 @@ class _CartViewState extends State<CartView> {
                 borderRadius: BorderRadius.circular(4.0)),
             color: AppColor.shimer200Color,
             elevation: 0.0,
-            child: const Text(
-              Strings.cancelDeleteCartText,
-              style: TextStyle(
+            child: Text(
+              'cancelDeleteCartText'.tr(),
+              style: const TextStyle(
                 color: AppColor.blackColor,
               ),
             ),
@@ -227,9 +228,9 @@ class _CartViewState extends State<CartView> {
                 borderRadius: BorderRadius.circular(4.0)),
             elevation: 0.0,
             color: Colors.redAccent,
-            child: const Text(
-              Strings.confirmDeleteCartText,
-              style: TextStyle(
+            child: Text(
+              'confirmDeleteCartText'.tr(),
+              style: const TextStyle(
                 color: AppColor.whiteColor,
               ),
             ),
@@ -322,9 +323,9 @@ class CartDelegate extends SearchDelegate<Cart> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    Strings.recentSearch,
-                    style: TextStyle(
+                  Text(
+                    'recentSearch'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.bold,
@@ -353,9 +354,9 @@ class CartDelegate extends SearchDelegate<Cart> {
                     ).toList(),
                   ),
                   const SizedBox(height: 16.0),
-                  const Text(
-                    Strings.youWant,
-                    style: TextStyle(
+                  Text(
+                    'youWant'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       color: AppColor.blackColor,
                       fontWeight: FontWeight.bold,

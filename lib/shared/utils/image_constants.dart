@@ -22,5 +22,10 @@ class ImageConstants {
       '${AssetConstants.imageConstants}avatar_demo.jpg';
   static const String imageUnLogin =
       '${AssetConstants.imageConstants}image_unlogin.png';
-  static const String iconChatBot = '${AssetConstants.imageConstants}icon_messenger.png';
+  static const String iconChatBot =
+      '${AssetConstants.imageConstants}icon_messenger.png';
+  static const String flagOfVietNam =
+      '${AssetConstants.imageConstants}flag_of_vietnam.png';
+  static const String flagOfEngland =
+      '${AssetConstants.imageConstants}flag_of_england.png';
 }

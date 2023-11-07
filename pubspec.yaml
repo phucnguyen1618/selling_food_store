@@ -40,7 +40,7 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_animate: ^4.2.0+1
   json_annotation: ^4.8.1
-  intl: ^0.18.1
+  intl: ^0.17.0
   cached_network_image: ^3.2.3
   shared_preferences: ^2.2.1
   get_it: ^7.6.0
@@ -51,6 +51,8 @@ dependencies:
   flutter_easyloading: ^3.0.5
   momo_vn: ^2.0.2
   url_launcher: ^6.1.11
+  easy_localization: ^3.0.3
+  expandable: ^5.0.1
 
   #Hive Library for save local data
   hive_flutter: ^1.1.0
@@ -106,6 +108,9 @@ flutter:
     - assets/images/avatar_demo.jpg
     - assets/images/image_unlogin.png
     - assets/images/icon_messenger.png
+    - assets/images/flag_of_vietnam.png
+    - assets/images/flag_of_england.png
+    - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

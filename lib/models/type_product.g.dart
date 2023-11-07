@@ -13,6 +13,6 @@ TypeProduct _$TypeProductFromJson(Map<String, dynamic> json) => TypeProduct(
 
 Map<String, dynamic> _$TypeProductToJson(TypeProduct instance) =>
     <String, dynamic>{
-      'idType': instance.idType,
+      'idType': instance.id,
       'name': instance.name,
     };

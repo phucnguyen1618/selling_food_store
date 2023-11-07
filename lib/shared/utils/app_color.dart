@@ -19,4 +19,6 @@ class AppColor {
   static Color shimer200Color = Colors.grey.shade200;
   static Color dividerColor = Colors.grey.shade50;
   static Color divider100Color = Colors.grey.shade100;
+  static const Color darkColor = Color(0xFF1B1D21);
+  static const Color baseColor = Colors.green;
 }

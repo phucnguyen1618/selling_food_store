@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/shared/utils/app_color.dart';
 
-import '../../utils/strings.dart';
 import 'price_widget.dart';
 
 class AddToCartBottomSheet extends StatefulWidget {
@@ -155,9 +155,9 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4.0),
             ),
-            child: const Text(
-              Strings.titleAddCartButton,
-              style: TextStyle(
+            child: Text(
+              'titleAddCartButton'.tr(),
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),

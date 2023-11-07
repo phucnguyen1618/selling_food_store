@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../utils/app_color.dart';
 import '../../utils/image_constants.dart';
-import '../../utils/strings.dart';
 
 class EmptyDataWidget extends StatelessWidget {
   final EmptyType emptyType;
@@ -24,6 +24,8 @@ class EmptyDataWidget extends StatelessWidget {
         return _buildUIProductListEmpty(context);
       case EmptyType.userNotSigIn:
         return _buildUINotSignIn();
+      case EmptyType.orderListEmpty:
+        return _buildOrderListEmpty();
     }
   }
 
@@ -34,14 +36,14 @@ class EmptyDataWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(
+          children: [
+            const Icon(
               Icons.shopping_bag_outlined,
               size: 56.0,
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Text(
-              Strings.emptyCartText,
+              'emptyCartText'.tr(),
               textAlign: TextAlign.center,
             ),
           ],
@@ -61,7 +63,7 @@ class EmptyDataWidget extends StatelessWidget {
           height: 200.0,
         ),
         const SizedBox(height: 12.0),
-        const Text(Strings.youNotLogin),
+        Text('youNotLogin'.tr()),
         const SizedBox(height: 12.0),
         MaterialButton(
           onPressed: () {
@@ -75,9 +77,9 @@ class EmptyDataWidget extends StatelessWidget {
           ),
           elevation: 0.0,
           color: AppColor.whiteColor,
-          child: const Text(
-            Strings.textSignIn,
-            style: TextStyle(
+          child: Text(
+            'textSignIn'.tr(),
+            style: const TextStyle(
               color: AppColor.primaryAppColor,
             ),
           ),
@@ -93,14 +95,14 @@ class EmptyDataWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            Icon(
+          children: [
+            const Icon(
               Icons.error_outline,
               size: 56.0,
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Text(
-              Strings.productListEmpty,
+              'productListEmpty'.tr(),
               textAlign: TextAlign.center,
             ),
           ],
@@ -116,6 +118,31 @@ class EmptyDataWidget extends StatelessWidget {
       children: [],
     );
   }
+
+  Widget _buildOrderListEmpty() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'titleOrderListEmpty'.tr(),
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: AppColor.blackColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-enum EmptyType { cartEmpty, profileEmpty, productListEmpty, userNotSigIn }
+enum EmptyType {
+  cartEmpty,
+  profileEmpty,
+  productListEmpty,
+  userNotSigIn,
+  orderListEmpty
+}

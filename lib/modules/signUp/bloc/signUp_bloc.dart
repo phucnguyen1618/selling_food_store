@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:selling_food_store/dependency_injection.dart';
@@ -40,7 +41,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
         add(OnErrorEvent(error));
       });
     } else {
-      add(OnErrorEvent(Strings.emptyInputData));
+      add(OnErrorEvent('emptyInputData'.tr()));
     }
   }
 
@@ -53,10 +54,10 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       OnConfirmInputUserProfileEvent event, Emitter<SignUpState> emitter) {
     final prefs = getIt.get<SharedPreferences>();
     String idUser = prefs.getString(Strings.idUser) ?? '';
-    final userInfo =
-        UserInfo(idUser, event.name, null, event.dateTime, event.address, event.sex);
+    final userInfo = UserInfo(
+        idUser, event.name, null, event.dateTime, event.address, event.sex);
     FirebaseService.insertUserInfoToDb(userInfo, () {
-      EasyLoading.showSuccess(Strings.signUpSuccess);
+      EasyLoading.showSuccess('signUpSuccess'.tr());
     }, (error) {
       add(OnErrorEvent(error));
     });

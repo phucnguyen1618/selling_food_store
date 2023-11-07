@@ -1,10 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/modules/edit_profile/bloc/edit_profile_bloc.dart';
 import 'package:selling_food_store/modules/edit_profile/bloc/edit_profile_event.dart';
 import 'package:selling_food_store/modules/edit_profile/bloc/edit_profile_state.dart';
+import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../dependency_injection.dart';
@@ -27,23 +30,29 @@ class _EditProfileViewState extends State<EditProfileView> {
   TextEditingController addressController = TextEditingController();
   TextEditingController birthDayController = TextEditingController();
   TextEditingController sexController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   final prefs = getIt.get<SharedPreferences>();
   DateTime dateTime = DateTime.now();
   int sex = 0;
+  String? content;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditProfileBloc, EditProfileState>(
         builder: (context, state) {
-      if (state is DisplayEditProfileState) {
+      if (state is InitEditProfileState) {
+        log('InitEditProfileState');
+      } else if (state is DisplayEditProfileState) {
+        log('DisplayEditProfileState');
         fullNameController.text = state.userInfo.fullName;
+        content = state.userInfo.avatar ?? state.userInfo.fullName;
         addressController.text = state.userInfo.address;
         dateTime = state.userInfo.birthDay;
         birthDayController.text = AppUtils.formatDateTime(dateTime);
         emailController.text = prefs.getString(Strings.email) ?? '';
         sexController.text =
-            state.userInfo.sex == 0 ? Strings.male : Strings.female;
+            state.userInfo.sex == 0 ? 'male'.tr() : 'female'.tr();
       } else if (state is ChooseBirthDayState) {
         dateTime = state.dateTime;
         birthDayController.text = AppUtils.formatDateTime(state.dateTime);
@@ -62,9 +71,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                 Icons.arrow_back,
                 color: AppColor.blackColor,
               )),
-          title: const Text(
-            Strings.titleUpdateProfileInfo,
-            style: TextStyle(
+          title: Text(
+            'titleUpdateProfileInfo'.tr(),
+            style: const TextStyle(
               color: AppColor.blackColor,
               fontWeight: FontWeight.bold,
               fontSize: 16.0,
@@ -78,28 +87,33 @@ class _EditProfileViewState extends State<EditProfileView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 24.0),
-              CachedNetworkImage(
-                width: 100.0,
-                height: 100.0,
-                imageUrl: Strings.avatarDemo,
-                fit: BoxFit.cover,
-                imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(image: imageProvider),
-                )),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) =>
-                    Icon(Icons.error, color: AppColor.hintGreyColor),
-              ),
+              content != null
+                  ? AvatarProfile(
+                      avatar: content!,
+                      onEdit: (imageAvatar) {
+                        context
+                            .read<EditProfileBloc>()
+                            .add(OnUpdateAvatarUserEvent(imageAvatar));
+                      },
+                    )
+                  : const CircularProgressIndicator(),
               const SizedBox(height: 56.0),
               TextField(
                 controller: fullNameController,
-                decoration: const InputDecoration(
-                  labelText: Strings.fullNameInputUserInfo,
-                  hintText: Strings.hintTextInputNameUserInfo,
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: 'fullNameInputUserInfo'.tr(),
+                  hintText: 'hintTextInputNameUserInfo'.tr(),
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12.0),
+              TextField(
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: 'phoneInputUserInfo'.tr(),
+                  hintText: 'hintTextInputPhoneUserInfo'.tr(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12.0),
@@ -107,8 +121,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                 readOnly: true,
                 controller: sexController,
                 decoration: InputDecoration(
-                  labelText: Strings.sexEditProfile,
-                  hintText: Strings.hintSexEditProfile,
+                  labelText: 'sexEditProfile'.tr(),
+                  hintText: 'hintSexEditProfile'.tr(),
                   suffixIcon: InkWell(
                     child: const Icon(Icons.arrow_drop_down),
                     onTap: () {
@@ -120,48 +134,37 @@ class _EditProfileViewState extends State<EditProfileView> {
                         items: [
                           PopupMenuItem(
                             value: 1,
-                            child: const Text(Strings.male),
+                            child: Text('male'.tr()),
                             onTap: () {
                               setState(() {
                                 sex = 1;
+                                sexController.text = 'male'.tr();
                               });
                             },
                           ),
                           PopupMenuItem(
                             value: 2,
-                            child: const Text(Strings.female),
+                            child: Text('female'.tr()),
                             onTap: () {
                               setState(() {
                                 sex = 2;
+                                sexController.text = 'female'.tr();
                               });
                             },
                           ),
                           PopupMenuItem(
                             value: 3,
-                            child: const Text(Strings.otherSex),
+                            child: Text('otherSex'.tr()),
                             onTap: () {
                               setState(() {
                                 sex = 3;
+                                sexController.text = 'otherSex'.tr();
                               });
                             },
                           ),
                         ],
                         elevation: 8.0,
-                      ).then((value) {
-                        switch (value) {
-                          case 1:
-                            sexController.text = Strings.male;
-                            break;
-                          case 2:
-                            sexController.text = Strings.female;
-                            break;
-                          case 3:
-                            sexController.text = Strings.otherSex;
-                            break;
-                          default:
-                            sexController.text = Strings.male;
-                        }
-                      });
+                      );
                     },
                   ),
                   border: const OutlineInputBorder(),
@@ -171,18 +174,18 @@ class _EditProfileViewState extends State<EditProfileView> {
               TextField(
                 controller: emailController,
                 readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: Strings.emailProfile,
-                  hintText: Strings.hintTextEmailProfile,
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: 'emailProfile'.tr(),
+                  hintText: 'hintTextEmailProfile'.tr(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 12.0),
               TextField(
                 controller: birthDayController,
                 decoration: InputDecoration(
-                  labelText: Strings.birthDayInputUserInfo,
-                  hintText: Strings.hintTextInputBirthDayUserInfo,
+                  labelText: 'birthDayInputUserInfo'.tr(),
+                  hintText: 'hintTextInputBirthDayUserInfo'.tr(),
                   suffixIcon: InkWell(
                     child: const Icon(Icons.event),
                     onTap: () {
@@ -201,15 +204,15 @@ class _EditProfileViewState extends State<EditProfileView> {
               const SizedBox(height: 12.0),
               TextField(
                 controller: addressController,
-                decoration: const InputDecoration(
-                  labelText: Strings.textInputAddressUserInfo,
-                  hintText: Strings.hintTextInputAddressUserInfo,
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: 'textInputAddressUserInfo'.tr(),
+                  hintText: 'hintTextInputAddressUserInfo'.tr(),
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 32.0),
               GeneralButton(
-                title: Strings.updateProfileInfo,
+                title: 'updateProfileInfo'.tr(),
                 onClick: () {
                   context.read<EditProfileBloc>().add(OnUpdateUserInfoEvent(
                       fullNameController.text,

@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 
 class IntroduceTextView extends StatefulWidget {
   final String? content;
@@ -19,12 +19,12 @@ class _IntroduceTextViewState extends State<IntroduceTextView> {
   @override
   Widget build(BuildContext context) {
     return widget.content == null
-        ? const Center(
+        ? Center(
             child: Padding(
-              padding: EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(
-                Strings.descBrandEmpty,
-                style: TextStyle(
+                'descBrandEmpty'.tr(),
+                style: const TextStyle(
                   fontSize: 14.0,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -63,7 +63,7 @@ class _IntroduceTextViewState extends State<IntroduceTextView> {
                     });
                   },
                   child: Text(
-                    isExpend ? Strings.showLess : Strings.viewMore,
+                    isExpend ? 'showLess'.tr() : 'viewMore'.tr(),
                     style: const TextStyle(
                       fontSize: 12.0,
                       fontWeight: FontWeight.bold,

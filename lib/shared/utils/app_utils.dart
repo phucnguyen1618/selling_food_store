@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/cart.dart';
@@ -25,8 +26,10 @@ class AppUtils {
       case 0:
         return 'Đã đặt hàng';
       case 1:
-        return 'Đã hoàn thành';
+        return 'Đang giao hàng';
       case 2:
+        return 'Đã hoàn thành';
+      case 3:
         return 'Đã huỷ';
       default:
         return 'Đang giao hàng';
@@ -38,8 +41,10 @@ class AppUtils {
       case 0:
         return 'Nhận hàng: Sau 2-3 ngày làm việc';
       case 1:
-        return 'Đơn hàng đã hoàn thành';
+        return 'Đơn hàng đang được vận chuyển';
       case 2:
+        return 'Đơn hàng đã hoàn thành';
+      case 3:
         return 'Đơn hàng bị huỷ';
       default:
         return 'Đơn hàng đang vận chuyển';
@@ -62,4 +67,13 @@ class AppUtils {
         return 'Bình thường';
     }
   }
+
+  static String generateAvatarText(String name) {
+    var textStr = name.split(' ');
+    String value1 = textStr[0];
+    String value2 = textStr[1];
+    return value1.characters.first.toUpperCase() +
+        value2.characters.first.toUpperCase();
+  }
+  
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:selling_food_store/models/user_info.dart';
 
 abstract class ProfileState extends Equatable {
@@ -15,6 +16,15 @@ class DisplayProfileState extends ProfileState {
 
   @override
   List<Object?> get props => [userInfo];
+}
+
+class ChangeLanguageState extends ProfileState {
+  final Locale locale;
+
+  ChangeLanguageState(this.locale);
+
+  @override
+  List<Object?> get props => [locale];
 }
 
 class SignOutState extends ProfileState {}

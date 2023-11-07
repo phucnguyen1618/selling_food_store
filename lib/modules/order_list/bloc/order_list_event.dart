@@ -16,7 +16,20 @@ class OnFilterOrderListEvent extends OrderListEvent {
   OnFilterOrderListEvent(this.value);
 }
 
-class OnCancelOrderEvent extends OrderListEvent {}
+class OnCancelOrderEvent extends OrderListEvent {
+  String idOrder;
+
+  OnCancelOrderEvent(this.idOrder);
+}
+
+class OnConfirmCancelOrderEvent extends OrderListEvent {
+  String idOrder;
+  String reason;
+
+  OnConfirmCancelOrderEvent(this.idOrder, this.reason);
+}
+
+class OnCloseBottomSheetEvent extends OrderListEvent {}
 
 class OnErrorEvent extends OrderListEvent {
   String error;

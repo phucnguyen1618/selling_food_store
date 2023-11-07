@@ -2,7 +2,6 @@ import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -18,6 +17,7 @@ import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/utils/image_constants.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import 'package:selling_food_store/shared/widgets/banner/slide_banner.dart';
+import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/utils/app_color.dart';
@@ -52,20 +52,12 @@ class HomeView extends StatelessWidget {
             onTap: () {
               context.goNamed('profile');
             },
-            child: CachedNetworkImage(
-              imageUrl: Strings.avatarDemo,
-              fit: BoxFit.cover,
-              imageBuilder: (context, imageProvider) => Container(
-                margin: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(image: imageProvider),
-                ),
+            child: Container(
+              margin: const EdgeInsets.all(6.0),
+              child: const AvatarProfile(
+                avatar: Strings.avatarDemo,
+                isEdit: false,
               ),
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) =>
-                  Icon(Icons.error, color: AppColor.hintGreyColor),
             ),
           ),
           elevation: 0.0,
@@ -124,8 +116,8 @@ class HomeView extends StatelessWidget {
               SlideBanner(),
               SizedBox(height: 16.0),
               RecommendProductList(),
-              // SizedBox(height: 24.0),
-              // TypeProductList(),
+              SizedBox(height: 24.0),
+              TypeProductList(),
               SizedBox(height: 24.0),
               HotSellingProductList(),
               SizedBox(height: 12.0),

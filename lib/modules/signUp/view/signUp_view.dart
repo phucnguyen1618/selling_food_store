@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,6 @@ import 'package:selling_food_store/shared/utils/app_utils.dart';
 import 'package:selling_food_store/shared/utils/bottomsheet_utils.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/general/general_button.dart';
 
 class SignUpView extends StatefulWidget {
@@ -57,11 +57,11 @@ class _SignUpViewState extends State<SignUpView> {
               ? _buildInputUserProfileForm()
               : Column(
                   children: [
-                    const Align(
+                    Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        Strings.signUp,
-                        style: TextStyle(
+                        'signUp'.tr(),
+                        style: const TextStyle(
                           fontSize: 24.0,
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.bold,
@@ -75,21 +75,21 @@ class _SignUpViewState extends State<SignUpView> {
                       value: isAccept,
                       controlAffinity: ListTileControlAffinity.leading,
                       title: RichText(
-                          text: const TextSpan(
-                              text: Strings.titleAccept,
-                              style: TextStyle(
+                          text: TextSpan(
+                              text: 'titleAccept'.tr(),
+                              style: const TextStyle(
                                   color: AppColor.blackColor, fontSize: 12.0),
                               children: [
                             TextSpan(
-                                text: Strings.terms,
-                                style: TextStyle(
+                                text: 'terms'.tr(),
+                                style: const TextStyle(
                                     color: AppColor.primaryAppColor,
                                     fontSize: 12.0)),
-                            TextSpan(text: Strings.toOur),
-                            TextSpan(text: Strings.acknowledge),
+                            TextSpan(text: 'toOur'.tr()),
+                            TextSpan(text: 'acknowledge'.tr()),
                             TextSpan(
-                                text: Strings.privacyPolicy,
-                                style: TextStyle(
+                                text: 'privacyPolicy'.tr(),
+                                style: const TextStyle(
                                     color: AppColor.primaryAppColor,
                                     fontSize: 12.0)),
                           ])),
@@ -101,7 +101,7 @@ class _SignUpViewState extends State<SignUpView> {
                     ),
                     const SizedBox(height: 24.0),
                     GeneralButton(
-                      title: Strings.textSignUp,
+                      title: 'textSignUp'.tr(),
                       onClick: () {
                         if (isAccept) {
                           context.read<SignUpBloc>().add(OnSignUpAccountEvent(
@@ -133,20 +133,20 @@ class _SignUpViewState extends State<SignUpView> {
       children: [
         TextField(
           controller: emailController,
-          decoration: const InputDecoration(
-            labelText: Strings.email,
-            hintText: Strings.hintEmailText,
-            prefixIcon: Icon(Icons.email_outlined),
+          decoration: InputDecoration(
+            labelText: 'email'.tr(),
+            hintText: 'hintEmailText'.tr(),
+            prefixIcon: const Icon(Icons.email_outlined),
           ),
         ),
         const SizedBox(height: 16.0),
         TextField(
           controller: passwordController,
-          decoration: const InputDecoration(
-            labelText: Strings.password,
-            hintText: Strings.hintPasswordText,
-            prefixIcon: Icon(Icons.lock_outlined),
-            suffixIcon: Icon(Icons.visibility_outlined),
+          decoration: InputDecoration(
+            labelText: 'password'.tr(),
+            hintText: 'hintPasswordText'.tr(),
+            prefixIcon: const Icon(Icons.lock_outlined),
+            suffixIcon: const Icon(Icons.visibility_outlined),
           ),
         ),
       ],
@@ -159,11 +159,11 @@ class _SignUpViewState extends State<SignUpView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Align(
+          Align(
             alignment: Alignment.topLeft,
             child: Text(
-              Strings.titleInputUserInfo,
-              style: TextStyle(
+              'titleInputUserInfo'.tr(),
+              style: const TextStyle(
                 fontSize: 24.0,
                 color: AppColor.blackColor,
                 fontWeight: FontWeight.bold,
@@ -171,9 +171,9 @@ class _SignUpViewState extends State<SignUpView> {
             ),
           ),
           const SizedBox(height: 24.0),
-          const Text(
-            Strings.fullNameInputUserInfo,
-            style: TextStyle(
+          Text(
+            'fullNameInputUserInfo'.tr(),
+            style: const TextStyle(
               fontSize: 14.0,
               color: AppColor.primaryAppColor,
             ),
@@ -181,15 +181,15 @@ class _SignUpViewState extends State<SignUpView> {
           const SizedBox(height: 8.0),
           TextField(
             controller: fullNameController,
-            decoration: const InputDecoration(
-              hintText: Strings.hintTextInputNameUserInfo,
-              prefixIcon: Icon(Icons.person),
+            decoration: InputDecoration(
+              hintText: 'hintTextInputNameUserInfo'.tr(),
+              prefixIcon: const Icon(Icons.person),
             ),
           ),
           const SizedBox(height: 16.0),
-          const Text(
-            Strings.birthDayInputUserInfo,
-            style: TextStyle(
+          Text(
+            'birthDayInputUserInfo'.tr(),
+            style: const TextStyle(
               fontSize: 14.0,
               color: AppColor.primaryAppColor,
             ),
@@ -199,7 +199,7 @@ class _SignUpViewState extends State<SignUpView> {
             controller: birthDayController,
             readOnly: true,
             decoration: InputDecoration(
-              hintText: Strings.hintTextInputBirthDayUserInfo,
+              hintText: 'hintTextInputBirthDayUserInfo'.tr(),
               suffixIcon: InkWell(
                 onTap: () {
                   BottomSheetUtils.showBottomSheetChooseBirthDay(
@@ -217,9 +217,9 @@ class _SignUpViewState extends State<SignUpView> {
             ),
           ),
           const SizedBox(height: 16.0),
-          const Text(
-            Strings.textInputSexUserInfo,
-            style: TextStyle(
+          Text(
+            'textInputSexUserInfo'.tr(),
+            style: const TextStyle(
               fontSize: 14.0,
               color: AppColor.primaryAppColor,
             ),
@@ -234,18 +234,18 @@ class _SignUpViewState extends State<SignUpView> {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<int>(
                 isExpanded: true,
-                items: const [
+                items: [
                   DropdownMenuItem(
                     value: 0,
-                    child: Text(Strings.male),
+                    child: Text('male'.tr()),
                   ),
                   DropdownMenuItem(
                     value: 1,
-                    child: Text(Strings.female),
+                    child: Text('female'.tr()),
                   ),
                   DropdownMenuItem(
                     value: 2,
-                    child: Text(Strings.otherSex),
+                    child: Text('otherSex'.tr()),
                   )
                 ],
                 onChanged: (value) {
@@ -258,9 +258,9 @@ class _SignUpViewState extends State<SignUpView> {
             ),
           ),
           const SizedBox(height: 16.0),
-          const Text(
-            Strings.textInputAddressUserInfo,
-            style: TextStyle(
+          Text(
+            'textInputAddressUserInfo'.tr(),
+            style: const TextStyle(
               fontSize: 14.0,
               color: AppColor.primaryAppColor,
             ),
@@ -269,9 +269,9 @@ class _SignUpViewState extends State<SignUpView> {
           TextField(
             controller: addressController,
             maxLines: 5,
-            decoration: const InputDecoration(
-              hintText: Strings.hintTextInputAddressUserInfo,
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: 'hintTextInputAddressUserInfo'.tr(),
+              border: const OutlineInputBorder(),
             ),
           ),
           const SizedBox(height: 48.0),
@@ -291,9 +291,9 @@ class _SignUpViewState extends State<SignUpView> {
                   onPressed: () {
                     context.pop();
                   },
-                  child: const Text(
-                    Strings.cancelInputUserInfo,
-                    style: TextStyle(
+                  child: Text(
+                    'cancelInputUserInfo'.tr(),
+                    style: const TextStyle(
                       color: AppColor.blackColor,
                     ),
                   ),
@@ -302,7 +302,7 @@ class _SignUpViewState extends State<SignUpView> {
               const SizedBox(width: 12.0),
               Expanded(
                 child: GeneralButton(
-                  title: Strings.confirmInputUserInfo,
+                  title: 'confirmInputUserInfo'.tr(),
                   onClick: () {
                     context.read<SignUpBloc>().add(
                         OnConfirmInputUserProfileEvent(fullNameController.text,

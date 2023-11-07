@@ -1,7 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 
 class ChoosePaymentMethod extends StatefulWidget {
   const ChoosePaymentMethod({super.key});
@@ -22,9 +22,9 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            Strings.paymentMethod,
-            style: TextStyle(
+          Text(
+            'paymentMethod'.tr(),
+            style: const TextStyle(
               fontSize: 16.0,
               color: AppColor.blackColor,
               fontWeight: FontWeight.bold,
@@ -36,9 +36,9 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             groupValue: selectedPaymentMethod,
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.trailing,
-            title: const Text(
-              Strings.codPaymentMethod,
-              style: TextStyle(
+            title: Text(
+              'codPaymentMethod'.tr(),
+              style: const TextStyle(
                 fontSize: 14.0,
                 color: AppColor.blackColor,
               ),
@@ -55,9 +55,9 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             groupValue: selectedPaymentMethod,
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.trailing,
-            title: const Text(
-              Strings.momoPaymentMethod,
-              style: TextStyle(
+            title: Text(
+              'momoPaymentMethod'.tr(),
+              style: const TextStyle(
                 fontSize: 14.0,
                 color: AppColor.blackColor,
               ),

@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 
 class ChooseBirthDay extends StatefulWidget {
   const ChooseBirthDay({super.key});
@@ -30,11 +30,11 @@ class _ChooseBirthDayState extends State<ChooseBirthDay> {
                   context.pop();
                 },
                 icon: const Icon(Icons.close)),
-            const Expanded(
+            Expanded(
               child: Text(
-                Strings.chooseBirthDay,
+                'chooseBirthDay'.tr(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                   color: AppColor.blackColor,
                   fontWeight: FontWeight.bold,
@@ -45,9 +45,9 @@ class _ChooseBirthDayState extends State<ChooseBirthDay> {
               onPressed: () {
                 context.pop(dateTime);
               },
-              child: const Text(
-                Strings.choose,
-                style: TextStyle(
+              child: Text(
+                'choose'.tr(),
+                style: const TextStyle(
                   color: AppColor.primaryAppColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,

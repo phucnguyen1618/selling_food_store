@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/user_info.dart';
 import 'package:selling_food_store/modules/cart/cart_page.dart';
+import 'package:selling_food_store/modules/change_password/change_password_page.dart';
 import 'package:selling_food_store/modules/confirm_order.dart/confirm_order_page.dart';
 import 'package:selling_food_store/modules/detail/product_detail_page.dart';
 import 'package:selling_food_store/modules/edit_profile/edit_profile_page.dart';
@@ -76,12 +77,11 @@ final GoRouter appRouter = GoRouter(
                   },
                   routes: [
                     GoRoute(
-                      path: 'cart',
-                      name: 'yourCart',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const CartPage();
-                      },
-                    ),
+                        path: 'cart',
+                        name: 'yourCart',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const CartPage();
+                        }),
                     GoRoute(
                       path: 'profle/editProfile',
                       name: 'editProfile',
@@ -107,6 +107,13 @@ final GoRouter appRouter = GoRouter(
                             },
                           ),
                         ]),
+                    GoRoute(
+                      path: 'changePassword',
+                      name: 'changePassword',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return const ChangePasswordPage();
+                      },
+                    ),
                   ]),
               GoRoute(
                   path: 'home/requestOrder',
@@ -114,7 +121,17 @@ final GoRouter appRouter = GoRouter(
                   builder: (BuildContext context, GoRouterState state) {
                     final dataValue = state.extra as List<Cart>;
                     return RequestOrderPage(carts: dataValue);
-                  }),
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'editProfileForOrder',
+                      name: 'editProfileForOrder',
+                      builder: (BuildContext context, GoRouterState state) {
+                        final dataValue = state.extra as UserInfo;
+                        return EditProfilePage(userInfo: dataValue);
+                      },
+                    ),
+                  ]),
               GoRoute(
                   path: 'home/confirmOrder',
                   name: 'confirmOrder',

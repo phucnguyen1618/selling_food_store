@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../shared/utils/app_color.dart';
-import '../../shared/utils/strings.dart';
 
 class ConfirmOrderPage extends StatelessWidget {
   const ConfirmOrderPage({super.key});
@@ -35,18 +35,18 @@ class ConfirmOrderPage extends StatelessWidget {
               size: 56.0,
             ),
             const SizedBox(height: 12.0),
-            const Text(
-              Strings.titleConfirmOrder,
-              style: TextStyle(
+            Text(
+              'titleConfirmOrder'.tr(),
+              style: const TextStyle(
                 fontSize: 18.0,
                 color: AppColor.blackColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8.0),
-            const Text(
-              Strings.shippingInfoOrder,
-              style: TextStyle(
+            Text(
+              'shippingInfoOrder'.tr(),
+              style: const TextStyle(
                 fontSize: 16.0,
                 color: AppColor.blackColor,
                 fontWeight: FontWeight.bold,
@@ -76,9 +76,9 @@ class ConfirmOrderPage extends StatelessWidget {
                       Border.all(width: 1.0, color: AppColor.primaryAppColor),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                child: const Text(
-                  Strings.homeComeBack,
-                  style: TextStyle(color: AppColor.primaryAppColor),
+                child: Text(
+                  'homeComeBack'.tr(),
+                  style: const TextStyle(color: AppColor.primaryAppColor),
                 ),
               ),
             ),

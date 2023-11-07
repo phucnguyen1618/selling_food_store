@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 
 class FeedbackProductDialog extends StatefulWidget {
   const FeedbackProductDialog({super.key});
@@ -19,10 +19,10 @@ class _FeedbackProductDialogState extends State<FeedbackProductDialog> {
     double baseWidth = MediaQuery.of(context).size.width;
     return AlertDialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-      title: const Center(
+      title: Center(
         child: Text(
-          Strings.titleFeedbackProduct,
-          style: TextStyle(
+          'titleFeedbackProduct'.tr(),
+          style: const TextStyle(
             fontSize: 18.0,
             color: AppColor.blackColor,
             fontWeight: FontWeight.bold,
@@ -63,12 +63,12 @@ class _FeedbackProductDialogState extends State<FeedbackProductDialog> {
                     ),
                   )
                 : const SizedBox(),
-            const TextField(
+            TextField(
               maxLines: 5,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                hintText: Strings.inputFeedback,
-                border: OutlineInputBorder(),
+                hintText: 'inputFeedback'.tr(),
+                border: const OutlineInputBorder(),
               ),
             ),
           ],
@@ -77,9 +77,9 @@ class _FeedbackProductDialogState extends State<FeedbackProductDialog> {
       actions: [
         TextButton(
             onPressed: () {},
-            child: const Text(
-              Strings.sendFeedback,
-              style: TextStyle(
+            child: Text(
+              'sendFeedback'.tr(),
+              style: const TextStyle(
                 fontSize: 16.0,
                 color: Colors.blue,
               ),

@@ -17,4 +17,24 @@ class DisplayOrderListState extends OrderListState {
   List<Object?> get props => [orders];
 }
 
-class CancelOrderState extends OrderListState {}
+class CancelOrderState extends OrderListState {
+  final String id;
+
+  CancelOrderState(this.id);
+
+  @override
+  List<Object?> get props => [id];
+}
+
+class ConfirmCancelOrderState extends OrderListState {}
+
+class CloseBottomSheetState extends OrderListState {}
+
+class ErrorCancelOrderState extends OrderListState {
+  final String error;
+
+  ErrorCancelOrderState(this.error);
+
+  @override
+  List<Object?> get props => [error];
+}

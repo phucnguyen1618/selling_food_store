@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/models/cart.dart';
@@ -9,7 +10,6 @@ import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
 import '../../utils/app_color.dart';
-import '../../utils/strings.dart';
 import '../general/price_widget.dart';
 
 class ItemCart extends StatefulWidget {
@@ -85,7 +85,7 @@ class _ItemCartState extends State<ItemCart> {
                     ),
                   ),
                   subtitle: Text(
-                    "${Strings.textAddToCart} ${AppUtils.formatDateTime(widget.cart.dateTimeOrder)}",
+                    "${'textAddToCart'.tr()} ${AppUtils.formatDateTime(widget.cart.dateTimeOrder)}",
                     style: TextStyle(
                       color: Colors.grey.shade400,
                       fontSize: 12.0,

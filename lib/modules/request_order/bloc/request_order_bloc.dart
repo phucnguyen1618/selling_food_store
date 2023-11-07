@@ -7,6 +7,7 @@ import 'package:selling_food_store/models/user_info_order.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_event.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
+import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 import 'package:uuid/uuid.dart';
 
@@ -79,9 +80,11 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
             DateTime.now(),
             0,
             event.note,
-            paymentMethod);
+            paymentMethod,
+            '');
         FirebaseService.requestOrder(requestOrder, () {
           FirebaseService.removeCartList();
+          HiveService.deleteAllItemCart();
           add(OnRequestOrderProductSuccessEvent());
         }, (error) {
           log('Error: $error');
@@ -96,11 +99,11 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
 
   void _onRequestOrderSuccess(OnRequestOrderProductSuccessEvent event,
       Emitter<RequestOrderState> emitter) {
-    if (paymentMethod == 0) {
-      emitter(RequestOrderProductSuccessState());
-    } else {
-      add(OnRequestPaymentEvent());
-    }
+    //if (paymentMethod == 0) {
+    emitter(RequestOrderProductSuccessState());
+    //} else {
+    //  add(OnRequestPaymentEvent());
+    // }
   }
 
   void _onRequestPayment(

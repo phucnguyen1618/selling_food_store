@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:selling_food_store/models/user_info.dart';
 
 abstract class EditProfileEvent {}
@@ -20,4 +22,11 @@ class OnUpdateUserInfoEvent extends EditProfileEvent {
   DateTime dateTime;
 
   OnUpdateUserInfoEvent(this.name, this.address, this.dateTime);
+}
+
+class OnUpdateAvatarUserEvent extends EditProfileEvent {
+  File imageFile;
+
+  OnUpdateAvatarUserEvent(this.imageFile);
+  
 }

@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selling_food_store/shared/widgets/items/item_feedback.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 
 class EvaluteProductTabView extends StatelessWidget {
   const EvaluteProductTabView({super.key});
@@ -17,11 +17,11 @@ class EvaluteProductTabView extends StatelessWidget {
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               Expanded(
                 child: Text(
-                  Strings.customerReviews,
-                  style: TextStyle(
+                  'customerReviews'.tr(),
+                  style: const TextStyle(
                     color: AppColor.blackColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
@@ -29,8 +29,8 @@ class EvaluteProductTabView extends StatelessWidget {
                 ),
               ),
               Text(
-                Strings.viewMore,
-                style: TextStyle(
+                'viewMore'.tr(),
+                style: const TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),

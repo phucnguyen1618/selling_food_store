@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,6 @@ import 'package:selling_food_store/shared/widgets/general/loading_data_widget.da
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/bottomsheet_utils.dart';
-import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/items/item_recommend_product.dart';
 
 class RecommendProductList extends StatefulWidget {
@@ -60,13 +60,13 @@ class _RecommendProductListState extends State<RecommendProductList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.0),
+                         Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              Strings.titleRecommendedProduct,
-                              style: TextStyle(
+                              'titleRecommendedProduct'.tr(),
+                              style: const TextStyle(
                                 fontSize: 18.0,
                                 color: AppColor.sologanColor,
                                 fontWeight: FontWeight.bold,

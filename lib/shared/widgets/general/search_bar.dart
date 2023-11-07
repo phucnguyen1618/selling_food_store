@@ -1,7 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selling_food_store/shared/utils/app_color.dart';
-
-import '../../utils/strings.dart';
 
 class SearchBar extends StatelessWidget {
   final String? hintText;
@@ -33,7 +32,7 @@ class SearchBar extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
         child: Text(
-          hintText ?? Strings.hintSearchProduct,
+          hintText ?? 'hintSearchProduct'.tr(),
           maxLines: 1,
           style: TextStyle(
             fontSize: 14.0,

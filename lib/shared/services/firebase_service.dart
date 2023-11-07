@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:selling_food_store/dependency_injection.dart';
 import 'package:selling_food_store/models/credential.dart';
 import 'package:selling_food_store/models/product_detail.dart';
@@ -16,12 +19,17 @@ import '../../models/cart.dart';
 import '../../models/detail_brand.dart';
 import '../../models/product.dart';
 import '../../models/request_order.dart';
+import '../../models/review.dart';
 
 class FirebaseService {
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   static final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+  static final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+
   static final DatabaseReference _dbRef =
       _firebaseDatabase.refFromURL(Strings.databaseUrl);
+
+  static final _stoRef = _firebaseStorage.refFromURL(Strings.storageRefUrl);
 
   static final prefs = getIt.get<SharedPreferences>();
 
@@ -146,19 +154,19 @@ class FirebaseService {
       });
     } on FirebaseAuthException catch (error) {
       log('Code: ${error.code} - Message: ${error.message}');
-      String errStr = Strings.errorStr;
+      String errStr = 'errorStr'.tr();
       switch (error.code) {
         case 'email-already-in-use':
-          errStr = Strings.emailAlreadyUse;
+          errStr = 'emailAlreadyUse'.tr();
           break;
         case 'weak-password':
-          errStr = Strings.notStrongPassword;
+          errStr = 'notStrongPassword'.tr();
           break;
         case 'invalid-email':
-          errStr = Strings.emailInvalid;
+          errStr = 'emailInvalid'.tr();
           break;
         default:
-          errStr = '${Strings.unknown} - ${error.code}';
+          errStr = '${'unknown'.tr()} - ${error.code}';
           break;
       }
       onError(errStr);
@@ -177,22 +185,22 @@ class FirebaseService {
       });
     } on FirebaseAuthException catch (error) {
       log('Code: ${error.code} - Message: ${error.message}');
-      String errStr = Strings.errorStr;
+      String errStr = 'errorStr'.tr();
       switch (error.code) {
         case 'network-request-failed':
-          errStr = Strings.notInternetConnect;
+          errStr = 'notInternetConnect'.tr();
           break;
         case 'wrong-password':
-          errStr = Strings.wrongPassword;
+          errStr = 'wrongPassword'.tr();
           break;
         case 'user-not-found':
-          errStr = Strings.userNotFoundErrorText;
+          errStr = 'userNotFoundErrorText'.tr();
           break;
         case 'invalid-email':
-          errStr = Strings.emailInvalid;
+          errStr = 'emailInvalid'.tr();
           break;
         default:
-          errStr = '${Strings.unknown} - ${error.code}';
+          errStr = '${'unknown'.tr()} - ${error.code}';
           break;
       }
       onError(errStr);
@@ -236,16 +244,16 @@ class FirebaseService {
           .then((value) => onComplete());
     } on FirebaseAuthException catch (error) {
       log('Code: ${error.code} - Message: ${error.message}');
-      String errStr = Strings.errorStr;
+      String errStr = 'errorStr'.tr();
       switch (error.code) {
         case 'invalid-email':
-          errStr = Strings.emailInvalid;
+          errStr = 'emailInvalid'.tr();
           break;
         case 'user-not-found':
-          errStr = Strings.userNotFound;
+          errStr = 'userNotFound'.tr();
           break;
         default:
-          errStr = '${Strings.unknown} - ${error.code}';
+          errStr = '${'unknown'.tr()} - ${error.code}';
           break;
       }
       onError(errStr);
@@ -263,19 +271,19 @@ class FirebaseService {
           .then((value) => onComplete());
     } on FirebaseAuthException catch (error) {
       log('Code: ${error.code} - Message: ${error.message}');
-      String errStr = Strings.errorStr;
+      String errStr = 'errorStr'.tr();
       switch (error.code) {
         case 'email-already-in-use':
-          errStr = Strings.emailAlreadyUse;
+          errStr = 'emailAlreadyUse'.tr();
           break;
         case 'weak-password':
-          errStr = Strings.notStrongPassword;
+          errStr = 'notStrongPassword'.tr();
           break;
         case 'invalid-email':
-          errStr = Strings.emailInvalid;
+          errStr = 'emailInvalid'.tr();
           break;
         default:
-          errStr = '${Strings.unknown} - ${error.code}';
+          errStr = '${'unknown'.tr()} - ${error.code}';
           break;
       }
       onError(errStr);
@@ -406,6 +414,130 @@ class FirebaseService {
       _dbRef.child('carts').child(idUser).child(idCart).update({
         'orderQuantity': value,
       });
+    }
+  }
+
+  static void updateReasonForCancelOrder(
+    String idOrder,
+    String reason,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('requestOrders').child(idUser).child(idOrder).update({
+        'status': 3,
+        'reasonCancelOrder': reason,
+      }).then((value) {
+        onComplete();
+      }).onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
+
+  static void updateAvatarProfileToStorage(
+    File file,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _stoRef
+          .child('avatars')
+          .child(idUser)
+          .putFile(file)
+          .then((taskSnapshot) async {
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+        if (imageUrl.isNotEmpty) {
+          updateAvatarProfileUserInfo(imageUrl);
+          onComplete();
+        }
+      }).onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
+
+  static void updateAvatarProfileUserInfo(String avatar) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('userInfos').child(idUser).update({
+        "avatar": avatar,
+      });
+    }
+  }
+
+  static void writeReviewForProduct(
+    String idProduct,
+    Review review,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef
+          .child('reviews')
+          .child(idProduct)
+          .set(review)
+          .then((value) => onComplete())
+          .onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
+
+  static Future<void> changePassword(
+    String oldPasword,
+    String password,
+    Function() onComplete,
+    Function(String) onError,
+  ) async {
+    User? currentUser = _firebaseAuth.currentUser;
+    final email = prefs.getString(Strings.email);
+    if (email != null) {
+      await currentUser!
+          .reauthenticateWithCredential(
+              EmailAuthProvider.credential(email: email, password: oldPasword))
+          .then((value) async {
+        if (value.user != null) {
+          await _firebaseAuth.currentUser!
+              .updatePassword(password)
+              .then((value) {
+            _dbRef
+                .child('credentials')
+                .child(currentUser.uid)
+                .update({"password": password})
+                .then((value) => onComplete())
+                .onError((error, stackTrace) => onError(error.toString()));
+          });
+        }
+      }).onError<FirebaseAuthException>((error, stackTrace) {
+        String errorStr = 'unknown'.tr();
+        switch (error.code) {
+          case 'invalid-email':
+            errorStr = 'emailInvalid'.tr();
+            break;
+          case 'user-not-found':
+            errorStr = 'userNotFound'.tr();
+            break;
+          case 'wrong-password':
+            errorStr = 'wrong_password'.tr();
+            break;
+          default:
+            errorStr = 'unknown'.tr();
+        }
+        onError(errorStr);
+      });
+    }
+  }
+
+  static void getUserCredential(
+    Function(Credential) onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('credentials').child(idUser).get().then((snapshot) {
+        final data =
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+        Credential credential = Credential.fromJson(data);
+        onComplete(credential);
+      }).onError((error, stackTrace) => onError(error.toString()));
     }
   }
 }

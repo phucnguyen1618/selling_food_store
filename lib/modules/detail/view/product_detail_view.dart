@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,7 +17,6 @@ import 'package:selling_food_store/shared/widgets/general/general_button.dart';
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/bottomsheet_utils.dart';
-import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/general/loading_data_widget.dart';
 import '../../../shared/widgets/general/price_widget.dart';
 import '../../../shared/widgets/general/search_bar.dart';
@@ -183,7 +183,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 ),
                 persistentFooterButtons: [
                   GeneralButton(
-                      title: Strings.textbuyNow,
+                      title: 'textbuyNow'.tr(),
                       onClick: () {
                         context
                             .read<ProductDetailBloc>()
@@ -203,7 +203,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
               product: state.product,
               onAdd: (productSelected, quantity) {
                 productSelected.addCart(quantity, DateTime.now(), () {
-                  EasyLoading.showSuccess(Strings.addCartSuccess);
+                  EasyLoading.showSuccess('addCartSuccess'.tr());
                 }, (error) {
                   context.read<ProductDetailBloc>().add(OnFailureEvent(error));
                 });

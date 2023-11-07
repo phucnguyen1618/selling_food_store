@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/modules/detail/bloc/brand_info_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:selling_food_store/modules/detail/view/introduct_text_view.dart'
 import 'package:selling_food_store/shared/widgets/items/item_suggest.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/strings.dart';
 
 class BrandInfo extends StatelessWidget {
   const BrandInfo({super.key});
@@ -75,11 +75,11 @@ class BrandInfo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12.0),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 12.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
                       child: Text(
-                        Strings.descProduct,
-                        style: TextStyle(
+                        'descProduct'.tr(),
+                        style: const TextStyle(
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.bold,
                         ),
@@ -88,11 +88,11 @@ class BrandInfo extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     IntroduceTextView(content: state.detailBrand.desc),
                     const SizedBox(height: 16.0),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 12.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
                       child: Text(
-                        Strings.maybeProduct,
-                        style: TextStyle(
+                        'maybeProduct'.tr(),
+                        style: const TextStyle(
                           color: AppColor.primaryAppColor,
                           fontWeight: FontWeight.bold,
                         ),

@@ -1,9 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/shared/utils/app_color.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
-import '../../utils/strings.dart';
 import '../general/price_widget.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -82,9 +82,9 @@ class ItemRecommendProduct extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   color: AppColor.buttonBuyColor,
-                  child: const Text(
-                    Strings.textbuyNow,
-                    style: TextStyle(
+                  child: Text(
+                    'textbuyNow'.tr(),
+                    style: const TextStyle(
                       fontSize: 16.0,
                       color: AppColor.whiteColor,
                     ),

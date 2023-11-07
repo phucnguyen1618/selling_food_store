@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:selling_food_store/modules/signIn/bloc/sign_in_event.dart';
 import 'package:selling_food_store/modules/signIn/bloc/sign_in_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
@@ -22,7 +23,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       prefs.setString(Strings.idUser, idUser);
       add(OnSignInSuccesEvent());
     }, (error) {
-      add(OnSignInFailureEvent(error ?? Strings.errorStr));
+      add(OnSignInFailureEvent(error ?? 'errorStr'.tr()));
     });
   }
 

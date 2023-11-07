@@ -23,4 +23,7 @@ class DisplayEditProfileState extends EditProfileState {
   final UserInfo userInfo;
 
   const DisplayEditProfileState(this.userInfo);
+
+  @override
+  List<Object?> get props => [userInfo];
 }
