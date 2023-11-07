@@ -57,7 +57,8 @@ class BottomSheetUtils {
 
   static Future<void> showBottomSheetSelectReasonForCancelOrder({
     required BuildContext context,
-    required Function() onSelect,
+    required Function(String) onSelect,
+    Function()? onClose,
   }) async {
     showModalBottomSheet(
       context: context,
@@ -70,7 +71,11 @@ class BottomSheetUtils {
       builder: (context) => const ReasonCancelOrderBottomSheet(),
     ).then((value) {
       if (value != null) {
-        onSelect();
+        onSelect(value);
+      } else {
+        if (onClose != null) {
+          onClose();
+        }
       }
     });
   }

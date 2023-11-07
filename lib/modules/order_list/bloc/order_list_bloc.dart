@@ -13,6 +13,8 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     on<OnDisplayOrderListEvent>(_onDisplayOrderList);
     on<OnFilterOrderListEvent>(_onFilterOrderList);
     on<OnCancelOrderEvent>(_onCancelOrder);
+    on<OnCloseBottomSheetEvent>(_onCloseBottomSheet);
+    on<OnConfirmCancelOrderEvent>(_onConfirmCancelOrder);
   }
 
   void _onLoadingOrderList(
@@ -38,7 +40,21 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
 
   void _onCancelOrder(
       OnCancelOrderEvent event, Emitter<OrderListState> emitter) {
-    emitter(CancelOrderState());
+    emitter(CancelOrderState(event.idOrder));
+  }
+
+  void _onCloseBottomSheet(
+      OnCloseBottomSheetEvent event, Emitter<OrderListState> emitter) {
+    emitter(CloseBottomSheetState());
+  }
+
+  void _onConfirmCancelOrder(
+      OnConfirmCancelOrderEvent event, Emitter<OrderListState> emitter) {
+    FirebaseService.updateReasonForCancelOrder(event.idOrder, event.reason, () {
+      emitter(ConfirmCancelOrderState());
+    }, (error) {
+      emitter(ErrorCancelOrderState(error));
+    });
   }
 
   List<RequestOrder> filterOrderListFromStatus(int value) {
@@ -53,11 +69,11 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
         return dataList;
       case 3:
         List<RequestOrder> dataList =
-            orderList.where((element) => element.status == 1).toList();
+            orderList.where((element) => element.status == 2).toList();
         return dataList;
       case 4:
         List<RequestOrder> dataList =
-            orderList.where((element) => element.status == 2).toList();
+            orderList.where((element) => element.status == 3).toList();
         return dataList;
       default:
         return orderList;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
 
@@ -46,7 +47,9 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
           ),
         ),
         trailing: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              //context.goNamed('editProfile');
+            },
             icon: const Icon(
               Icons.arrow_forward_ios,
               size: 16.0,

@@ -18,6 +18,7 @@ RequestOrder _$RequestOrderFromJson(Map<String, dynamic> json) => RequestOrder(
       json['status'] as int,
       json['note'] as String?,
       json['paymentMethod'] as int,
+      json['reasonCancelOrder'] as String?,
     );
 
 Map<String, dynamic> _$RequestOrderToJson(RequestOrder instance) =>
@@ -31,4 +32,5 @@ Map<String, dynamic> _$RequestOrderToJson(RequestOrder instance) =>
       'status': instance.status,
       'note': instance.note,
       'paymentMethod': instance.paymentMethod,
+      'reasonCancelOrder': instance.reasonCancelOrder,
     };

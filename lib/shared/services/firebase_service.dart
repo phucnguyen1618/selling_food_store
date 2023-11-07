@@ -408,4 +408,21 @@ class FirebaseService {
       });
     }
   }
+
+  static void updateReasonForCancelOrder(
+    String idOrder,
+    String reason,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('requestOrders').child(idUser).child(idOrder).update({
+        'status': 3,
+        'reasonCancelOrder': reason,
+      }).then((value) {
+        onComplete();
+      }).onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
 }

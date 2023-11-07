@@ -76,12 +76,11 @@ final GoRouter appRouter = GoRouter(
                   },
                   routes: [
                     GoRoute(
-                      path: 'cart',
-                      name: 'yourCart',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const CartPage();
-                      },
-                    ),
+                        path: 'cart',
+                        name: 'yourCart',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const CartPage();
+                        }),
                     GoRoute(
                       path: 'profle/editProfile',
                       name: 'editProfile',
@@ -114,7 +113,17 @@ final GoRouter appRouter = GoRouter(
                   builder: (BuildContext context, GoRouterState state) {
                     final dataValue = state.extra as List<Cart>;
                     return RequestOrderPage(carts: dataValue);
-                  }),
+                  },
+                  routes: [
+                    GoRoute(
+                      path: 'editProfileForOrder',
+                      name: 'editProfileForOrder',
+                      builder: (BuildContext context, GoRouterState state) {
+                        final dataValue = state.extra as UserInfo;
+                        return EditProfilePage(userInfo: dataValue);
+                      },
+                    ),
+                  ]),
               GoRoute(
                   path: 'home/confirmOrder',
                   name: 'confirmOrder',

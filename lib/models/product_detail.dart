@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selling_food_store/models/brand.dart';
+import 'package:selling_food_store/models/type_product.dart';
 
 part 'product_detail.g.dart';
 
@@ -18,6 +19,7 @@ class ProductDetail {
   String origin;
   List<String>? tags;
   Brand brand;
+  List<TypeProduct> typeProducts;
 
   ProductDetail(
     this.idProduct,
@@ -33,6 +35,7 @@ class ProductDetail {
     this.origin,
     this.tags,
     this.brand,
+    this.typeProducts,
   );
 
   factory ProductDetail.fromJson(Map<String, dynamic> json) =>

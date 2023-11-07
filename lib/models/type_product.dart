@@ -4,10 +4,10 @@ part 'type_product.g.dart';
 
 @JsonSerializable()
 class TypeProduct {
-  String idType;
+  String id;
   String name;
 
-  TypeProduct(this.idType, this.name);
+  TypeProduct(this.id, this.name);
 
   factory TypeProduct.fromJson(Map<String, dynamic> json) =>
       _$TypeProductFromJson(json);

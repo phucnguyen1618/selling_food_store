@@ -166,6 +166,7 @@ class Strings {
   static const String sendFeedback = 'Gửi';
   static const String inputFeedback = 'Viết đánh giá sản phẩm...';
   static const String titleFeedbackProduct = 'Đánh giá sản phẩm';
+  static const String titleOrderListEmpty = 'Bạn hiện chưa có đơn hàng nào.';
 
   //Khác
   static const String youNotLogin = 'Bạn chưa đăng nhập';

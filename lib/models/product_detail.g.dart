@@ -21,6 +21,9 @@ ProductDetail _$ProductDetailFromJson(Map<String, dynamic> json) =>
       json['origin'] as String,
       (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
       Brand.fromJson(json['brand'] as Map<String, dynamic>),
+      (json['typeProducts'] as List<dynamic>)
+          .map((e) => TypeProduct.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ProductDetailToJson(ProductDetail instance) =>
@@ -37,5 +40,6 @@ Map<String, dynamic> _$ProductDetailToJson(ProductDetail instance) =>
       'howToUse': instance.howToUse,
       'origin': instance.origin,
       'tags': instance.tags,
-      'brand': instance.brand,
+      'brand': instance.brand.toJson(),
+      'typeProducts': instance.typeProducts.map((e) => e.toJson()).toList(),
     };

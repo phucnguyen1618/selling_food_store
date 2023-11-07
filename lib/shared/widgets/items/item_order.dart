@@ -29,7 +29,9 @@ class ItemOrder extends StatelessWidget {
         requestOrder.status == 0
             ? InkWell(
                 onTap: () {
-                  context.read<OrderListBloc>().add(OnCancelOrderEvent());
+                  context
+                      .read<OrderListBloc>()
+                      .add(OnCancelOrderEvent(requestOrder.idOrder));
                 },
                 child: Container(
                   width: baseWidth - 2 * 12,

@@ -24,6 +24,8 @@ class EmptyDataWidget extends StatelessWidget {
         return _buildUIProductListEmpty(context);
       case EmptyType.userNotSigIn:
         return _buildUINotSignIn();
+      case EmptyType.orderListEmpty:
+        return _buildOrderListEmpty();
     }
   }
 
@@ -116,6 +118,31 @@ class EmptyDataWidget extends StatelessWidget {
       children: [],
     );
   }
+
+  Widget _buildOrderListEmpty() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Text(
+            Strings.titleOrderListEmpty,
+            style: TextStyle(
+              fontSize: 16.0,
+              color: AppColor.blackColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-enum EmptyType { cartEmpty, profileEmpty, productListEmpty, userNotSigIn }
+enum EmptyType {
+  cartEmpty,
+  profileEmpty,
+  productListEmpty,
+  userNotSigIn,
+  orderListEmpty
+}

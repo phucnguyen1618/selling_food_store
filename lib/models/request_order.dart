@@ -12,11 +12,12 @@ class RequestOrder {
   double orderPrice;
   double shippingFee;
   DateTime orderDateTime;
-  //Trang thai don hang - 0: Đang vận chuyển, 1: Đã hoàn thành, 2: Đã huỷ
+  //Trang thai don hang - 0: Đơn hàng xác nhận, 1: Đang giao hàng,  2: Giao hàng thành công, 3: Huỷ giao hàng
   int status;
   String? note;
   //Phuong thuc thanh toan - 0: COD, 1: MOMO
   int paymentMethod;
+  String? reasonCancelOrder;
 
   RequestOrder(
     this.idOrder,
@@ -28,6 +29,7 @@ class RequestOrder {
     this.status,
     this.note,
     this.paymentMethod,
+    this.reasonCancelOrder,
   );
 
   factory RequestOrder.fromJson(Map<String, dynamic> json) =>

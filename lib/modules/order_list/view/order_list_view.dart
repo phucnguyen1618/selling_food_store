@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/request_order.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_state.dart';
 import 'package:selling_food_store/shared/utils/bottomsheet_utils.dart';
+import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/strings.dart';
@@ -17,6 +21,7 @@ class OrderListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<RequestOrder> orders = [];
+    bool isLoading = true;
     return BlocConsumer<OrderListBloc, OrderListState>(
       builder: (context, state) {
         return DefaultTabController(
@@ -62,35 +67,51 @@ class OrderListView extends StatelessWidget {
                     color: AppColor.blackColor,
                   )),
             ),
-            body: orders.isNotEmpty
-                ? Column(
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: orders.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) =>
-                              ItemOrder(requestOrder: orders[index]),
-                          separatorBuilder: (context, index) => Container(
-                            height: 10.0,
-                            color: Colors.grey.shade100,
+            body: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : orders.isNotEmpty
+                    ? Column(
+                        children: [
+                          Expanded(
+                            child: ListView.separated(
+                              itemCount: orders.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) =>
+                                  ItemOrder(requestOrder: orders[index]),
+                              separatorBuilder: (context, index) => Container(
+                                height: 10.0,
+                                color: Colors.grey.shade100,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )
-                : const Center(child: CircularProgressIndicator()),
+                        ],
+                      )
+                    : const EmptyDataWidget(
+                        emptyType: EmptyType.orderListEmpty),
           ),
         );
       },
       listener: (context, state) {
         if (state is CancelOrderState) {
           BottomSheetUtils.showBottomSheetSelectReasonForCancelOrder(
-            context: context,
-            onSelect: () {},
-          );
+              context: context,
+              onSelect: (String reason) {
+                context
+                    .read<OrderListBloc>()
+                    .add(OnConfirmCancelOrderEvent(state.id, reason));
+              },
+              onClose: () {
+                context.read<OrderListBloc>().add(OnCloseBottomSheetEvent());
+              });
         } else if (state is DisplayOrderListState) {
+          isLoading = false;
           orders = state.orders;
+        } else if (state is CloseBottomSheetState) {
+          log('bottom sheet is closed');
+        } else if (state is ConfirmCancelOrderState) {
+          EasyLoading.showSuccess('Huỷ đơn hàng thành công');
+        } else if (state is ErrorCancelOrderState) {
+          EasyLoading.showError('Đã xảy ra lỗi');
         }
       },
     );
