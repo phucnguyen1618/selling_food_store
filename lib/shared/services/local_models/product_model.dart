@@ -18,6 +18,8 @@ class ProductModel extends HiveObject {
   double? discount;
   @HiveField(6)
   String brand;
+  @HiveField(7)
+  List<String> typeProducts;
 
   ProductModel(
     this.idProduct,
@@ -27,5 +29,6 @@ class ProductModel extends HiveObject {
     this.cost,
     this.discount,
     this.brand,
+    this.typeProducts,
   );
 }

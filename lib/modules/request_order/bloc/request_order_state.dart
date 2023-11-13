@@ -9,9 +9,14 @@ abstract class RequestOrderState extends Equatable {
 
 class InitRequestOrderState extends RequestOrderState {}
 
-class IncreaseNumberProductState extends RequestOrderState {}
+class UpdateNumberProductState extends RequestOrderState {
+  final double price;
 
-class DecreaseNumberProductState extends RequestOrderState {}
+  UpdateNumberProductState(this.price);
+
+  @override
+  List<Object?> get props => [price];
+}
 
 class DisplayProductForRequestOrderState extends RequestOrderState {
   final List<Cart> cartList;
@@ -35,7 +40,15 @@ class DisplayUserInfoState extends RequestOrderState {
   List<Object?> get props => [name, address];
 }
 
-class RequestOrderProductSuccessState extends RequestOrderState {}
+class RequestOrderProductSuccessState extends RequestOrderState {
+  final String name;
+  final String address;
+
+  RequestOrderProductSuccessState(this.name, this.address);
+
+  @override
+  List<Object?> get props => [name, address];
+}
 
 class RequestOrderProductFailureState extends RequestOrderState {
   final String message;

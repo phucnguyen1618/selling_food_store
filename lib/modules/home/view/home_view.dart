@@ -102,7 +102,7 @@ class HomeView extends StatelessWidget {
                 focusColor: AppColor.transparentColor,
                 hoverColor: AppColor.transparentColor,
                 icon: const Icon(
-                  Icons.more_horiz_outlined,
+                  Icons.notifications_none_outlined,
                   color: Colors.black,
                 ),
               ),

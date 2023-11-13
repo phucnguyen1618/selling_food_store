@@ -1,9 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selling_food_store/dependency_injection.dart';
+import 'package:selling_food_store/models/review.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../models/request_order.dart';
+import '../../../shared/utils/strings.dart';
 
 class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   List<RequestOrder> orderList = [];
@@ -15,6 +20,9 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     on<OnCancelOrderEvent>(_onCancelOrder);
     on<OnCloseBottomSheetEvent>(_onCloseBottomSheet);
     on<OnConfirmCancelOrderEvent>(_onConfirmCancelOrder);
+    on<OnErrorEvent>(_onErrorCancelOrder);
+    on<OnCancelOrderSuccessEvent>(_onCancelOrderSuccess);
+    on<OnFeedbackProductEvent>(_onFeedback);
   }
 
   void _onLoadingOrderList(
@@ -51,10 +59,38 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   void _onConfirmCancelOrder(
       OnConfirmCancelOrderEvent event, Emitter<OrderListState> emitter) {
     FirebaseService.updateReasonForCancelOrder(event.idOrder, event.reason, () {
-      emitter(ConfirmCancelOrderState());
+      add(OnCancelOrderSuccessEvent());
     }, (error) {
-      emitter(ErrorCancelOrderState(error));
+      add(OnErrorEvent(error));
     });
+  }
+
+  void _onFeedback(
+      OnFeedbackProductEvent event, Emitter<OrderListState> emitter) {
+    String idReview = const Uuid().v1();
+    final prefs = getIt.get<SharedPreferences>();
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      final review = Review(
+          idReview,
+          idUser,
+          event.review,
+          Strings.titleNameUserFeedbackDemo,
+          Strings.avatarDemo,
+          event.rating ?? 0);
+      FirebaseService.writeReviewForProduct(event.product.idProduct, review);
+      emitter(FeedbackProductState());
+    }
+  }
+
+  void _onCancelOrderSuccess(
+      OnCancelOrderSuccessEvent event, Emitter<OrderListState> emitter) {
+    emitter(ConfirmCancelOrderState());
+  }
+
+  void _onErrorCancelOrder(
+      OnErrorEvent event, Emitter<OrderListState> emitter) {
+    emitter(ErrorCancelOrderState(event.error));
   }
 
   List<RequestOrder> filterOrderListFromStatus(int value) {

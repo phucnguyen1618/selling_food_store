@@ -1,16 +1,20 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_event.dart';
 import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
+import 'package:selling_food_store/modules/request_order/bloc/update_number_product_bloc.dart';
 import 'package:selling_food_store/modules/request_order/view/choose_payment_method.dart';
+import 'package:selling_food_store/modules/request_order/view/display_price.dart';
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
-import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/general/general_button.dart';
 import 'cart_order_info.dart';
 import 'user_info_widget.dart';
@@ -72,94 +76,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                   color: AppColor.dividerColor,
                   height: 12.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0, vertical: 24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'requestOrder'.tr(),
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'totalProductPrice'.tr(),
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Text(
-                            '${AppUtils.formatPrice(orderPrice)}đ',
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12.0),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'shippingFee'.tr(),
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          Text(
-                            AppUtils.formatPrice(Strings.shippingFeeValue),
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 24.0),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'totalPrice'.tr(),
-                            style: const TextStyle(
-                              fontSize: 16.0,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '${AppUtils.formatPrice(totalPrice)}đ',
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                DisplayPrice(order: orderPrice, total: totalPrice),
                 Container(
                   color: AppColor.dividerColor,
                   height: 12.0,
@@ -169,54 +86,67 @@ class _RequestOrderViewState extends State<RequestOrderView> {
             ),
           ),
           persistentFooterButtons: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'totalPrice'.tr(),
-                        style: const TextStyle(
-                          fontSize: 16.0,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.bold,
+            BlocBuilder<UpdateNumberProductBloc, RequestOrderState>(
+                builder: ((context, state) {
+              if (state is UpdateNumberProductState) {
+                totalPrice = state.price + 20000;
+              }
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'totalPrice'.tr(),
+                          style: const TextStyle(
+                            fontSize: 16.0,
+                            color: AppColor.blackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '${AppUtils.formatPrice(totalPrice)}đ',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          '${AppUtils.formatPrice(totalPrice)}đ',
+                          style: const TextStyle(
+                            fontSize: 18.0,
+                            color: AppColor.blackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12.0),
-                  GeneralButton(
-                    title: 'order'.tr(),
-                    onClick: () {
-                      context
-                          .read<RequestOrderBloc>()
-                          .add(OnRequestOrderProductEvent(cartList, null));
-                    },
-                  )
-                ],
-              ),
-            )
+                      ],
+                    ),
+                    const SizedBox(height: 12.0),
+                    GeneralButton(
+                      title: 'order'.tr(),
+                      onClick: () {
+                        context
+                            .read<RequestOrderBloc>()
+                            .add(OnRequestOrderProductEvent(cartList, null));
+                      },
+                    )
+                  ],
+                ),
+              );
+            }))
           ],
         );
       }),
       listener: (context, state) {
         if (state is RequestOrderProductSuccessState) {
-          context.goNamed('confirmOrder');
-        } else if (state is IncreaseNumberProductState) {}
+          context.goNamed('confirmOrder', extra: {
+            "name": state.name,
+            "address": state.address,
+          });
+        } else if (state is RequestOrderProductFailureState) {
+          EasyLoading.showError(state.message);
+        } else if (state is ChoosePaymentMethodState) {
+          log('Payment method is ${state.value}');
+        }
       },
     );
   }

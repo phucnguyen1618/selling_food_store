@@ -17,7 +17,7 @@ Future<void> main() async {
   ]);
   await DependencyInjection.setUp();
   runApp(
-    EasyLocalization(
+    EasyLocalization(   
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('vi', 'VN'),

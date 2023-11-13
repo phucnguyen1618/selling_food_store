@@ -1,7 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:selling_food_store/dependency_injection.dart';
+import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc.dart';
+import 'package:selling_food_store/modules/request_order/bloc/request_order_event.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../shared/utils/app_color.dart';
+import '../../../shared/utils/strings.dart';
 
 class ChoosePaymentMethod extends StatefulWidget {
   const ChoosePaymentMethod({super.key});
@@ -11,8 +17,14 @@ class ChoosePaymentMethod extends StatefulWidget {
 }
 
 class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
-  bool? selectedPaymentMethod = true;
-  int paymentMethodValue = 0;
+  final prefs = getIt.get<SharedPreferences>();
+  int paymentMethodValue = -1;
+
+  @override
+  void initState() {
+    paymentMethodValue = prefs.getInt(Strings.paymentMethod) ?? -1;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +44,8 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
           ),
           const SizedBox(height: 12.0),
           RadioListTile(
-            value: true,
-            groupValue: selectedPaymentMethod,
+            value: 0,
+            groupValue: paymentMethodValue,
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.trailing,
             title: Text(
@@ -45,14 +57,15 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             ),
             onChanged: (value) {
               setState(() {
-                selectedPaymentMethod = value;
                 paymentMethodValue = 0;
+                context.read<RequestOrderBloc>().add(
+                    OnChoosePaymentMethodEvent(value ?? paymentMethodValue));
               });
             },
           ),
           RadioListTile(
-            value: false,
-            groupValue: selectedPaymentMethod,
+            value: 1,
+            groupValue: paymentMethodValue,
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.trailing,
             title: Text(
@@ -64,8 +77,9 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             ),
             onChanged: (value) {
               setState(() {
-                selectedPaymentMethod = value;
                 paymentMethodValue = 1;
+                context.read<RequestOrderBloc>().add(
+                    OnChoosePaymentMethodEvent(value ?? paymentMethodValue));
               });
             },
           ),

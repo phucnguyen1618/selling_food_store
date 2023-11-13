@@ -138,5 +138,21 @@
     "note_new_password": "Lưu ý: Mật khẩu mới cần có ít nhất 8 ký tự, trong đó có ít nhất 1 chữ hoa, 1 chữ thường hoặc 1 ký tự đặc biệt,...",
     "confirm_new_password": "Xác nhận mật khẩu mới",
     "note_confirm_password": "Cả hai mật khẩu phải khớp nhau.",
-    "wrong_password": "Mật khẩu đăng nhập không đúng"
+    "wrong_password": "Mật khẩu đăng nhập không đúng",
+    "cancel_order_success": "Huỷ đơn hàng thành công",
+    "title_cancel_order": "Tại sao bạn lại huỷ đặt hàng ?",
+    "confirm_cancel_order": "Xác nhận",
+    "reason_one": "Mặt hàng không đúng chất lượng như giới thiệu.",
+    "reason_two": "Tôi muốn huỷ vì có sự nhầm lẫn trong quá trình đặt hàng.",
+    "reason_three": "Vì có sự nhầm lần trong số lượng đặt sản phẩm.",
+    "reason_four": "Vì có sự nhầm lẫn trong chọn phương thức thanh toán.",
+    "reason_five": "Vì muốn đặt sản phẩm khác có giá rẻ hơn.",
+    "ordered" : "Đã đặt hàng",
+    "delivering": "Đang giao hàng",
+    "accomplished": "Đã hoàn thành",
+    "canceled": "Đã huỷ",
+    "text_ordered": "Nhận hàng: Sau 2-3 ngày làm việc",
+    "text_delivering": "Đơn hàng đang được vận chuyển",
+    "text_order_success": "Đơn hàng đã hoàn thành",
+    "text_canceled": "Đơn hàng bị huỷ"
 }

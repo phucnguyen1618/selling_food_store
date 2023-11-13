@@ -8,7 +8,13 @@ import '../../utils/app_utils.dart';
 
 class ItemProductOrderInfo extends StatefulWidget {
   final Cart cart;
-  const ItemProductOrderInfo({super.key, required this.cart});
+  final Function() onUpdate;
+
+  const ItemProductOrderInfo({
+    super.key,
+    required this.cart,
+    required this.onUpdate,
+  });
 
   @override
   State<ItemProductOrderInfo> createState() => _ItemProductOrderInfoState();
@@ -191,8 +197,8 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
   void increaseNumberProduct() {
     setState(() {
       quantity++;
-      price = widget.cart.product.getPrice() * quantity;
       widget.cart.updateQuantity(quantity);
+      widget.onUpdate();
     });
   }
 
@@ -202,8 +208,8 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
       if (quantity <= 0) {
         quantity = 1;
       }
-      price = widget.cart.product.getPrice() * quantity;
       widget.cart.updateQuantity(quantity);
+      widget.onUpdate();
     });
   }
 }

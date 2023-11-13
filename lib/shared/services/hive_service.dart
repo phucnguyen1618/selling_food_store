@@ -47,19 +47,16 @@ class HiveService {
 
   static void deleteItemCart(List<Cart> dataList) {
     var cartBox = Hive.box<CartModel>('cartList');
-    List<CartModel> cartModelList = [];
     for (Cart cart in dataList) {
-      String product = jsonEncode(cart.product);
-      CartModel cartModel = CartModel(
-          cart.idCart, product, cart.dateTimeOrder, cart.orderQuantity);
-      cartModelList.add(cartModel);
+      cartBox.delete(cart.idCart);
     }
-    cartBox.deleteAll(cartModelList);
   }
 
   static void deleteAllItemCart() {
     List<Cart> dataList = getCartList();
-    deleteItemCart(dataList);
+    if (dataList.isNotEmpty) {
+      deleteItemCart(dataList);
+    }
   }
 
   static void addKeyword(String input) {

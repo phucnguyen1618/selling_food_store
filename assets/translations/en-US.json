@@ -138,5 +138,21 @@
     "note_new_password": "Note: New password needs to be at least 8 characters, including at least one uppercase letter, one lowercase letter,...",
     "confirm_new_password": "Confirm new password",
     "note_confirm_password": "Both passwords must match.",
-    "wrong_password": "Login password is incorrect"
+    "wrong_password": "Login password is incorrect",
+    "cancel_order_success": "Order canceled successfully",
+    "title_cancel_order": "Why did you cancel the order?",
+    "confirm_cancel_order": "Confirm",
+    "reason_one": "The item is not of the same quality as introduced.",
+    "reason_two": "I want to cancel because there was a mistake during the ordering process.",
+    "reason_three": "Because there was a mistake in the quantity of the product ordered.",
+    "reason_four": "Because there is confusion in choosing the payment method.",
+    "reason_five": "Because I want to order another product with a cheaper price.",
+    "ordered": "Ordered",
+    "delivering": "Delivering",
+    "accomplished": "Order completed",
+    "canceled": "Order canceled",
+    "text_ordered": "Receive goods: After 2-3 working days",
+    "text_delivering": "Order is being shipped",
+    "text_order_success": "Order has been completed",
+    "text_canceled": "Order was cancelled"
 }

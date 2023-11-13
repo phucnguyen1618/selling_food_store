@@ -30,6 +30,8 @@ class ConfirmCancelOrderState extends OrderListState {}
 
 class CloseBottomSheetState extends OrderListState {}
 
+class FeedbackProductState extends OrderListState {}
+
 class ErrorCancelOrderState extends OrderListState {
   final String error;
 

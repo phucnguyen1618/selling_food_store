@@ -4,6 +4,7 @@ import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/user_info.dart';
 import 'package:selling_food_store/modules/cart/cart_page.dart';
 import 'package:selling_food_store/modules/change_password/change_password_page.dart';
+import 'package:selling_food_store/modules/change_payment/change_payment_page.dart';
 import 'package:selling_food_store/modules/confirm_order.dart/confirm_order_page.dart';
 import 'package:selling_food_store/modules/detail/product_detail_page.dart';
 import 'package:selling_food_store/modules/edit_profile/edit_profile_page.dart';
@@ -28,6 +29,7 @@ final GoRouter appRouter = GoRouter(
       routes: <RouteBase>[
         GoRoute(
             path: 'home',
+            name: 'home',
             builder: (BuildContext context, GoRouterState state) {
               return const HomePage();
             },
@@ -114,6 +116,13 @@ final GoRouter appRouter = GoRouter(
                         return const ChangePasswordPage();
                       },
                     ),
+                    GoRoute(
+                      path: 'changePayment',
+                      name: 'changePayment',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return const ChangePaymentPage();
+                      },
+                    ),
                   ]),
               GoRoute(
                   path: 'home/requestOrder',
@@ -136,7 +145,10 @@ final GoRouter appRouter = GoRouter(
                   path: 'home/confirmOrder',
                   name: 'confirmOrder',
                   builder: (BuildContext context, GoRouterState state) {
-                    return const ConfirmOrderPage();
+                    final dataValue = state.extra as Map<String, dynamic>;
+                    String name = dataValue['name'];
+                    String address = dataValue['address'];
+                    return ConfirmOrderPage(name: name, address: address);
                   }),
             ]),
       ],

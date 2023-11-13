@@ -65,6 +65,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _onChangeLanguage(
       OnChangeLanguageEvent event, Emitter<ProfileState> emitter) {
+        
     emitter(ChangeLanguageState(event.locale));
   }
 }

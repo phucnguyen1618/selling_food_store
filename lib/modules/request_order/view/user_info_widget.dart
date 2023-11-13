@@ -5,20 +5,15 @@ import 'package:selling_food_store/modules/request_order/bloc/request_order_stat
 
 import '../../../shared/utils/app_color.dart';
 
-class UserInfoWidget extends StatefulWidget {
+class UserInfoWidget extends StatelessWidget {
   const UserInfoWidget({super.key});
 
-  @override
-  State<UserInfoWidget> createState() => _UserInfoWidgetState();
-}
-
-class _UserInfoWidgetState extends State<UserInfoWidget> {
-  String name = '';
-  String address = '';
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RequestOrderBloc, RequestOrderState>(
         builder: (context, state) {
+      String name = '';
+      String address = '';
       if (state is DisplayUserInfoState) {
         name = state.name;
         address = state.address;
@@ -45,8 +40,7 @@ class _UserInfoWidgetState extends State<UserInfoWidget> {
           ),
         ),
         trailing: IconButton(
-            onPressed: () {
-            },
+            onPressed: () {},
             icon: const Icon(
               Icons.arrow_forward_ios,
               size: 16.0,

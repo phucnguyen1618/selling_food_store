@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,13 +16,13 @@ class _ReasonCancelOrderBottomSheetState
     extends State<ReasonCancelOrderBottomSheet> {
   int isSelected = -1;
   List<String> reasons = [
-    'Mặt hàng không đúng chất lượng như giới thiệu.',
-    'Tôi muốn huỷ vì có sự nhầm lẫn trong quá trình đặt hàng.',
-    'Vì có sự nhầm lần trong số lượng đặt sản phẩm.',
-    'Vì có sự nhầm lẫn trong chọn phương thức thanh toán.',
-    'Vì có sự nhầm lẫn trong chọn phương thức thanh toán.',
-    'Vì muốn đặt sản phẩm khác có giá rẻ hơn.',
+    'reason_one'.tr(),
+    'reason_two'.tr(),
+    'reason_three'.tr(),
+    'reason_four'.tr(),
+    'reason_five'.tr(),
   ];
+  
   @override
   Widget build(BuildContext context) {
     double baseWidth = MediaQuery.of(context).size.width;
@@ -30,9 +31,9 @@ class _ReasonCancelOrderBottomSheetState
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 16.0),
-        const Text(
-          'Tại sao bạn lại huỷ đặt hàng ?',
-          style: TextStyle(
+        Text(
+          'title_cancel_order'.tr(),
+          style: const TextStyle(
             fontSize: 18.0,
             color: AppColor.blackColor,
             fontWeight: FontWeight.bold,
@@ -75,10 +76,10 @@ class _ReasonCancelOrderBottomSheetState
               borderRadius: BorderRadius.circular(4.0),
               color: Colors.pinkAccent,
             ),
-            child: const Text(
-              'Xác nhận',
+            child: Text(
+              'confirm_cancel_order'.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16.0,
                 color: AppColor.whiteColor,
                 fontWeight: FontWeight.bold,

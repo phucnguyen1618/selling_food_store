@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:selling_food_store/models/product.dart';
+import 'package:selling_food_store/models/type_product.dart';
 
 import '../../../models/cart.dart';
 
@@ -19,12 +20,32 @@ class DialogCloseState extends HomeState {}
 class DisplayProductListState extends HomeState {
   final List<Product> recommendProductList;
   final List<Product> hotSellingProductList;
+  final List<Product> productList;
+  final List<TypeProduct> typeProducts;
 
   DisplayProductListState(
-      this.recommendProductList, this.hotSellingProductList);
+    this.recommendProductList,
+    this.hotSellingProductList,
+    this.productList,
+    this.typeProducts,
+  );
 
   @override
-  List<Object?> get props => [recommendProductList, hotSellingProductList];
+  List<Object?> get props => [
+        recommendProductList,
+        hotSellingProductList,
+        productList,
+        typeProducts,
+      ];
+}
+
+class ReloadProductListState extends HomeState {
+  final List<Product> products;
+
+  ReloadProductListState(this.products);
+
+  @override
+  List<Object?> get props => [products];
 }
 
 class BuyNowState extends HomeState {

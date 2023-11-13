@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:momo_vn/momo_vn.dart';
 import 'package:selling_food_store/models/user_info_order.dart';
@@ -9,13 +8,16 @@ import 'package:selling_food_store/modules/request_order/bloc/request_order_stat
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../dependency_injection.dart';
 import '../../../models/request_order.dart';
 import '../../../shared/utils/strings.dart';
 
 class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
-  int paymentMethod = 1;
+  final prefs = getIt.get<SharedPreferences>();
+
   late MomoVn _momoPay;
   late PaymentResponse _momoPaymentResult;
 
@@ -24,8 +26,8 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
     on<OnDisplayUserInfoEvent>(_onDisplayUserInfo);
     on<OnLoadingRequestOrderEvent>(_onLoadingRequestOrder);
     on<OnDisplayRequestOrderEvent>(_onDisplayRequestOrder);
-    on<OnRequestOrderProductEvent>(_onRequestOrderProduct);
     on<OnChoosePaymentMethodEvent>(_onChoosePaymentMethod);
+    on<OnRequestOrderProductEvent>(_onRequestOrderProduct);
     on<OnRequestOrderProductSuccessEvent>(_onRequestOrderSuccess);
     on<OnRequestOrderProductFailureEvent>(_onRequestOrderFailure);
     on<OnRequestPaymentEvent>(_onRequestPayment);
@@ -59,7 +61,7 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
 
   void _onChoosePaymentMethod(
       OnChoosePaymentMethodEvent event, Emitter<RequestOrderState> emitter) {
-    paymentMethod = event.value;
+    prefs.setInt(Strings.paymentMethod, event.value);
     emitter(ChoosePaymentMethodState(event.value));
   }
 
@@ -71,6 +73,7 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
             data.idAccount, data.fullName, '0392634700', data.address);
         String idOrder = const Uuid().v1();
         double orderPrice = AppUtils.calculateTotalPrice(event.cartList);
+        int paymentMethodValue = prefs.getInt(Strings.paymentMethod) ?? -1;
         final requestOrder = RequestOrder(
             idOrder,
             orderUserInfo,
@@ -80,16 +83,27 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
             DateTime.now(),
             0,
             event.note,
-            paymentMethod,
-            '');
-        FirebaseService.requestOrder(requestOrder, () {
-          FirebaseService.removeCartList();
-          HiveService.deleteAllItemCart();
-          add(OnRequestOrderProductSuccessEvent());
-        }, (error) {
-          log('Error: $error');
-          add(OnRequestOrderProductFailureEvent(error));
-        });
+            paymentMethodValue,
+            null);
+        if (paymentMethodValue == 0) {
+          FirebaseService.requestOrder(requestOrder, () {
+            for (var element in event.cartList) {
+              FirebaseService.insertOrderForBrand(element);
+            }
+            FirebaseService.removeCartList();
+            HiveService.deleteAllItemCart();
+            add(OnRequestOrderProductSuccessEvent(
+                orderUserInfo.name, orderUserInfo.address));
+          }, (error) {
+            log('Error: $error');
+            add(OnRequestOrderProductFailureEvent(error));
+          });
+        } else if (paymentMethodValue == 1) {
+          add(OnRequestPaymentEvent(requestOrder));
+        } else if (paymentMethodValue == -1) {
+          add(OnRequestOrderProductFailureEvent(
+              'Vui lòng chọn phương thức thanh toán'));
+        }
       }
     }, (error) {
       log('Error: $error');
@@ -99,11 +113,7 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
 
   void _onRequestOrderSuccess(OnRequestOrderProductSuccessEvent event,
       Emitter<RequestOrderState> emitter) {
-    //if (paymentMethod == 0) {
-    emitter(RequestOrderProductSuccessState());
-    //} else {
-    //  add(OnRequestPaymentEvent());
-    // }
+    emitter(RequestOrderProductSuccessState(event.name, event.address));
   }
 
   void _onRequestPayment(

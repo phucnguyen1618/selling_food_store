@@ -14,6 +14,7 @@ import 'package:selling_food_store/models/type_product.dart';
 import 'package:selling_food_store/shared/utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../models/cart.dart';
 import '../../models/detail_brand.dart';
@@ -374,6 +375,16 @@ class FirebaseService {
     }
   }
 
+  static void insertOrderForBrand(Cart cart) {
+    String idBrand = cart.product.brand.idBrand;
+    String idCart = const Uuid().v1();
+    _dbRef
+        .child('orderForBrand')
+        .child(idBrand)
+        .child(idCart)
+        .set(cart.toJson());
+  }
+
   static void removeCartList() {
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
@@ -464,22 +475,27 @@ class FirebaseService {
     }
   }
 
-  static void writeReviewForProduct(
-    String idProduct,
-    Review review,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
+  static void writeReviewForProduct(String idProduct, Review review) {
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
       _dbRef
           .child('reviews')
           .child(idProduct)
-          .set(review)
-          .then((value) => onComplete())
-          .onError((error, stackTrace) => onError(error.toString()));
+          .child(review.id)
+          .set(review.toJson());
     }
   }
+
+  // static bool checkReviewExists(String idProduct, String idUser) {
+  //   final idUser = prefs.getString(Strings.idUser);
+  //   if (idUser != null) {
+  //     _dbRef
+  //         .child('reviews')
+  //         .child(idProduct)
+  //         .child(review.id)
+  //         .set(review.toJson());
+  //   }
+  // }
 
   static Future<void> changePassword(
     String oldPasword,

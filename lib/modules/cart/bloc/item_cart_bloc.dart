@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
+import 'package:selling_food_store/shared/services/hive_service.dart';
 
 class ItemCartBloc extends Bloc<CartEvent, CartState> {
   double _totalPrice = 0;
@@ -25,14 +26,13 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _onDecreaseQuantity(
-      OnDecreaseQuantityEvent event, Emitter<CartState> emitter) { 
+      OnDecreaseQuantityEvent event, Emitter<CartState> emitter) {
     _totalPrice = _totalPrice - event.value;
     add(OnDisplayTotalPriceEvent(_totalPrice));
   }
 
   void _onDeleteItemCart(OnDeleteItemEvent event, Emitter<CartState> emitter) {
-    event.cartList;
+    HiveService.deleteItemCart(event.cartList);
     emitter(OnDeleteItemCartState(event.isDeleteItem));
   }
 }
-  

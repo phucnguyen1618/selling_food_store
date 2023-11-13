@@ -94,7 +94,11 @@ class _ItemCartState extends State<ItemCart> {
                   trailing: isDeleteItem
                       ? Checkbox(
                           value: isDeleteItem,
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            setState(() {
+                              isDeleteItem = !isDeleteItem;
+                            });
+                          },
                         )
                       : const SizedBox(),
                 ),

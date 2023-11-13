@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
+import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 
@@ -161,7 +164,12 @@ class ItemProductInOrder extends StatelessWidget {
                       const SizedBox(width: 12.0),
                       InkWell(
                         onTap: () {
-                          ShowDialogUtils.showDialogFeedback(context);
+                          ShowDialogUtils.showDialogFeedback(context, cart,
+                              (rating, review) {
+                            context.read<OrderListBloc>().add(
+                                OnFeedbackProductEvent(
+                                    rating, review, cart.product));
+                          });
                         },
                         child: Container(
                           width: baseWidth / 3,

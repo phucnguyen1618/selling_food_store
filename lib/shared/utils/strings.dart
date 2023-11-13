@@ -9,7 +9,7 @@ class Strings {
 
   static const String nameProduct = 'Dưỡng mi Revitalash Advanced';
   static const String textDiscountProduct = '2.960.000';
-  static const String costProduct = '3.800.000';
+  static const double costProduct = 3800000;
   static const String unitPrice = 'VNĐ';
   static const String googleSignInText = 'Đăng nhập với tài khoản Google';
   static const String sologanApp = 'Chăm sóc sức khoẻ, sắc đẹp từ gốc';
@@ -21,8 +21,13 @@ class Strings {
   static const String phone = '039263**00';
 
   static const String titleBrandDemo = 'Luxury Shop';
-  static const String titleNameUserFeedbackDemo = 'Nguyen Hoang Thai Binh';
+  static const String titleNameUserFeedbackDemo = 'Nguyễn Hoàng Thái Bình';
   static const String contentFeedbackDemo =
       'Sản phẩm tuyệt vời, an toàn, không có gì để chê. Lần sau sẽ ủng hộ tiếp cho shop nha.';
   static const String upTenCart = '10+';
+
+  static const String typeProduct = 'Mỹ phẩm thiên nhiên';
+
+  static const String language = 'language';
+  static const String paymentMethod = 'paymentMethod';
 }

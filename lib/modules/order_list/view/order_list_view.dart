@@ -109,9 +109,11 @@ class OrderListView extends StatelessWidget {
         } else if (state is CloseBottomSheetState) {
           log('bottom sheet is closed');
         } else if (state is ConfirmCancelOrderState) {
-          EasyLoading.showSuccess('Huỷ đơn hàng thành công');
+          EasyLoading.showSuccess('cancel_order_success'.tr());
         } else if (state is ErrorCancelOrderState) {
           EasyLoading.showError('unknown'.tr());
+        } else if (state is FeedbackProductState) {
+          EasyLoading.showToast('Cảm ơn bạn đã phản hồi');
         }
       },
     );

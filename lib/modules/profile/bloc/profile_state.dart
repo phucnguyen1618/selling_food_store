@@ -11,6 +11,7 @@ class InitProfileState extends ProfileState {}
 
 class DisplayProfileState extends ProfileState {
   final UserInfo? userInfo;
+  
 
   DisplayProfileState({this.userInfo});
 

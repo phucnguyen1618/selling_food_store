@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../models/cart.dart';
 
@@ -24,30 +24,30 @@ class AppUtils {
   static String formatOrderStatus(int status) {
     switch (status) {
       case 0:
-        return 'Đã đặt hàng';
+        return 'ordered'.tr();
       case 1:
-        return 'Đang giao hàng';
+        return 'delivering'.tr();
       case 2:
-        return 'Đã hoàn thành';
+        return 'accomplished'.tr();
       case 3:
-        return 'Đã huỷ';
+        return 'canceled'.tr();
       default:
-        return 'Đang giao hàng';
+        return 'delivering'.tr();
     }
   }
 
   static String formatOrderTitleStatus(int status) {
     switch (status) {
       case 0:
-        return 'Nhận hàng: Sau 2-3 ngày làm việc';
+        return 'text_ordered'.tr();
       case 1:
-        return 'Đơn hàng đang được vận chuyển';
+        return 'text_delivering'.tr();
       case 2:
-        return 'Đơn hàng đã hoàn thành';
+        return 'text_order_success'.tr();
       case 3:
-        return 'Đơn hàng bị huỷ';
+        return 'text_canceled'.tr();
       default:
-        return 'Đơn hàng đang vận chuyển';
+        return 'text_delivering'.tr();
     }
   }
 
@@ -75,5 +75,4 @@ class AppUtils {
     return value1.characters.first.toUpperCase() +
         value2.characters.first.toUpperCase();
   }
-  
 }

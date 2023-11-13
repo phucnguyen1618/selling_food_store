@@ -110,6 +110,7 @@ flutter:
     - assets/images/icon_messenger.png
     - assets/images/flag_of_vietnam.png
     - assets/images/flag_of_england.png
+    - assets/images/icon_momo.jpg
     - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see

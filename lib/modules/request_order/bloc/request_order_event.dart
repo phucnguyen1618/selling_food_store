@@ -1,4 +1,5 @@
 import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/models/request_order.dart';
 
 abstract class RequestOrderEvent {}
 
@@ -36,7 +37,12 @@ class OnChoosePaymentMethodEvent extends RequestOrderEvent {
   OnChoosePaymentMethodEvent(this.value);
 }
 
-class OnRequestOrderProductSuccessEvent extends RequestOrderEvent {}
+class OnRequestOrderProductSuccessEvent extends RequestOrderEvent {
+  String name;
+  String address;
+
+  OnRequestOrderProductSuccessEvent(this.name, this.address);
+}
 
 class OnRequestOrderProductFailureEvent extends RequestOrderEvent {
   String error;
@@ -44,20 +50,18 @@ class OnRequestOrderProductFailureEvent extends RequestOrderEvent {
   OnRequestOrderProductFailureEvent(this.error);
 }
 
-class OnRequestPaymentEvent extends RequestOrderEvent {}
+class OnRequestPaymentEvent extends RequestOrderEvent {
+  RequestOrder order;
+
+  OnRequestPaymentEvent(this.order);
+}
 
 class OnPaymentSuccessEvent extends RequestOrderEvent {}
 
 class OnPaymentFailureEvent extends RequestOrderEvent {}
 
-class OnIncreaseNumberProductEvent extends RequestOrderEvent {
-  int value;
+class OnUpdateNumberProductEvent extends RequestOrderEvent {
+  double value;
 
-  OnIncreaseNumberProductEvent(this.value);
-}
-
-class OnDecreaseNumberProductEvent extends RequestOrderEvent {
-  int value;
-
-  OnDecreaseNumberProductEvent(this.value);
+  OnUpdateNumberProductEvent(this.value);
 }

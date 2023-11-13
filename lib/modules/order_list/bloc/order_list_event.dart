@@ -1,3 +1,5 @@
+import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/models/request_order.dart';
 
 abstract class OrderListEvent {}
@@ -28,6 +30,20 @@ class OnConfirmCancelOrderEvent extends OrderListEvent {
 
   OnConfirmCancelOrderEvent(this.idOrder, this.reason);
 }
+
+class OnFeedbackProductEvent extends OrderListEvent {
+  double? rating;
+  String review;
+  Product product;
+
+  OnFeedbackProductEvent(
+    this.rating,
+    this.review,
+    this.product,
+  );
+}
+
+class OnCancelOrderSuccessEvent extends OrderListEvent {}
 
 class OnCloseBottomSheetEvent extends OrderListEvent {}
 

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
 import '../../utils/app_color.dart';
@@ -13,7 +14,10 @@ class FeedbackProductDialog extends StatefulWidget {
 }
 
 class _FeedbackProductDialogState extends State<FeedbackProductDialog> {
-  double rating = 0;
+
+  double rating = 3.0;
+  TextEditingController feedBackController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double baseWidth = MediaQuery.of(context).size.width;
@@ -65,6 +69,7 @@ class _FeedbackProductDialogState extends State<FeedbackProductDialog> {
                 : const SizedBox(),
             TextField(
               maxLines: 5,
+              controller: feedBackController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 hintText: 'inputFeedback'.tr(),
@@ -76,7 +81,12 @@ class _FeedbackProductDialogState extends State<FeedbackProductDialog> {
       ),
       actions: [
         TextButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pop({
+                "rating": rating,
+                "review": feedBackController.text,
+              });
+            },
             child: Text(
               'sendFeedback'.tr(),
               style: const TextStyle(

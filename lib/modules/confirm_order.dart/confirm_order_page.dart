@@ -5,7 +5,14 @@ import 'package:go_router/go_router.dart';
 import '../../shared/utils/app_color.dart';
 
 class ConfirmOrderPage extends StatelessWidget {
-  const ConfirmOrderPage({super.key});
+  final String name;
+  final String address;
+
+  const ConfirmOrderPage({
+    super.key,
+    required this.name,
+    required this.address,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +63,7 @@ class ConfirmOrderPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Text(
-                'Người nhận: Nguyễn Hoàng Phúc (+84392634700)\nĐịa chỉ: Cạnh số nhà 28, đường Ngô Đức Kế, Vinh Tân, Thành phố Vinh, tỉnh Nghệ An.',
+                'Người nhận: $name (+84392634700)\nĐịa chỉ: $address',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey.shade400),
               ),
@@ -64,7 +71,7 @@ class ConfirmOrderPage extends StatelessWidget {
             const SizedBox(height: 24.0),
             InkWell(
               onTap: () {
-                context.pop();
+                context.pushReplacementNamed('home');
               },
               child: Container(
                 alignment: Alignment.center,

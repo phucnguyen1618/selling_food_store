@@ -10,7 +10,9 @@ import 'package:selling_food_store/modules/profile/bloc/profile_state.dart';
 import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../dependency_injection.dart';
 import '../../../models/user_info.dart';
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
@@ -29,8 +31,10 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   bool isDisplay = false;
-  bool isChooseLanguage = true;
+  String chooseLanguage = 'vi';
   UserInfo? userInfo;
+
+  final prefs = getIt.get<SharedPreferences>();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +43,7 @@ class _ProfileViewState extends State<ProfileView> {
         if (state is DisplayProfileState) {
           isDisplay = true;
           userInfo = state.userInfo;
+          chooseLanguage = prefs.getString(Strings.language) ?? 'vi';
         }
         return Scaffold(
           backgroundColor: AppColor.whiteColor,
@@ -142,7 +147,9 @@ class _ProfileViewState extends State<ProfileView> {
                           _buildLabel(
                               name: 'paymentManage'.tr(),
                               icon: Icons.attach_money_outlined,
-                              onClicked: () {}),
+                              onClicked: () {
+                                context.goNamed('changePayment');
+                              }),
                           const SizedBox(height: 12.0),
                           _buildLabel(
                               name: 'yourCart'.tr(),
@@ -210,6 +217,7 @@ class _ProfileViewState extends State<ProfileView> {
         } else if (state is ErrorState) {
           EasyLoading.showError(state.error);
         } else if (state is ChangeLanguageState) {
+          prefs.setString(Strings.language, state.locale.languageCode);
           context.setLocale(state.locale);
         }
       },
@@ -263,11 +271,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   ),
                   trailing: Radio(
-                    value: true,
-                    groupValue: isChooseLanguage,
-                    onChanged: (bool? value) {
+                    value: 'vi',
+                    groupValue: chooseLanguage,
+                    onChanged: (String? value) {
                       setState(() {
-                        isChooseLanguage = value ?? false;
+                        chooseLanguage = value ?? 'vi';
                         if (onSelect != null) {
                           onSelect(const Locale('vi', 'VN'));
                         }
@@ -296,11 +304,11 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   ),
                   trailing: Radio(
-                    value: false,
-                    groupValue: isChooseLanguage,
-                    onChanged: (bool? value) {
+                    value: 'en',
+                    groupValue: chooseLanguage,
+                    onChanged: (String? value) {
                       setState(() {
-                        isChooseLanguage = value ?? false;
+                        chooseLanguage = value ?? 'en';
                         if (onSelect != null) {
                           onSelect(const Locale('en', 'US'));
                         }
