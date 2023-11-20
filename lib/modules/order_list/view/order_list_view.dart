@@ -24,6 +24,10 @@ class OrderListView extends StatelessWidget {
     bool isLoading = true;
     return BlocConsumer<OrderListBloc, OrderListState>(
       builder: (context, state) {
+        if (state is DisplayOrderListState) {
+          isLoading = false;
+          orders = state.orders;
+        }
         return DefaultTabController(
           length: 5,
           child: Scaffold(
@@ -110,6 +114,7 @@ class OrderListView extends StatelessWidget {
           log('bottom sheet is closed');
         } else if (state is ConfirmCancelOrderState) {
           EasyLoading.showSuccess('cancel_order_success'.tr());
+          context.read<OrderListBloc>().add(OnLoadingOrderListEvent());
         } else if (state is ErrorCancelOrderState) {
           EasyLoading.showError('unknown'.tr());
         } else if (state is FeedbackProductState) {

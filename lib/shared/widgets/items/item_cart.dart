@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/product.dart';
+import 'package:selling_food_store/modules/cart/bloc/cart_bloc.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
@@ -14,9 +15,11 @@ import '../general/price_widget.dart';
 
 class ItemCart extends StatefulWidget {
   final Cart cart;
+  final Function(Cart) onChecked;
   const ItemCart({
     super.key,
     required this.cart,
+    required this.onChecked,
   });
 
   @override
@@ -27,7 +30,7 @@ class _ItemCartState extends State<ItemCart> {
   int quantity = 0;
   double? price;
   Product? product;
-  bool isDeleteItem = false;
+  bool? isDeleteItem;
 
   @override
   void initState() {
@@ -51,6 +54,11 @@ class _ItemCartState extends State<ItemCart> {
       builder: (context, state) {
         if (state is OnDeleteItemCartState) {
           isDeleteItem = state.value;
+        } else if (state is ConfirmDeleteCartState) {
+          isDeleteItem = null;
+          context.read<CartBloc>().add(LoadingCartListEvent());
+        } else if (state is CancelDeleteCartState) {
+          isDeleteItem = null;
         }
         return Card(
           color: AppColor.whiteColor,
@@ -91,15 +99,17 @@ class _ItemCartState extends State<ItemCart> {
                       fontSize: 12.0,
                     ),
                   ),
-                  trailing: isDeleteItem
+                  trailing: isDeleteItem != null
                       ? Checkbox(
                           value: isDeleteItem,
                           onChanged: (value) {
                             setState(() {
-                              isDeleteItem = !isDeleteItem;
+                              isDeleteItem = value;
+                              if (isDeleteItem == true) {
+                                widget.onChecked(widget.cart);
+                              }
                             });
-                          },
-                        )
+                          })
                       : const SizedBox(),
                 ),
                 const SizedBox(height: 8.0),

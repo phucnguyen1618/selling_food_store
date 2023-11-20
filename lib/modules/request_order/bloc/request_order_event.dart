@@ -5,8 +5,9 @@ abstract class RequestOrderEvent {}
 
 class OnLoadingRequestOrderEvent extends RequestOrderEvent {
   List<Cart> cartList;
+  bool isBuyNow;
 
-  OnLoadingRequestOrderEvent(this.cartList);
+  OnLoadingRequestOrderEvent(this.cartList, this.isBuyNow);
 }
 
 class OnLoadingUserInfoEvent extends RequestOrderEvent {}

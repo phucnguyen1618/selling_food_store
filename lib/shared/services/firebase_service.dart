@@ -82,6 +82,28 @@ class FirebaseService {
     });
   }
 
+  static Future<void> fetchDataProductListWithType({
+    required String typeProduct,
+    required Function(List<Product>) onLoadComplete,
+  }) async {
+    List<Product> products = [];
+    _dbRef.child('products').child('recommended').get().then((snapshot) {
+      if (snapshot.exists) {
+        for (DataSnapshot dataSnapshot in snapshot.children) {
+          final result = jsonDecode(jsonEncode(dataSnapshot.value))
+              as Map<String, dynamic>;
+          final dataValue = Product.fromJson(result);
+          if (dataValue.typeProducts
+              .where((element) => element.name == typeProduct)
+              .isNotEmpty) {
+            products.add(dataValue);
+          }
+        }
+        onLoadComplete(products);
+      }
+    });
+  }
+
   static void fetchDataProductDetail(
     String id,
     Function(ProductDetail) onComplete,
@@ -385,10 +407,16 @@ class FirebaseService {
         .set(cart.toJson());
   }
 
-  static void removeCartList() {
+  static void removeCartList({List<Cart>? cartList}) {
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
-      _dbRef.child('carts').child(idUser).remove();
+      if (cartList != null) {
+        for (var cart in cartList) {
+          _dbRef.child('carts').child(idUser).child(cart.idCart).remove();
+        }
+      } else {
+        _dbRef.child('carts').child(idUser).remove();
+      }
     }
   }
 
@@ -413,10 +441,6 @@ class FirebaseService {
         }
       }).onError((error, stackTrace) => onError(error.toString()));
     }
-  }
-
-  static void addOrderToBrand(String id, RequestOrder order) {
-    _dbRef.child('brandHaveOrders').child(id).child(order.idOrder).set(order);
   }
 
   static void updateQuantityForCart(String idCart, int value) {
@@ -481,21 +505,11 @@ class FirebaseService {
       _dbRef
           .child('reviews')
           .child(idProduct)
+          .child(idUser)
           .child(review.id)
           .set(review.toJson());
     }
   }
-
-  // static bool checkReviewExists(String idProduct, String idUser) {
-  //   final idUser = prefs.getString(Strings.idUser);
-  //   if (idUser != null) {
-  //     _dbRef
-  //         .child('reviews')
-  //         .child(idProduct)
-  //         .child(review.id)
-  //         .set(review.toJson());
-  //   }
-  // }
 
   static Future<void> changePassword(
     String oldPasword,

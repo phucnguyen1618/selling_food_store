@@ -13,11 +13,11 @@ import 'package:selling_food_store/modules/home/view/bestselling_product_list.da
 import 'package:selling_food_store/modules/home/view/hotselling_product_list.dart';
 import 'package:selling_food_store/modules/home/view/recommend_product_list.dart';
 import 'package:selling_food_store/modules/home/view/type_product_list.dart';
-import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/utils/image_constants.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import 'package:selling_food_store/shared/widgets/banner/slide_banner.dart';
 import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
+import 'package:selling_food_store/shared/widgets/general/cart/cart_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/utils/app_color.dart';
@@ -33,7 +33,6 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(builder: (context, state) {
-      int numberCart = HiveService.getCartList().length;
       return Scaffold(
         backgroundColor: AppColor.whiteColor,
         appBar: AppBar(
@@ -61,52 +60,25 @@ class HomeView extends StatelessWidget {
             ),
           ),
           elevation: 0.0,
-          actions: [
+          actions: const [
+            CartButton(),
             Center(
-              child:
-                  BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                numberCart = HiveService.getCartList().length;
-                return badges.Badge(
-                    position: badges.BadgePosition.topEnd(top: 4, end: 4),
-                    showBadge: numberCart != 0,
-                    badgeContent: Text(
-                      numberCart <= 10
-                          ? numberCart.toString()
-                          : Strings.upTenCart,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 8.0,
-                      ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        context.goNamed('cart');
-                      },
-                      splashColor: AppColor.transparentColor,
-                      highlightColor: AppColor.transparentColor,
-                      focusColor: AppColor.transparentColor,
-                      hoverColor: AppColor.transparentColor,
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
-                        Icons.shopping_cart_outlined,
-                        color: AppColor.blackColor,
-                      ),
-                    ));
-              }),
-            ),
-            Center(
-              child: IconButton(
-                onPressed: () {},
-                splashColor: AppColor.transparentColor,
-                highlightColor: AppColor.transparentColor,
-                focusColor: AppColor.transparentColor,
-                hoverColor: AppColor.transparentColor,
-                icon: const Icon(
+              child: badges.Badge(
+                showBadge: true,
+                badgeContent: Text(
+                  Strings.upTenCart,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 8.0,
+                  ),
+                ),
+                child: Icon(
                   Icons.notifications_none_outlined,
-                  color: Colors.black,
+                  color: AppColor.blackColor,
                 ),
               ),
-            )
+            ),
+            SizedBox(width: 16.0),
           ],
         ),
         body: SingleChildScrollView(
@@ -129,12 +101,30 @@ class HomeView extends StatelessWidget {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _openChatBot();
-          },
-          backgroundColor: AppColor.transparentColor,
-          child: Image.asset(ImageConstants.iconChatBot),
+        floatingActionButton: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () {
+                _openChatBot();
+              },
+              heroTag: "Messenger",
+              backgroundColor: AppColor.transparentColor,
+              child: Image.asset(ImageConstants.iconChatBot),
+            ),
+            const SizedBox(height: 16.0),
+            FloatingActionButton(
+              onPressed: () {},
+              heroTag: "Call",
+              backgroundColor: Colors.redAccent,
+              child: const Icon(
+                Icons.call,
+                color: AppColor.whiteColor,
+              ),
+            )
+          ],
         ),
       );
     }, listener: (context, state) {

@@ -19,7 +19,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<OnDisplayProductList>(_onDisplayProductList);
     on<OnBuyNowEvent>(_onBuyNowProduct);
     on<OnAddProductToCartEvent>(_onAddProductToCart);
-    on<OnUpdateNumberCartEvent>(_onUpdateNumberCart);
     on<OnRequestSignInEvent>(_onRequestSignIn);
     on<OnBottomSheetCloseEvent>(_onBottomSheetClose);
     on<OnCloseDialogEvent>(_onDialogClose);
@@ -46,9 +45,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
     FirebaseService.fetchDataTypeProducts(onLoadComplete: (dataList) {
       typeProducts = dataList;
-      List<Product> products = _filterProductListWithType(Strings.typeProduct);
-      add(OnDisplayProductList(
-          recommendProductList, hotSellingProductList, typeProducts, products));
+      FirebaseService.fetchDataProductListWithType(
+        typeProduct: Strings.typeProduct,
+        onLoadComplete: (dataList) {
+          add(OnDisplayProductList(recommendProductList, hotSellingProductList,
+              typeProducts, dataList));
+        },
+      );
     });
   }
 
@@ -77,12 +80,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } else {
       add(OnRequestSignInEvent());
     }
-  }
-
-  void _onUpdateNumberCart(
-      OnUpdateNumberCartEvent event, Emitter<HomeState> emitter) {
-    int numberItems = event.numberCart++;
-    emitter(UpdateNumberCartState(numberItems));
   }
 
   void _onRequestSignIn(

@@ -33,12 +33,6 @@ class OnAddProductToCartEvent extends HomeEvent {
   OnAddProductToCartEvent(this.product);
 }
 
-class OnUpdateNumberCartEvent extends HomeEvent {
-  int numberCart;
-
-  OnUpdateNumberCartEvent(this.numberCart);
-}
-
 class OnTabItemClickedEvent extends HomeEvent {
   String content;
 

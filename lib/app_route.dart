@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/user_info.dart';
 import 'package:selling_food_store/modules/cart/cart_page.dart';
 import 'package:selling_food_store/modules/change_password/change_password_page.dart';
@@ -100,12 +99,16 @@ final GoRouter appRouter = GoRouter(
                         },
                         routes: [
                           GoRoute(
-                            path: 'requestOrder',
+                            path: 'profile/requestOrder',
                             name: 'requestOrderToBuyNow',
                             builder:
                                 (BuildContext context, GoRouterState state) {
-                              final dataValue = state.extra as List<Cart>;
-                              return RequestOrderPage(carts: dataValue);
+                              final dataValue =
+                                  state.extra as Map<String, dynamic>;
+                              final cartList = dataValue['cartList'];
+                              final isBuyNow = dataValue['isBuyNow'];
+                              return RequestOrderPage(
+                                  carts: cartList, isBuyNow: isBuyNow);
                             },
                           ),
                         ]),
@@ -128,8 +131,11 @@ final GoRouter appRouter = GoRouter(
                   path: 'home/requestOrder',
                   name: 'requestOrder',
                   builder: (BuildContext context, GoRouterState state) {
-                    final dataValue = state.extra as List<Cart>;
-                    return RequestOrderPage(carts: dataValue);
+                    final dataValue = state.extra as Map<String, dynamic>;
+                    final cartList = dataValue['cartList'];
+                    final isBuyNow = dataValue['isBuyNow'];
+                    return RequestOrderPage(
+                        carts: cartList, isBuyNow: isBuyNow);
                   },
                   routes: [
                     GoRoute(

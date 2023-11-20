@@ -65,12 +65,3 @@ class AddProductToCartState extends HomeState {
   @override
   List<Object?> get props => [product];
 }
-
-class UpdateNumberCartState extends HomeState {
-  final int value;
-
-  UpdateNumberCartState(this.value);
-
-  @override
-  List<Object?> get props => [value];
-}

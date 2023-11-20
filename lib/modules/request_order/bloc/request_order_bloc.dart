@@ -20,6 +20,7 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
 
   late MomoVn _momoPay;
   late PaymentResponse _momoPaymentResult;
+  bool _isBuyNow = false;
 
   RequestOrderBloc() : super(InitRequestOrderState()) {
     on<OnLoadingUserInfoEvent>(_onLoadingUserInfo);
@@ -49,6 +50,8 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
 
   void _onLoadingRequestOrder(
       OnLoadingRequestOrderEvent event, Emitter<RequestOrderState> emitter) {
+    _isBuyNow = event.isBuyNow;
+    log('Buy now: $_isBuyNow');
     add(OnDisplayRequestOrderEvent(event.cartList));
   }
 
@@ -90,8 +93,10 @@ class RequestOrderBloc extends Bloc<RequestOrderEvent, RequestOrderState> {
             for (var element in event.cartList) {
               FirebaseService.insertOrderForBrand(element);
             }
-            FirebaseService.removeCartList();
-            HiveService.deleteAllItemCart();
+            if (!_isBuyNow) {
+              FirebaseService.removeCartList();
+              HiveService.deleteAllItemCart();
+            }
             add(OnRequestOrderProductSuccessEvent(
                 orderUserInfo.name, orderUserInfo.address));
           }, (error) {

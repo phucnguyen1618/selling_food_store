@@ -8,6 +8,9 @@ import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/modules/home/bloc/home_bloc.dart';
 import 'package:selling_food_store/modules/home/bloc/home_event.dart';
 import 'package:selling_food_store/modules/home/bloc/home_state.dart';
+import 'package:selling_food_store/shared/widgets/general/cart/cart_bloc.dart';
+import 'package:selling_food_store/shared/widgets/general/cart/cart_event.dart'
+    as cart;
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
 
@@ -40,14 +43,19 @@ class _RecommendProductListState extends State<RecommendProductList> {
                 product: state.product,
                 onAdd: (productSelected, quantity) {
                   productSelected.addCart(quantity, DateTime.now(), () {
-                    context.read<HomeBloc>().add(OnUpdateNumberCartEvent(1));
+                    context
+                        .read<CartButtonBloc>()
+                        .add(cart.OnAddProductToCartEvent(1));
                   }, (error) {});
                 },
                 onClose: () {
                   context.read<HomeBloc>().add(OnBottomSheetCloseEvent());
                 });
           } else if (state is BuyNowState) {
-            context.goNamed('requestOrder', extra: state.cartList);
+            context.goNamed('requestOrder', extra: {
+              "cartList": state.cartList,
+              "isBuyNow": true,
+            });
           } else if (state is BottomSheetCloseState) {
             log('bottom sheet is closed');
           }
@@ -60,7 +68,7 @@ class _RecommendProductListState extends State<RecommendProductList> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: Align(
                             alignment: Alignment.centerLeft,

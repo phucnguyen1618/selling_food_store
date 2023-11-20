@@ -9,6 +9,7 @@ import 'package:selling_food_store/modules/cart/bloc/cart_bloc.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
+import 'package:selling_food_store/modules/cart/view/bottom_cart_panel.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
@@ -20,7 +21,8 @@ import 'package:selling_food_store/shared/widgets/items/item_result_search.dart'
 import '../../../models/cart.dart';
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
-import '../../../shared/utils/strings.dart';
+import '../../../shared/widgets/general/cart/cart_bloc.dart';
+import '../../../shared/widgets/general/cart/cart_event.dart';
 import '../../../shared/widgets/items/item_cart.dart';
 
 class CartView extends StatefulWidget {
@@ -32,9 +34,10 @@ class CartView extends StatefulWidget {
 
 class _CartViewState extends State<CartView> {
   List<Cart> _cartItems = [];
-  double _totalPrice = 0;
   bool isNotSignIn = false;
   bool isDeleteItem = false;
+
+  List<Cart> removeCartList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -71,24 +74,33 @@ class _CartViewState extends State<CartView> {
             },
           ),
           actions: [
-            isDeleteItem
-                ? const SizedBox()
-                : IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isDeleteItem = !isDeleteItem;
-                        context
-                            .read<ItemCartBloc>()
-                            .add(OnDeleteItemEvent(isDeleteItem, _cartItems));
-                      });
-                    },
-                    splashColor: AppColor.transparentColor,
-                    highlightColor: AppColor.transparentColor,
-                    focusColor: AppColor.transparentColor,
-                    hoverColor: AppColor.transparentColor,
-                    icon: const Icon(Icons.delete),
-                    color: AppColor.hintGreyColor,
-                  ),
+            BlocBuilder<ItemCartBloc, CartState>(builder: (context, state) {
+              if (state is OnDeleteItemCartState) {
+                isDeleteItem = state.value;
+              } else if (state is CancelDeleteCartState) {
+                isDeleteItem = false;
+              } else if (state is ConfirmDeleteCartState) {
+                isDeleteItem = false;
+              }
+              return isDeleteItem
+                  ? const SizedBox()
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isDeleteItem = !isDeleteItem;
+                          context
+                              .read<ItemCartBloc>()
+                              .add(OnDeleteItemEvent(false));
+                        });
+                      },
+                      splashColor: AppColor.transparentColor,
+                      highlightColor: AppColor.transparentColor,
+                      focusColor: AppColor.transparentColor,
+                      hoverColor: AppColor.transparentColor,
+                      icon: const Icon(Icons.delete),
+                      color: AppColor.hintGreyColor,
+                    );
+            }),
             const SizedBox(width: 8.0),
           ],
         ),
@@ -116,8 +128,12 @@ class _CartViewState extends State<CartView> {
                                   child: ListView.separated(
                                     shrinkWrap: true,
                                     itemCount: _cartItems.length,
-                                    itemBuilder: (context, index) =>
-                                        ItemCart(cart: _cartItems[index]),
+                                    itemBuilder: (context, index) => ItemCart(
+                                      cart: _cartItems[index],
+                                      onChecked: (itemCart) {
+                                        removeCartList.add(itemCart);
+                                      },
+                                    ),
                                     separatorBuilder:
                                         (BuildContext context, int index) =>
                                             Container(
@@ -132,112 +148,19 @@ class _CartViewState extends State<CartView> {
           ],
         ),
         persistentFooterButtons: _cartItems.isNotEmpty
-            ? [isDeleteItem ? _buildBottomDelete() : _buildBottomPanel()]
+            ? [
+                BottomCartPanel(
+                  cartList: _cartItems,
+                  onConfirmDelete: () {
+                    context
+                        .read<ItemCartBloc>()
+                        .add(OnConfirmDeleteCart(removeCartList));
+                  },
+                )
+              ]
             : null,
       );
     });
-  }
-
-  Widget _buildBottomPanel() {
-    return BlocBuilder<ItemCartBloc, CartState>(builder: (context, state) {
-      if (state is DisplayTotalPriceState) {
-        _totalPrice = state.value;
-      }
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'titleTotalPrice'.tr(),
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4.0),
-                  Text(
-                    '${AppUtils.formatPrice(_totalPrice)} ${Strings.unitPrice}',
-                    style: const TextStyle(
-                      fontSize: 18.0,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            MaterialButton(
-              onPressed: () {
-                context.goNamed('requestOrder', extra: _cartItems);
-              },
-              color: Colors.green,
-              elevation: 0.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Text(
-                'payment'.tr(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildBottomDelete() {
-    return Row(
-      children: [
-        Expanded(
-          child: MaterialButton(
-            onPressed: () {
-              setState(() {
-                isDeleteItem = false;
-                context
-                    .read<ItemCartBloc>()
-                    .add(OnDeleteItemEvent(isDeleteItem, []));
-              });
-            },
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0)),
-            color: AppColor.shimer200Color,
-            elevation: 0.0,
-            child: Text(
-              'cancelDeleteCartText'.tr(),
-              style: const TextStyle(
-                color: AppColor.blackColor,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12.0),
-        Expanded(
-          child: MaterialButton(
-            onPressed: () {},
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0)),
-            elevation: 0.0,
-            color: Colors.redAccent,
-            child: Text(
-              'confirmDeleteCartText'.tr(),
-              style: const TextStyle(
-                color: AppColor.whiteColor,
-              ),
-            ),
-          ),
-        )
-      ],
-    );
   }
 }
 

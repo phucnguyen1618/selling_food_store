@@ -32,7 +32,14 @@ class OnDecreaseQuantityEvent extends CartEvent {
 
 class OnDeleteItemEvent extends CartEvent {
   bool isDeleteItem;
-  List<Cart> cartList;
 
-  OnDeleteItemEvent(this.isDeleteItem, this.cartList);
+  OnDeleteItemEvent(this.isDeleteItem);
 }
+
+class OnConfirmDeleteCart extends CartEvent {
+  List<Cart> removeCartList;
+
+  OnConfirmDeleteCart(this.removeCartList);
+}
+
+class OnCancelDeleteCart extends CartEvent {}

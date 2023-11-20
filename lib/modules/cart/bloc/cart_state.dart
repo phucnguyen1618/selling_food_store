@@ -46,3 +46,7 @@ class OnDeleteItemCartState extends CartState {
   @override
   List<Object?> get props => [value];
 }
+
+class ConfirmDeleteCartState extends CartState {}
+
+class CancelDeleteCartState extends CartState {}

@@ -9,7 +9,13 @@ import '../../models/cart.dart';
 
 class RequestOrderPage extends StatelessWidget {
   final List<Cart> carts;
-  const RequestOrderPage({super.key, required this.carts});
+  final bool isBuyNow;
+
+  const RequestOrderPage({
+    super.key,
+    required this.carts,
+    required this.isBuyNow,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class RequestOrderPage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => RequestOrderBloc()
-            ..add(OnLoadingRequestOrderEvent(carts))
+            ..add(OnLoadingRequestOrderEvent(carts, isBuyNow))
             ..add(OnLoadingUserInfoEvent()),
         ),
         BlocProvider(create: (context) => UpdateNumberProductBloc()),

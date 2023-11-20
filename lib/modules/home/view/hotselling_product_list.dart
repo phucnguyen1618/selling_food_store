@@ -79,7 +79,10 @@ class _HotSellingProductListState extends State<HotSellingProductList> {
         isLoading = false;
         productList = state.hotSellingProductList;
       } else if (state is BuyNowState) {
-        context.goNamed('requestOrder', extra: state.cartList);
+        context.goNamed('requestOrder', extra: {
+          "cartList": state.cartList,
+          "isBuyNow": true,
+        });
       }
     });
   }
