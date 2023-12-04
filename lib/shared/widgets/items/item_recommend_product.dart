@@ -4,8 +4,6 @@ import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/shared/utils/app_color.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
-import '../general/price_widget.dart';
-
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ItemRecommendProduct extends StatelessWidget {
@@ -24,27 +22,67 @@ class ItemRecommendProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = MediaQuery.of(context).size.width * 0.45;
+    double baseWidth = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: () {
         onClick();
       },
       child: Container(
-        width: baseWidth,
+        width: baseWidth * 0.45,
         padding: const EdgeInsets.only(right: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            CachedNetworkImage(
-              width: double.infinity,
-              height: 220.0,
-              imageUrl: product.image,
-              fit: BoxFit.cover,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) =>
-                  Icon(Icons.error, color: AppColor.hintGreyColor),
+            Stack(
+              children: [
+                CachedNetworkImage(
+                  width: double.infinity,
+                  height: 220.0,
+                  imageUrl: product.image,
+                  fit: BoxFit.cover,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.error, color: AppColor.hintGreyColor),
+                ),
+                product.discount != null
+                    ? Positioned(
+                        top: 8.0,
+                        right: 8.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                width: 1.0,
+                                color: Colors.deepOrange,
+                              )),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.discount,
+                                color: Colors.deepOrange,
+                                size: 16.0,
+                              ),
+                              const SizedBox(width: 4.0),
+                              Text(
+                                '${product.discount!.toInt()}%',
+                                maxLines: 2,
+                                style: const TextStyle(
+                                  color: Colors.deepOrange,
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 14.0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
+                    : const SizedBox(),
+              ],
             ),
             const SizedBox(height: 8.0),
             Text(
@@ -58,6 +96,48 @@ class ItemRecommendProduct extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8.0),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CachedNetworkImage(
+                  width: 20.0,
+                  height: 20.0,
+                  imageUrl: product.brand.logoBrand,
+                  fit: BoxFit.cover,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColor.baseColor,
+                      image: DecorationImage(image: imageProvider),
+                    ),
+                  ),
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.error, color: AppColor.hintGreyColor),
+                ),
+                const SizedBox(width: 8.0),
+                Text(
+                  product.brand.name,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: AppColor.hintGreyColor,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 12.0,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0),
+            RichText(
+                text: TextSpan(
+                    text: AppUtils.formatPrice(product.cost),
+                    style: TextStyle(
+                        decoration: TextDecoration.lineThrough,
+                        color: AppColor.hintGreyColor))),
+            const SizedBox(height: 2.0),
             Text(
               AppUtils.formatPrice(product.getPrice()),
               maxLines: 1,
@@ -68,7 +148,7 @@ class ItemRecommendProduct extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            PriceWidget(value: product.cost, isPrice: false),
+            const SizedBox(height: 8.0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

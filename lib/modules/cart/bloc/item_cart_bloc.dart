@@ -8,12 +8,14 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
   double _totalPrice = 0;
 
   ItemCartBloc() : super(OnInitQuantityState()) {
-    on<OnDisplayTotalPriceEvent>(_onDisplayTotalPrice);
-    on<OnDeleteItemEvent>(_onDeleteItemCart);
-    on<OnIncreaseQuantityEvent>(_onIncreaseQuantity);
-    on<OnDecreaseQuantityEvent>(_onDecreaseQuantity);
-    on<OnConfirmDeleteCart>(_onConfirmDeleteCart);
-    on<OnCancelDeleteCart>(_onCancelDeleteCart);
+    if (!isClosed) {
+      on<OnDisplayTotalPriceEvent>(_onDisplayTotalPrice);
+      on<OnDeleteItemEvent>(_onDeleteItemCart);
+      on<OnIncreaseQuantityEvent>(_onIncreaseQuantity);
+      on<OnDecreaseQuantityEvent>(_onDecreaseQuantity);
+      on<OnConfirmDeleteCart>(_onConfirmDeleteCart);
+      on<OnCancelDeleteCart>(_onCancelDeleteCart);
+    }
   }
 
   void _onDisplayTotalPrice(
@@ -39,7 +41,7 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _onConfirmDeleteCart(
-      OnConfirmDeleteCart event, Emitter<CartState> emitter) {
+      OnConfirmDeleteCart event, Emitter<CartState> emitter) {  
     HiveService.deleteItemCart(event.removeCartList);
     FirebaseService.removeCartList(cartList: event.removeCartList);
     emitter(ConfirmDeleteCartState());

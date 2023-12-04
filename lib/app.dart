@@ -17,7 +17,10 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: Strings.appName,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: false,
+      ),
       builder: EasyLoading.init(),
     );
   }

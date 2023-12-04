@@ -1,8 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:selling_food_store/models/brand.dart';
 import 'package:selling_food_store/models/cart.dart';
-import 'package:selling_food_store/models/type_product.dart';
-import 'package:selling_food_store/shared/services/firebase_service.dart';
+import 'package:selling_food_store/models/category.dart';
 import 'package:uuid/uuid.dart';
 
 import '../shared/services/hive_service.dart';
@@ -18,7 +17,8 @@ class Product {
   double cost;
   double? discount;
   Brand brand;
-  List<TypeProduct> typeProducts;
+  List<Category> categories;
+  double? sold;
 
   Product(
     this.idProduct,
@@ -28,13 +28,28 @@ class Product {
     this.cost,
     this.discount,
     this.brand,
-    this.typeProducts,
+    this.categories,
+    this.sold,
   );
 
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
+
+  Map<String, dynamic> convertToJson() {
+    return {
+      "idProduct": idProduct,
+      "name": name,
+      "image": image,
+      "description": description,
+      "cost": cost,
+      "discount": discount,
+      "brand": brand.toJson(),
+      "categories": categories.map((e) => e.toJson()).toList(),
+      "sold": sold,
+    };
+  }
 
   double getPrice() {
     return discount != null && discount != 0.0
@@ -43,16 +58,12 @@ class Product {
   }
 
   void addCart(
-    int order,
-    DateTime dateTime,
+    int quantity,
     Function() onComplete,
     Function(String) onError,
   ) {
-    String idCart = const Uuid().v1();
-    Cart cart = Cart(idCart, this, order, dateTime);
-    FirebaseService.addProductToCart(cart, () {
-      HiveService.addCart(cart);
-      onComplete();
-    }, (message) => onError(message));
+    String idCart = const Uuid().v4();
+    Cart cart = Cart(idCart, idProduct, quantity);
+    HiveService.addCart(cart);
   }
 }

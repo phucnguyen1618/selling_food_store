@@ -14,15 +14,13 @@ import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
-import 'package:selling_food_store/shared/widgets/general/search_bar.dart';
+import 'package:selling_food_store/shared/widgets/general/search_bar.dart'
+    as searchBar;
 import 'package:selling_food_store/shared/widgets/items/item_product.dart';
-import 'package:selling_food_store/shared/widgets/items/item_result_search.dart';
 
 import '../../../models/cart.dart';
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
-import '../../../shared/widgets/general/cart/cart_bloc.dart';
-import '../../../shared/widgets/general/cart/cart_event.dart';
 import '../../../shared/widgets/items/item_cart.dart';
 
 class CartView extends StatefulWidget {
@@ -63,7 +61,7 @@ class _CartViewState extends State<CartView> {
                 Icons.arrow_back,
                 color: AppColor.blackColor,
               )),
-          title: SearchBar(
+          title: searchBar.SearchBar(
             hintText: 'searchCartText'.tr(),
             backgroundColor: AppColor.shimer200Color,
             onSearch: () {
@@ -170,9 +168,11 @@ class CartDelegate extends SearchDelegate<Cart> {
   List<Product> productList = [];
 
   CartDelegate() {
-    FirebaseService.fetchDataRecommendProducts(onLoadComplete: (dataList) {
-      productList = dataList;
-    });
+    getProducts();
+  }
+
+  Future<void> getProducts() async {
+    productList = await FirebaseService.fetchProducts();
   }
 
   @override
@@ -220,16 +220,17 @@ class CartDelegate extends SearchDelegate<Cart> {
   @override
   Widget buildResults(BuildContext context) {
     log('build Results');
-    HiveService.addKeyword(query);
-    List<Cart> resultList = HiveService.getCartList()
-        .where((item) =>
-            item.product.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: resultList.length,
-        itemBuilder: (context, index) =>
-            ItemResultSearch(product: resultList[index].product));
+    return SizedBox();
+    // HiveService.addKeyword(query);
+    // List<Cart> resultList = HiveService.getCartList()
+    //     .where((item) =>
+    //         item.productID.toLowerCase().contains(query.toLowerCase()))
+    //     .toList();
+    // return ListView.builder(
+    //     shrinkWrap: true,
+    //     itemCount: resultList.length,
+    //     itemBuilder: (context, index) =>
+    //         ItemResultSearch(product: resultList[index]));
   }
 
   @override

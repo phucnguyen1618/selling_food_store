@@ -14,11 +14,7 @@ class ChangePasswordBloc
 
   void _onInit(
       OnInitChangePasswordEvent event, Emitter<ChangePasswordState> emitter) {
-    FirebaseService.getUserCredential((credential) {
-      if (credential.password != null) {
-        add(OnGetCredentialEvent(credential.password!));
-      }
-    }, (error) {
+    FirebaseService.getUserCredential((credential) {}, (error) {
       add(OnErrorEvent(error));
     });
   }

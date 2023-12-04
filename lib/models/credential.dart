@@ -5,18 +5,14 @@ part 'credential.g.dart';
 @JsonSerializable()
 class Credential {
   String idUser;
-  String? phone;
-  String? email;
-  String? password;
-  // 0 la khach hang, 1 la nha cung cap, 2 la nhan vien
-  int role;
+  String email;
+  @JsonKey(name: 'create_at')
+  DateTime createAt;
 
   Credential({
     required this.idUser,
-    this.phone,
-    this.email,
-    this.password,
-    required this.role,
+    required this.email,
+    required this.createAt,
   });
 
   factory Credential.fromJson(Map<String, dynamic> json) =>

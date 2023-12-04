@@ -43,17 +43,13 @@ class PriceWidget extends StatelessWidget {
               style: TextStyle(
                 color: priceTextColor ?? AppColor.hintGreyColor,
                 overflow: TextOverflow.ellipsis,
-                fontSize: textSize ?? 16.0,
+                fontSize: textSize ?? 14.0,
                 fontWeight: isTextBold == true ? FontWeight.bold : null,
               ),
             ),
             isPrice == true
                 ? Container()
-                : Container(
-                    width: width ?? 70.0,
-                    height: 1,
-                    color: AppColor.hintGreyColor,
-                  ),
+                : const Divider(),
           ],
         ),
         isUnit == true

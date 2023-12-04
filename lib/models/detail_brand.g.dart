@@ -24,5 +24,5 @@ Map<String, dynamic> _$DetailBrandToJson(DetailBrand instance) =>
       'logo': instance.logo,
       'address': instance.address,
       'desc': instance.desc,
-      'products': instance.products.map((e) => e.toJson()).toList(),
+      'products': instance.products,
     };

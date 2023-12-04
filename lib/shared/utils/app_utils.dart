@@ -9,6 +9,11 @@ class AppUtils {
     return priceFormat.format(value);
   }
 
+  static String formatSold(double value) {
+    var soldFormat = NumberFormat('#,###');
+    return soldFormat.format(value);
+  }
+
   static String formatDateTime(DateTime dateTime) {
     return DateFormat('dd/MM/yyyy').format(dateTime);
   }
@@ -16,7 +21,7 @@ class AppUtils {
   static double calculateTotalPrice(List<Cart> dataList) {
     double totalPrice = 0;
     for (Cart cart in dataList) {
-      totalPrice = totalPrice + cart.orderQuantity * cart.product.getPrice();
+      totalPrice = totalPrice + cart.quantity;
     }
     return totalPrice;
   }
@@ -68,11 +73,29 @@ class AppUtils {
     }
   }
 
-  static String generateAvatarText(String name) {
-    var textStr = name.split(' ');
-    String value1 = textStr[0];
-    String value2 = textStr[1];
-    return value1.characters.first.toUpperCase() +
-        value2.characters.first.toUpperCase();
+  static Color generateIconColor(int type) {
+    switch (type) {
+      case 0:
+        return Colors.amberAccent;
+      case 1:
+        return Colors.teal;
+      case 2:
+        return Colors.red;
+      case 3:
+        return Colors.green;
+      case 4:
+        return Colors.blue.shade900;
+      default:
+        return Colors.black;
+    }
+  }
+
+  static String generateNameAvatar(String fullName) {
+    String nameAvatar = '';
+    final splitted = fullName.split(' ');
+    for (var str in splitted) {
+      nameAvatar = nameAvatar + str.substring(0, 1);
+    }
+    return nameAvatar;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:selling_food_store/models/product.dart';
-import 'package:selling_food_store/models/type_product.dart';
+import 'package:selling_food_store/models/category.dart';
 
 abstract class HomeEvent {
   HomeEvent();
@@ -10,14 +10,14 @@ class OnLoadingProductList extends HomeEvent {}
 class OnDisplayProductList extends HomeEvent {
   List<Product> recommendedProducts;
   List<Product> hotSellingProducts;
-  List<TypeProduct> typeProducts;
+  List<Category> categories;
   List<Product> productList;
-
 
   OnDisplayProductList(
     this.recommendedProducts,
     this.hotSellingProducts,
-    this.typeProducts, this.productList
+    this.categories,
+    this.productList,
   );
 }
 

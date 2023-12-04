@@ -47,8 +47,8 @@ class _EditProfileViewState extends State<EditProfileView> {
         log('DisplayEditProfileState');
         fullNameController.text = state.userInfo.fullName;
         content = state.userInfo.avatar ?? state.userInfo.fullName;
-        addressController.text = state.userInfo.address;
-        dateTime = state.userInfo.birthDay;
+        addressController.text = state.userInfo.address!;
+        dateTime = state.userInfo.birthDay!;
         birthDayController.text = AppUtils.formatDateTime(dateTime);
         emailController.text = prefs.getString(Strings.email) ?? '';
         sexController.text =

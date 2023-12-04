@@ -10,7 +10,13 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileBloc()..add(OnLoadingProfileEvent()),
+      create: (context) {
+        bool isClosed = ProfileBloc().isClosed;
+        if (isClosed) {
+          return ProfileBloc();
+        }
+        return ProfileBloc()..add(OnLoadingProfileEvent());
+      },
       child: const ProfileView(),
     );
   }

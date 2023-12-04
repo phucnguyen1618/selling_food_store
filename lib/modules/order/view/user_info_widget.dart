@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
+import 'package:selling_food_store/modules/order/bloc/order_bloc.dart';
+import 'package:selling_food_store/modules/order/bloc/order_state.dart';
 
 import '../../../shared/utils/app_color.dart';
 
@@ -10,7 +10,7 @@ class UserInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RequestOrderBloc, RequestOrderState>(
+    return BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
       String name = '';
       String address = '';

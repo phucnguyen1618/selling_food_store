@@ -1,13 +1,12 @@
-import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/product.dart';
-import 'package:selling_food_store/models/request_order.dart';
+import 'package:selling_food_store/models/order.dart';
 
 abstract class OrderListEvent {}
 
 class OnLoadingOrderListEvent extends OrderListEvent {}
 
 class OnDisplayOrderListEvent extends OrderListEvent {
-  List<RequestOrder> requestOrders;
+  List<Order> requestOrders;
 
   OnDisplayOrderListEvent(this.requestOrders);
 }

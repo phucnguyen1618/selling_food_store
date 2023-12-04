@@ -53,54 +53,56 @@ class EmptyDataWidget extends StatelessWidget {
   }
 
   Widget _buildUserInfoEmpty(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset(
-          ImageConstants.imageUnLogin,
-          width: 200.0,
-          height: 200.0,
-        ),
-        const SizedBox(height: 12.0),
-        Text('youNotLogin'.tr()),
-        const SizedBox(height: 12.0),
-        MaterialButton(
-          onPressed: () {
-            if (onClick != null) {
-              onClick!();
-            }
-          },
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            side: const BorderSide(color: AppColor.primaryAppColor),
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            ImageConstants.imageUnLogin,
+            width: 200.0,
+            height: 200.0,
           ),
-          elevation: 0.0,
-          color: AppColor.whiteColor,
-          child: Text(
-            'textSignIn'.tr(),
-            style: const TextStyle(
-              color: AppColor.primaryAppColor,
+          const SizedBox(height: 12.0),
+          Text('youNotLogin'.tr()),
+          const SizedBox(height: 12.0),
+          MaterialButton(
+            onPressed: () {
+              if (onClick != null) {
+                onClick!();
+              }
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              side: const BorderSide(color: AppColor.primaryAppColor),
             ),
-          ),
-        )
-      ],
+            
+            elevation: 0.0,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            color: AppColor.whiteColor,
+            child: Text(
+              'textSignIn'.tr(),
+              style: const TextStyle(
+                color: AppColor.primaryAppColor,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
   Widget _buildUIProductListEmpty(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 32.0),
+      margin: const EdgeInsets.symmetric(vertical: 48.0),
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.error_outline,
-              size: 56.0,
-            ),
-            const SizedBox(height: 12.0),
             Text(
               'productListEmpty'.tr(),
               textAlign: TextAlign.center,

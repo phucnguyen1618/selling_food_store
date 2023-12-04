@@ -17,3 +17,5 @@ class SignInFailureState extends SignInState {
   @override
   List<Object?> get props => [error];
 }
+
+class CloseDialogState extends SignInState {}

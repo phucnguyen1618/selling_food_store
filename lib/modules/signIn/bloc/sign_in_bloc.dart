@@ -9,16 +9,19 @@ import '../../../dependency_injection.dart';
 import '../../../shared/utils/strings.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
+
+  final prefs = getIt.get<SharedPreferences>();
+
   SignInBloc() : super(InitSignInState()) {
     on<OnUserSignInEvent>(_onSignIn);
     on<OnSignInSuccesEvent>(_onSuccess);
     on<OnSignInFailureEvent>(_onFailure);
+    on<OnCloseDialogEvent>(_onClose);
   }
 
   void _onSignIn(OnUserSignInEvent event, Emitter<SignInState> emitter) {
     FirebaseService.signInFirebaseWithEmail(event.email, event.password,
         (idUser) {
-      final prefs = getIt.get<SharedPreferences>();
       prefs.setString(Strings.email, event.email);
       prefs.setString(Strings.idUser, idUser);
       add(OnSignInSuccesEvent());
@@ -33,5 +36,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   void _onFailure(OnSignInFailureEvent event, Emitter<SignInState> emitter) {
     emitter(SignInFailureState(event.error));
+  }
+
+  void _onClose(OnCloseDialogEvent event, Emitter<SignInState> emitter) {
+    emitter(CloseDialogState());
   }
 }

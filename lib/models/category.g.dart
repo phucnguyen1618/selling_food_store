@@ -1,33 +1,33 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'type_product_model.dart';
+part of 'category.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TypeProductAdapter extends TypeAdapter<TypeProduct> {
+class CategoryAdapter extends TypeAdapter<Category> {
   @override
-  final int typeId = 3;
+  final int typeId = 1;
 
   @override
-  TypeProduct read(BinaryReader reader) {
+  Category read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TypeProduct(
+    return Category(
       fields[0] as String,
       fields[1] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, TypeProduct obj) {
+  void write(BinaryWriter writer, Category obj) {
     writer
       ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.idType)
+      ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name);
   }
@@ -38,7 +38,21 @@ class TypeProductAdapter extends TypeAdapter<TypeProduct> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TypeProductAdapter &&
+      other is CategoryAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
+      json['category_id'] as String,
+      json['name'] as String,
+    );
+
+Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
+      'category_id': instance.id,
+      'name': instance.name,
+    };

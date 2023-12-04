@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/dependency_injection.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_event.dart';
+import 'package:selling_food_store/modules/order/bloc/order_bloc.dart';
+import 'package:selling_food_store/modules/order/bloc/order_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../shared/utils/app_color.dart';
@@ -58,7 +58,7 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             onChanged: (value) {
               setState(() {
                 paymentMethodValue = 0;
-                context.read<RequestOrderBloc>().add(
+                context.read<OrderBloc>().add(
                     OnChoosePaymentMethodEvent(value ?? paymentMethodValue));
               });
             },
@@ -78,7 +78,7 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             onChanged: (value) {
               setState(() {
                 paymentMethodValue = 1;
-                context.read<RequestOrderBloc>().add(
+                context.read<OrderBloc>().add(
                     OnChoosePaymentMethodEvent(value ?? paymentMethodValue));
               });
             },

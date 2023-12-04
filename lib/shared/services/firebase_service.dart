@@ -10,16 +10,16 @@ import 'package:selling_food_store/models/credential.dart';
 import 'package:selling_food_store/models/product_detail.dart';
 // ignore: library_prefixes
 import 'package:selling_food_store/models/user_info.dart' as user;
-import 'package:selling_food_store/models/type_product.dart';
+import 'package:selling_food_store/models/category.dart';
 import 'package:selling_food_store/shared/utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../models/brand.dart';
 import '../../models/cart.dart';
 import '../../models/detail_brand.dart';
 import '../../models/product.dart';
-import '../../models/request_order.dart';
+import '../../models/order.dart';
 import '../../models/review.dart';
 
 class FirebaseService {
@@ -34,74 +34,30 @@ class FirebaseService {
 
   static final prefs = getIt.get<SharedPreferences>();
 
-  static Future<void> fetchDataTypeProducts(
-      {required Function(List<TypeProduct>) onLoadComplete}) async {
-    List<TypeProduct> typeProducts = [];
-    _dbRef.child('typeProducts').get().then((snapshot) {
-      if (snapshot.exists) {
-        for (DataSnapshot dataSnapshot in snapshot.children) {
-          final result = jsonDecode(jsonEncode(dataSnapshot.value))
-              as Map<String, dynamic>;
-          final dataType = TypeProduct.fromJson(result);
-          typeProducts.add(dataType);
-        }
-        onLoadComplete(typeProducts);
-      }
-    });
+  //Category
+  static Future<List<Category>> fetchDataCategories() async {
+    List<Category> typeProducts = [];
+    final DataSnapshot snapshot = await _dbRef.child('Categories').get();
+    for (DataSnapshot dataSnapshot in snapshot.children) {
+      final result =
+          jsonDecode(jsonEncode(dataSnapshot.value)) as Map<String, dynamic>;
+      final dataType = Category.fromJson(result);
+      typeProducts.add(dataType);
+    }
+    return typeProducts;
   }
 
-  static Future<void> fetchDataRecommendProducts(
-      {required Function(List<Product>) onLoadComplete}) async {
+  //Product
+  static Future<List<Product>> fetchProducts() async {
     List<Product> products = [];
-    _dbRef.child('products').child('recommended').get().then((snapshot) {
-      if (snapshot.exists) {
-        for (DataSnapshot dataSnapshot in snapshot.children) {
-          final result = jsonDecode(jsonEncode(dataSnapshot.value))
-              as Map<String, dynamic>;
-          final dataValue = Product.fromJson(result);
-          products.add(dataValue);
-        }
-        onLoadComplete(products);
-      }
-    });
-  }
-
-  static Future<void> fetchDataHotSellingProducts(
-      {required Function(List<Product>) onLoadComplete}) async {
-    List<Product> products = [];
-    _dbRef.child('products').child('hotSelling').get().then((snapshot) {
-      if (snapshot.exists) {
-        for (DataSnapshot dataSnapshot in snapshot.children) {
-          final result = jsonDecode(jsonEncode(dataSnapshot.value))
-              as Map<String, dynamic>;
-          final dataValue = Product.fromJson(result);
-          products.add(dataValue);
-        }
-        onLoadComplete(products);
-      }
-    });
-  }
-
-  static Future<void> fetchDataProductListWithType({
-    required String typeProduct,
-    required Function(List<Product>) onLoadComplete,
-  }) async {
-    List<Product> products = [];
-    _dbRef.child('products').child('recommended').get().then((snapshot) {
-      if (snapshot.exists) {
-        for (DataSnapshot dataSnapshot in snapshot.children) {
-          final result = jsonDecode(jsonEncode(dataSnapshot.value))
-              as Map<String, dynamic>;
-          final dataValue = Product.fromJson(result);
-          if (dataValue.typeProducts
-              .where((element) => element.name == typeProduct)
-              .isNotEmpty) {
-            products.add(dataValue);
-          }
-        }
-        onLoadComplete(products);
-      }
-    });
+    DataSnapshot snapshot = await _dbRef.child('Products').get();
+    for (DataSnapshot dataSnapshot in snapshot.children) {
+      final result =
+          jsonDecode(jsonEncode(dataSnapshot.value)) as Map<String, dynamic>;
+      final dataValue = Product.fromJson(result);
+      products.add(dataValue);
+    }
+    return products;
   }
 
   static void fetchDataProductDetail(
@@ -109,7 +65,7 @@ class FirebaseService {
     Function(ProductDetail) onComplete,
     Function(String) onError,
   ) {
-    _dbRef.child('detailProducts').child(id).get().then((snapshot) {
+    _dbRef.child('DetailProducts').child(id).get().then((snapshot) {
       if (snapshot.exists) {
         final result =
             jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
@@ -121,13 +77,26 @@ class FirebaseService {
     );
   }
 
+  static void writeReviewForProduct(String idProduct, Review review) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef
+          .child('Reviews')
+          .child(idProduct)
+          .child(idUser)
+          .child(review.id)
+          .set(review.toJson());
+    }
+  }
+
+  //Cart
   static void fetchProductListToCart(
     Function(List<Cart>) onComplete,
     Function(String) onError,
   ) {
     List<Cart> cartList = [];
     final String? id = prefs.getString(Strings.idUser);
-    _dbRef.child('carts').child(id ?? '').get().then((snapshot) {
+    _dbRef.child('Carts').child(id ?? '').get().then((snapshot) {
       if (snapshot.exists) {
         for (DataSnapshot dataSnapshot in snapshot.children) {
           final result = jsonDecode(jsonEncode(dataSnapshot.value));
@@ -149,15 +118,53 @@ class FirebaseService {
     final String? id = prefs.getString(Strings.idUser);
     if (id != null) {
       _dbRef
-          .child('carts')
+          .child('Carts')
           .child(id)
-          .child(cart.idCart)
+          .child(cart.cartID)
           .set(cart.toJson())
           .then((value) => onComplete())
           .onError((error, stackTrace) => onError(error.toString()));
     }
   }
 
+  static void removeCartList({List<Cart>? cartList}) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      if (cartList != null) {
+        for (var cart in cartList) {
+          _dbRef.child('Carts').child(idUser).child(cart.cartID).remove();
+        }
+      } else {
+        _dbRef.child('Carts').child(idUser).remove();
+      }
+    }
+  }
+
+  static void updateQuantityForCart(String idCart, int value) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('Carts').child(idUser).child(idCart).update({
+        'quantity': value,
+      });
+    }
+  }
+
+  static void getProductByID(
+    String id,
+    Function(Product) onComplete,
+    Function(String) onError,
+  ) {
+    _dbRef.child('Products').child(id).get().then((snapshot) {
+      if (snapshot.exists) {
+        final data =
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+        Product product = Product.fromJson(data);
+        onComplete(product);
+      }
+    }).onError((error, stackTrace) => onError(error.toString()));
+  }
+
+  //Authentication
   static bool checkUserIsSignIn() {
     return _firebaseAuth.currentUser == null ||
             prefs.getString(Strings.idUser) == null
@@ -165,16 +172,12 @@ class FirebaseService {
         : true;
   }
 
-  static Future<void> signUpFirebaseWithEmail(String email, String password,
-      Function(String) onComplete, Function(String) onError) async {
+  static Future<UserCredential?> signUpFirebaseWithEmail(
+      String email, String password, Function(String) onError) async {
     try {
-      await _firebaseAuth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((userCredential) {
-        if (userCredential.user != null) {
-          onComplete(userCredential.user!.uid);
-        }
-      });
+      UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return userCredential;
     } on FirebaseAuthException catch (error) {
       log('Code: ${error.code} - Message: ${error.message}');
       String errStr = 'errorStr'.tr();
@@ -193,6 +196,7 @@ class FirebaseService {
           break;
       }
       onError(errStr);
+      return null;
     }
   }
 
@@ -228,32 +232,6 @@ class FirebaseService {
       }
       onError(errStr);
     }
-  }
-
-  static void insertAccountInfoToDb(
-    Credential credential,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
-    _dbRef
-        .child('credentials')
-        .child(credential.idUser)
-        .set(credential.toJson())
-        .then((value) => onComplete())
-        .onError((error, stackTrace) => onError(error.toString()));
-  }
-
-  static void insertUserInfoToDb(
-    user.UserInfo userInfo,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
-    _dbRef
-        .child('userInfos')
-        .child(userInfo.idAccount)
-        .set(userInfo.toJson())
-        .then((value) => onComplete())
-        .onError((error, stackTrace) => onError(error.toString()));
   }
 
   static Future<void> forgotPasswordAccount(
@@ -313,21 +291,6 @@ class FirebaseService {
     }
   }
 
-  static Future<void> getUserInfo(
-      Function(user.UserInfo?) onComplete, Function(String) onError) async {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('userInfos').child(idUser).get().then((snapshot) {
-        final dataSnapshot =
-            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
-        user.UserInfo userInfo = user.UserInfo.fromJson(dataSnapshot);
-        onComplete(userInfo);
-      }).onError((error, stackTrace) => onError(error.toString()));
-    } else {
-      onComplete(null);
-    }
-  }
-
   static Future<void> signOutAccount(
       Function() onComplete, Function(String) onError) async {
     _firebaseAuth
@@ -336,28 +299,17 @@ class FirebaseService {
         .onError((error, stackTrace) => onError(error.toString()));
   }
 
-  static Future<void> updateUserInfo(
-      String name, String address, DateTime dateTime) async {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('userInfos').child(idUser).update({
-        "fullName": name,
-        "address": address,
-        "birthDay": dateTime.toString(),
-      });
-    }
-  }
-
-  static void fetchDetailBrand(
-      String id, Function(DetailBrand) onComplete, Function(String) onError) {
-    _dbRef.child('detailBrands').child(id).get().then((snapshot) {
-      if (snapshot.exists) {
-        final dataValue =
-            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
-        DetailBrand detailBrand = DetailBrand.fromJson(dataValue);
-        onComplete(detailBrand);
-      }
-    }).onError((error, stackTrace) => onError(error.toString()));
+  static void insertCredentialToDb(
+    Credential credential,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    _dbRef
+        .child('Credentials')
+        .child(credential.idUser)
+        .set(credential.toJson())
+        .then((value) => onComplete())
+        .onError((error, stackTrace) => onError(error.toString()));
   }
 
   static void deleteUserAccount(
@@ -380,137 +332,6 @@ class FirebaseService {
     }
   }
 
-  static void requestOrder(
-    RequestOrder requestOrder,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef
-          .child('requestOrders')
-          .child(idUser)
-          .child(requestOrder.idOrder)
-          .set(requestOrder.toJson())
-          .then((value) => onComplete())
-          .onError((error, stackTrace) => onError(error.toString()));
-    }
-  }
-
-  static void insertOrderForBrand(Cart cart) {
-    String idBrand = cart.product.brand.idBrand;
-    String idCart = const Uuid().v1();
-    _dbRef
-        .child('orderForBrand')
-        .child(idBrand)
-        .child(idCart)
-        .set(cart.toJson());
-  }
-
-  static void removeCartList({List<Cart>? cartList}) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      if (cartList != null) {
-        for (var cart in cartList) {
-          _dbRef.child('carts').child(idUser).child(cart.idCart).remove();
-        }
-      } else {
-        _dbRef.child('carts').child(idUser).remove();
-      }
-    }
-  }
-
-  static void getOrderList(
-    Function(List<RequestOrder>) onComplete,
-    Function(String) onError,
-  ) {
-    List<RequestOrder> orderList = [];
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('requestOrders').child(idUser).get().then((snapshot) {
-        if (snapshot.exists) {
-          for (DataSnapshot dataSnapshot in snapshot.children) {
-            final dataValue = jsonDecode(jsonEncode(dataSnapshot.value))
-                as Map<String, dynamic>;
-            final requestOrder = RequestOrder.fromJson(dataValue);
-            orderList.add(requestOrder);
-          }
-          onComplete(orderList);
-        } else {
-          onComplete(orderList);
-        }
-      }).onError((error, stackTrace) => onError(error.toString()));
-    }
-  }
-
-  static void updateQuantityForCart(String idCart, int value) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('carts').child(idUser).child(idCart).update({
-        'orderQuantity': value,
-      });
-    }
-  }
-
-  static void updateReasonForCancelOrder(
-    String idOrder,
-    String reason,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('requestOrders').child(idUser).child(idOrder).update({
-        'status': 3,
-        'reasonCancelOrder': reason,
-      }).then((value) {
-        onComplete();
-      }).onError((error, stackTrace) => onError(error.toString()));
-    }
-  }
-
-  static void updateAvatarProfileToStorage(
-    File file,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _stoRef
-          .child('avatars')
-          .child(idUser)
-          .putFile(file)
-          .then((taskSnapshot) async {
-        String imageUrl = await taskSnapshot.ref.getDownloadURL();
-        if (imageUrl.isNotEmpty) {
-          updateAvatarProfileUserInfo(imageUrl);
-          onComplete();
-        }
-      }).onError((error, stackTrace) => onError(error.toString()));
-    }
-  }
-
-  static void updateAvatarProfileUserInfo(String avatar) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('userInfos').child(idUser).update({
-        "avatar": avatar,
-      });
-    }
-  }
-
-  static void writeReviewForProduct(String idProduct, Review review) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef
-          .child('reviews')
-          .child(idProduct)
-          .child(idUser)
-          .child(review.id)
-          .set(review.toJson());
-    }
-  }
-
   static Future<void> changePassword(
     String oldPasword,
     String password,
@@ -529,7 +350,7 @@ class FirebaseService {
               .updatePassword(password)
               .then((value) {
             _dbRef
-                .child('credentials')
+                .child('Credentials')
                 .child(currentUser.uid)
                 .update({"password": password})
                 .then((value) => onComplete())
@@ -556,18 +377,172 @@ class FirebaseService {
     }
   }
 
-  static void getUserCredential(
-    Function(Credential) onComplete,
+  //User
+  static void insertUserInfoToDb(
+    user.UserInfo userInfo,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    _dbRef
+        .child('Users')
+        .child(userInfo.idAccount)
+        .set(userInfo.toJson())
+        .then((value) => onComplete())
+        .onError((error, stackTrace) => onError(error.toString()));
+  }
+
+  static Future<void> getUserInfo(
+      Function(user.UserInfo?) onComplete, Function(String) onError) async {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('Users').child(idUser).get().then((snapshot) {
+        final dataSnapshot =
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+        user.UserInfo userInfo = user.UserInfo.fromJson(dataSnapshot);
+        onComplete(userInfo);
+      }).onError((error, stackTrace) => onError(error.toString()));
+    } else {
+      onComplete(null);
+    }
+  }
+
+  static Future<void> updateUserInfo(
+      String name, String address, DateTime dateTime) async {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('Users').child(idUser).update({
+        "fullName": name,
+        "address": address,
+        "birthDay": dateTime.toString(),
+      });
+    }
+  }
+
+  static void updateAvatarProfileToStorage(
+    File file,
+    Function() onComplete,
     Function(String) onError,
   ) {
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
-      _dbRef.child('credentials').child(idUser).get().then((snapshot) {
-        final data =
-            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
-        Credential credential = Credential.fromJson(data);
-        onComplete(credential);
+      _stoRef
+          .child('Avatars')
+          .child(idUser)
+          .putFile(file)
+          .then((taskSnapshot) async {
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
+        if (imageUrl.isNotEmpty) {
+          updateAvatarProfileUserInfo(imageUrl);
+          onComplete();
+        }
       }).onError((error, stackTrace) => onError(error.toString()));
     }
+  }
+
+  static void updateAvatarProfileUserInfo(String avatar) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('Users').child(idUser).update({
+        "avatar": avatar,
+      });
+    }
+  }
+
+  //Brand
+  static void fetchDetailBrand(
+      String id, Function(DetailBrand) onComplete, Function(String) onError) {
+    _dbRef.child('DetailBrands').child(id).get().then((snapshot) {
+      if (snapshot.exists) {
+        final dataValue =
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+        DetailBrand detailBrand = DetailBrand.fromJson(dataValue);
+        onComplete(detailBrand);
+      }
+    }).onError((error, stackTrace) => onError(error.toString()));
+  }
+
+  static Future<Brand?> fetchBrandByID(
+      String id, Function(String) onError) async {
+    DataSnapshot snapshot = await _dbRef.child('Brands').child(id).get();
+    if (snapshot.exists) {
+      final dataValue =
+          jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+      Brand detailBrand = Brand.fromJson(dataValue);
+      return detailBrand;
+    }
+    return null;
+  }
+
+  //Order
+  static void requestOrder(
+    Order order,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef
+          .child('Orders')
+          .child(idUser)
+          .child(order.idOrder)
+          .set(order.convertToJson())
+          .then((value) => onComplete())
+          .onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
+
+  static void getOrderList(
+    Function(List<Order>) onComplete,
+    Function(String) onError,
+  ) {
+    List<Order> orderList = [];
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('Orders').child(idUser).get().then((snapshot) {
+        if (snapshot.exists) {
+          for (DataSnapshot dataSnapshot in snapshot.children) {
+            final dataValue = jsonDecode(jsonEncode(dataSnapshot.value))
+                as Map<String, dynamic>;
+            final requestOrder = Order.fromJson(dataValue);
+            orderList.add(requestOrder);
+          }
+          onComplete(orderList);
+        } else {
+          onComplete(orderList);
+        }
+      }).onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
+
+  static void updateReasonForCancelOrder(
+    String idOrder,
+    String reason,
+    Function() onComplete,
+    Function(String) onError,
+  ) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('Orders').child(idUser).child(idOrder).update({
+        'status': 3,
+        'reasonCancelOrder': reason,
+      }).then((value) {
+        onComplete();
+      }).onError((error, stackTrace) => onError(error.toString()));
+    }
+  }
+
+  static void getUserCredential(
+    Function(Credential) onComplete,
+    Function(String) onError,
+  ) {
+    // final idUser = prefs.getString(Strings.idUser);
+    // if (idUser != null) {
+    //   _dbRef.child('Credentials').child(idUser).get().then((snapshot) {
+    //     final data =
+    //         jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+    //     Credential credential = Credential.fromJson(data);
+    //     onComplete(credential);
+    //   }).onError((error, stackTrace) => onError(error.toString()));
+    // }
   }
 }

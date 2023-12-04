@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:selling_food_store/models/product.dart';
-import 'package:selling_food_store/models/type_product.dart';
+import 'package:selling_food_store/models/category.dart';
 
 import '../../../models/cart.dart';
 
@@ -21,13 +21,13 @@ class DisplayProductListState extends HomeState {
   final List<Product> recommendProductList;
   final List<Product> hotSellingProductList;
   final List<Product> productList;
-  final List<TypeProduct> typeProducts;
+  final List<Category> categories;
 
   DisplayProductListState(
     this.recommendProductList,
     this.hotSellingProductList,
     this.productList,
-    this.typeProducts,
+    this.categories,
   );
 
   @override
@@ -35,7 +35,7 @@ class DisplayProductListState extends HomeState {
         recommendProductList,
         hotSellingProductList,
         productList,
-        typeProducts,
+        categories,
       ];
 }
 

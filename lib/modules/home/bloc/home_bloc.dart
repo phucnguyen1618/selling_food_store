@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:selling_food_store/models/type_product.dart';
+import 'package:selling_food_store/models/category.dart';
 import 'package:selling_food_store/modules/home/bloc/home_event.dart';
 import 'package:selling_food_store/modules/home/bloc/home_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
@@ -15,57 +15,50 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Product> productList = [];
 
   HomeBloc() : super(InitHomeState()) {
-    on<OnLoadingProductList>(_onLoadingProductList);
-    on<OnDisplayProductList>(_onDisplayProductList);
-    on<OnBuyNowEvent>(_onBuyNowProduct);
-    on<OnAddProductToCartEvent>(_onAddProductToCart);
-    on<OnRequestSignInEvent>(_onRequestSignIn);
-    on<OnBottomSheetCloseEvent>(_onBottomSheetClose);
-    on<OnCloseDialogEvent>(_onDialogClose);
-    on<OnTabItemClickedEvent>(_onTabItemClicked);
-    on<OnReloadProductListEvent>(_onReloadProductListWithType);
+    if (!isClosed) {
+      on<OnLoadingProductList>(_onLoadingProductList);
+      on<OnDisplayProductList>(_onDisplayProductList);
+      on<OnBuyNowEvent>(_onBuyNowProduct);
+      on<OnAddProductToCartEvent>(_onAddProductToCart);
+      on<OnRequestSignInEvent>(_onRequestSignIn);
+      on<OnBottomSheetCloseEvent>(_onBottomSheetClose);
+      on<OnCloseDialogEvent>(_onDialogClose);
+      on<OnTabItemClickedEvent>(_onTabItemClicked);
+      on<OnReloadProductListEvent>(_onReloadProductListWithType);
+    }
   }
 
-  void _onLoadingProductList(
-      OnLoadingProductList event, Emitter<HomeState> emitter) {
+  Future<void> _onLoadingProductList(
+      OnLoadingProductList event, Emitter<HomeState> emitter) async {
     List<Product> recommendProductList = [];
     List<Product> hotSellingProductList = [];
-    List<TypeProduct> typeProducts = [];
+    List<Product> productListWithCategory = [];
+    List<Category> typeProducts = [];
 
-    FirebaseService.fetchDataRecommendProducts(onLoadComplete: (dataList) {
-      recommendProductList = dataList;
-      productList = dataList;
-      add(OnDisplayProductList(
-          recommendProductList, hotSellingProductList, typeProducts, []));
-    });
-    FirebaseService.fetchDataHotSellingProducts(onLoadComplete: (dataList) {
-      hotSellingProductList = dataList;
-      add(OnDisplayProductList(
-          recommendProductList, hotSellingProductList, typeProducts, []));
-    });
-    FirebaseService.fetchDataTypeProducts(onLoadComplete: (dataList) {
-      typeProducts = dataList;
-      FirebaseService.fetchDataProductListWithType(
-        typeProduct: Strings.typeProduct,
-        onLoadComplete: (dataList) {
-          add(OnDisplayProductList(recommendProductList, hotSellingProductList,
-              typeProducts, dataList));
-        },
-      );
-    });
+    productList = await FirebaseService.fetchProducts();
+    typeProducts = await FirebaseService.fetchDataCategories();
+    if (productList.isNotEmpty && typeProducts.isNotEmpty) {
+      recommendProductList =
+          productList.where((e) => e.sold == null || e.sold == 0.0).toList();
+      hotSellingProductList =
+          productList.where((e) => e.sold != null && e.sold! > 500).toList();
+      productListWithCategory = _filterProductListWithType(Strings.typeProduct);
+      add(OnDisplayProductList(recommendProductList, hotSellingProductList,
+          typeProducts, productListWithCategory));
+    }
   }
 
   void _onDisplayProductList(
       OnDisplayProductList event, Emitter<HomeState> emitter) {
     emitter(DisplayProductListState(event.recommendedProducts,
-        event.hotSellingProducts, event.productList, event.typeProducts));
+        event.hotSellingProducts, event.productList, event.categories));
   }
 
   void _onBuyNowProduct(OnBuyNowEvent event, Emitter<HomeState> emitter) {
     if (FirebaseService.checkUserIsSignIn()) {
       List<Cart> cartList = [];
       String idCart = const Uuid().v1();
-      Cart cart = Cart(idCart, event.product, 1, DateTime.now());
+      Cart cart = Cart(idCart, event.product.idProduct, 1);
       cartList.add(cart);
       emitter(BuyNowState(cartList));
     } else {
@@ -111,7 +104,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Product> _filterProductListWithType(String type) {
     return productList
         .where((element) =>
-            element.typeProducts.where((e) => e.name == type).isNotEmpty)
+            element.categories.where((e) => e.name == type).isNotEmpty)
         .toList();
   }
 }

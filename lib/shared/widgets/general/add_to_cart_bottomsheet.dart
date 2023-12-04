@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/shared/utils/app_color.dart';
 
+import '../../utils/app_utils.dart';
 import 'price_widget.dart';
 
 class AddToCartBottomSheet extends StatefulWidget {
@@ -26,7 +27,6 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.max,
         children: [
           Column(
@@ -71,18 +71,42 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             PriceWidget(
-                              value: widget.product.getPrice() * quantity,
+                              value: widget.product.getPrice(),
                               isPrice: true,
                               textSize: 18.0,
                               priceTextColor: AppColor.priceProductColor,
                             ),
                             const SizedBox(width: 8.0),
-                            PriceWidget(
-                              value: widget.product.cost,
-                              textSize: 14.0,
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '${AppUtils.formatPrice(widget.product.cost)}đ',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: AppColor.hintGreyColor,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
+                        widget.product.discount != null
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 4.0),
+                                child: Text(
+                                  'Giảm: ${widget.product.discount!.toInt()}%',
+                                  style: const TextStyle(
+                                    fontSize: 12.0,
+                                    color: AppColor.priceProductColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
                         const SizedBox(height: 16.0),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,9 +164,33 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
               ),
               const SizedBox(height: 12.0),
               Text(widget.product.description),
-              const SizedBox(height: 12.0),
             ],
           ),
+          const Spacer(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Tổng:',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${AppUtils.formatPrice(quantity * widget.product.getPrice())}đ',
+                style: const TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
+          const SizedBox(height: 12.0),
           MaterialButton(
             onPressed: () {
               context.pop({

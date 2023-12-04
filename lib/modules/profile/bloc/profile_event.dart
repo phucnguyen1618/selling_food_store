@@ -17,14 +17,16 @@ class OnErrorEvent extends ProfileEvent {
   OnErrorEvent(this.error);
 }
 
+class OnChangeLanguageEvent extends ProfileEvent {
+  Locale locale;
+
+  OnChangeLanguageEvent(this.locale);
+}
+
 class OnSignOutEvent extends ProfileEvent {}
 
 class OnConfirmSignOutEvent extends ProfileEvent {}
 
 class OnSignOutSuccessEvent extends ProfileEvent {}
 
-class OnChangeLanguageEvent extends ProfileEvent {
-  Locale locale;
-
-  OnChangeLanguageEvent(this.locale);
-}
+class OnCloseDialog extends ProfileEvent {}

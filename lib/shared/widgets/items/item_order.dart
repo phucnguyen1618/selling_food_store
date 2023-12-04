@@ -5,11 +5,11 @@ import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart'
 import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/shared/widgets/items/item_product_in_order.dart';
 
-import '../../../models/request_order.dart';
+import '../../../models/order.dart';
 import '../../utils/app_color.dart';
 
 class ItemOrder extends StatelessWidget {
-  final RequestOrder requestOrder;
+  final Order requestOrder;
   const ItemOrder({super.key, required this.requestOrder});
 
   @override

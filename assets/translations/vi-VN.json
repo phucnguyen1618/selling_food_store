@@ -23,7 +23,7 @@
     "errorStr": "Đã có lỗi xảy ra",
     "userNotFoundErrorText": "Không tồn tại tài khoản nào với email này",
     "yourCart": "Giỏ hàng của bạn",
-    "signUp": "Đăng ký",
+    "signUp": "Đăng ký tài khoản",
     "titleAccept": "Bằng cách tạo tài khoản, bạn đồng ý với",
     "terms": " Điều khoản sử dụng ",
     "toOur": "của chúng tôi",
@@ -65,7 +65,6 @@
     "uses": "Công dụng: ",
     "howToUse": "Hướng dẫn sử dụng: ",
     "addCartSuccess": "Thêm giỏ hàng thành công",
-    "titleInputUserInfo": "Nhập thông tin cá nhân",
     "fullNameInputUserInfo": "Họ và tên",
     "hintTextInputNameUserInfo": "Nhập họ và tên",
     "birthDayInputUserInfo": "Ngày sinh",
@@ -154,5 +153,8 @@
     "text_ordered": "Nhận hàng: Sau 2-3 ngày làm việc",
     "text_delivering": "Đơn hàng đang được vận chuyển",
     "text_order_success": "Đơn hàng đã hoàn thành",
-    "text_canceled": "Đơn hàng bị huỷ"
+    "text_canceled": "Đơn hàng bị huỷ",
+    "notification": "Thông báo",
+    "sign_up_title": "Thông tin đăng ký",
+    "user_info": "Thông tin cá nhân"
 }

@@ -3,19 +3,61 @@
 part of 'cart.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class CartAdapter extends TypeAdapter<Cart> {
+  @override
+  final int typeId = 1;
+
+  @override
+  Cart read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Cart(
+      fields[0] as String,
+      fields[1] as String,
+      fields[2] as int,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Cart obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.cartID)
+      ..writeByte(1)
+      ..write(obj.productID)
+      ..writeByte(2)
+      ..write(obj.quantity);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CartAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
 Cart _$CartFromJson(Map<String, dynamic> json) => Cart(
-      json['idCart'] as String,
-      Product.fromJson(json['product'] as Map<String, dynamic>),
-      json['orderQuantity'] as int,
-      DateTime.parse(json['dateTimeOrder'] as String),
+      json['cart_id'] as String,
+      json['product_id'] as String,
+      json['quantity'] as int,
     );
 
 Map<String, dynamic> _$CartToJson(Cart instance) => <String, dynamic>{
-      'idCart': instance.idCart,
-      'product': instance.product.toJson(),
-      'orderQuantity': instance.orderQuantity,
-      'dateTimeOrder': instance.dateTimeOrder.toIso8601String(),
+      'cart_id': instance.cartID,
+      'product_id': instance.productID,
+      'quantity': instance.quantity,
     };

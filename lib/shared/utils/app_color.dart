@@ -14,8 +14,9 @@ class AppColor {
   static Color hintBlackColor = Colors.black38;
   static Color cancelButtonColor = Colors.grey.shade300;
   static const Color transparentColor = Colors.transparent;
+  static const Color discountColor = Colors.deepOrange;
 
-  static Color shimmerColor = Colors.grey.shade300;
+  static Color shimmerColor = Colors.grey.shade200;
   static Color shimer200Color = Colors.grey.shade200;
   static Color dividerColor = Colors.grey.shade50;
   static Color divider100Color = Colors.grey.shade100;

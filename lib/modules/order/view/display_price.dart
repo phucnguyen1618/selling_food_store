@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
-import 'package:selling_food_store/modules/request_order/bloc/update_number_product_bloc.dart';
+import 'package:selling_food_store/modules/order/bloc/order_state.dart';
+import 'package:selling_food_store/modules/order/bloc/update_number_product_bloc.dart';
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
@@ -22,7 +22,7 @@ class DisplayPrice extends StatelessWidget {
   Widget build(BuildContext context) {
     double orderPrice = order;
     double totalPrice = total;
-    return BlocBuilder<UpdateNumberProductBloc, RequestOrderState>(
+    return BlocBuilder<UpdateNumberProductBloc, OrderState>(
         builder: (context, state) {
       if (state is UpdateNumberProductState) {
         orderPrice = state.price;

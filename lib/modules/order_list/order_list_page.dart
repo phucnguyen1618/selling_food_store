@@ -10,7 +10,13 @@ class OrderListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OrderListBloc()..add(OnLoadingOrderListEvent()),
+      create: (context) {
+        bool isClosed = OrderListBloc().isClosed;
+        if (isClosed) {
+          return OrderListBloc();
+        }
+        return OrderListBloc()..add(OnLoadingOrderListEvent());
+      },
       child: const OrderListView(),
     );
   }

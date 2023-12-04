@@ -50,7 +50,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     if (FirebaseService.checkUserIsSignIn()) {
       List<Cart> cartList = [];
       String idCart = const Uuid().v1();
-      Cart cart = Cart(idCart, event.product, 1, DateTime.now());
+      Cart cart = Cart(idCart, event.product.idProduct, 1);
       cartList.add(cart);
       emitter(BuyNowSuccessState(cartList));
     } else {

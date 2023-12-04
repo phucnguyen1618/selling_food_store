@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:selling_food_store/models/type_product.dart';
+import 'package:selling_food_store/models/category.dart';
 import 'package:selling_food_store/modules/home/bloc/home_bloc.dart';
 import 'package:selling_food_store/modules/home/bloc/home_event.dart';
 import 'package:selling_food_store/modules/home/bloc/home_state.dart';
@@ -11,17 +11,17 @@ import 'package:selling_food_store/shared/widgets/general/loading_data_widget.da
 import '../../../models/product.dart';
 import '../../../shared/widgets/items/item_recommend_product.dart';
 
-class TypeProductList extends StatefulWidget {
-  const TypeProductList({super.key});
+class CategoryList extends StatefulWidget {
+  const CategoryList({super.key});
 
   @override
-  State<TypeProductList> createState() => _TypeProductListState();
+  State<CategoryList> createState() => _CategoryListState();
 }
 
-class _TypeProductListState extends State<TypeProductList>
+class _CategoryListState extends State<CategoryList>
     with TickerProviderStateMixin {
   TabController? _tabController;
-  List<TypeProduct> typeProductList = [];
+  List<Category> categories = [];
   List<Product> productListWithType = [];
   bool isLoading = true;
 
@@ -31,20 +31,20 @@ class _TypeProductListState extends State<TypeProductList>
       builder: (context, state) {
         if (state is DisplayProductListState) {
           isLoading = false;
-          typeProductList = state.typeProducts;
+          categories = state.categories;
           productListWithType = state.productList;
           _tabController =
-              TabController(length: state.typeProducts.length, vsync: this);
+              TabController(length: state.categories.length, vsync: this);
         } else if (state is ReloadProductListState) {
           productListWithType = state.products;
         }
         return isLoading
             ? const LoadingDataWidget(
                 loadingType: LoadingDataType.loadingRecommendProductList)
-            : typeProductList.isEmpty
+            : categories.isEmpty
                 ? const SizedBox()
                 : DefaultTabController(
-                    length: typeProductList.length,
+                    length: categories.length,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -59,15 +59,14 @@ class _TypeProductListState extends State<TypeProductList>
                             labelColor: Colors.teal,
                             unselectedLabelColor: Colors.black,
                             tabs: List.generate(
-                                typeProductList.length,
+                                categories.length,
                                 (index) => Tab(
-                                    text: typeProductList[index]
-                                        .name
-                                        .toUpperCase())),
+                                    text:
+                                        categories[index].name.toUpperCase())),
                             onTap: (index) {
                               context.read<HomeBloc>().add(
                                   OnTabItemClickedEvent(
-                                      typeProductList[index].name));
+                                      categories[index].name));
                             },
                           ),
                         ),

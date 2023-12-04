@@ -1,61 +1,43 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:hive/hive.dart';
 import 'package:selling_food_store/models/cart.dart';
-import 'package:selling_food_store/models/product.dart';
-import 'package:selling_food_store/shared/services/local_models/cart_model.dart';
 
 class HiveService {
   static void addCart(Cart cart) {
-    Product product = cart.product;
-    String productStr = jsonEncode(product.toJson());
-    CartModel cartModel = CartModel(
-        cart.idCart, productStr, cart.dateTimeOrder, cart.orderQuantity);
-    var cartBox = Hive.box<CartModel>('cartList');
+    var cartBox = Hive.box<Cart>('cartList');
     cartBox
-        .put(cartModel.idCart, cartModel)
+        .put(cart.cartID, cart)
         .then((value) => log('Add Cart Successfully'));
   }
 
   static List<Cart> getCartList() {
-    var cartBox = Hive.box<CartModel>('cartList');
-    List<CartModel> cartModelList = cartBox.values.toList();
-    return cartModelList
-        .map((e) => Cart(e.idCart, Product.fromJson(jsonDecode(e.product)),
-            e.orderQuantity, e.dateTimeOrder))
-        .toList();
-  }
-
-  static void updateQuantityForCart(String idCart, int quantity) {
-    var cartBox = Hive.box<CartModel>('cartList');
-    CartModel? cartModel = cartBox.get(idCart);
-    if (cartModel != null) {
-      cartModel.orderQuantity = quantity;
-      cartModel.save();
-    }
+    var cartBox = Hive.box<dynamic>('cartList');
+    final cartModelList = cartBox.values.toList();
+    return cartModelList.map((e) => Cart.fromJson(e)).toList();
   }
 
   static void addAllCartList(List<Cart> dataList) {
-    var cartBox = Hive.box<CartModel>('cartList');
-    cartBox.addAll(dataList.map((e) {
-      Product product = e.product;
-      String productStr = jsonEncode(product.toJson());
-      return CartModel(e.idCart, productStr, e.dateTimeOrder, e.orderQuantity);
-    }).toList());
+    // var cartBox = Hive.box<Cart>('cartList');
+    // cartBox.addAll(dataList.map((e) {
+    //   Product product = e.product;
+    //   String productStr = jsonEncode(product.toJson());
+    //   return Cart(e.idCart, productStr, e.dateTimeOrder, e.orderQuantity);
+    // }).toList());
   }
 
   static void deleteItemCart(List<Cart> dataList) {
-    var cartBox = Hive.box<CartModel>('cartList');
+    var cartBox = Hive.box<Cart>('cartList');
     for (Cart cart in dataList) {
-      cartBox.delete(cart.idCart);
+      cartBox.delete(cart.cartID);
     }
   }
 
   static void deleteAllItemCart() {
-    List<Cart> dataList = getCartList();
-    if (dataList.isNotEmpty) {
-      deleteItemCart(dataList);
+    var cartBox = Hive.box<Cart>('cartList');
+    List<Cart> cartModelList = cartBox.values.toList();
+    for (Cart cartModel in cartModelList) {
+      cartModel.delete();
     }
   }
 
@@ -76,5 +58,10 @@ class HiveService {
   static List<String> getKeywords() {
     var keywordBox = Hive.box<String>('keywords');
     return keywordBox.values.map((e) => e.toString()).toList();
+  }
+
+  static bool isProductExists(String idProduct) {
+    List<Cart> cartList = getCartList();
+    return cartList.where((e) => e.productID == idProduct).isNotEmpty;
   }
 }

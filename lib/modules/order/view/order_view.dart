@@ -6,12 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/cart.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_bloc.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_event.dart';
-import 'package:selling_food_store/modules/request_order/bloc/request_order_state.dart';
-import 'package:selling_food_store/modules/request_order/bloc/update_number_product_bloc.dart';
-import 'package:selling_food_store/modules/request_order/view/choose_payment_method.dart';
-import 'package:selling_food_store/modules/request_order/view/display_price.dart';
+import 'package:selling_food_store/modules/order/bloc/order_bloc.dart';
+import 'package:selling_food_store/modules/order/bloc/order_event.dart';
+import 'package:selling_food_store/modules/order/bloc/order_state.dart';
+import 'package:selling_food_store/modules/order/bloc/update_number_product_bloc.dart';
+import 'package:selling_food_store/modules/order/view/choose_payment_method.dart';
+import 'package:selling_food_store/modules/order/view/display_price.dart';
 
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/app_utils.dart';
@@ -33,7 +33,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RequestOrderBloc, RequestOrderState>(
+    return BlocConsumer<OrderBloc, OrderState>(
       builder: ((context, state) {
         if (state is DisplayProductForRequestOrderState) {
           cartList = state.cartList;
@@ -86,7 +86,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
             ),
           ),
           persistentFooterButtons: [
-            BlocBuilder<UpdateNumberProductBloc, RequestOrderState>(
+            BlocBuilder<UpdateNumberProductBloc, OrderState>(
                 builder: ((context, state) {
               if (state is UpdateNumberProductState) {
                 totalPrice = state.price + 20000;
@@ -125,7 +125,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
                       title: 'order'.tr(),
                       onClick: () {
                         context
-                            .read<RequestOrderBloc>()
+                            .read<OrderBloc>()
                             .add(OnRequestOrderProductEvent(cartList, null));
                       },
                     )

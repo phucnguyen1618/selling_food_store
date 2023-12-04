@@ -2,10 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/user_info_order.dart';
 
-part 'request_order.g.dart';
+part 'order.g.dart';
 
 @JsonSerializable()
-class RequestOrder {
+class Order {
   String idOrder;
   UserInfoOrder orderUserInfo;
   List<Cart> cartList;
@@ -19,7 +19,7 @@ class RequestOrder {
   int paymentMethod;
   String? reasonCancelOrder;
 
-  RequestOrder(
+  Order(
     this.idOrder,
     this.orderUserInfo,
     this.cartList,
@@ -32,10 +32,25 @@ class RequestOrder {
     this.reasonCancelOrder,
   );
 
-  factory RequestOrder.fromJson(Map<String, dynamic> json) =>
-      _$RequestOrderFromJson(json);
+  factory Order.fromJson(Map<String, dynamic> json) =>
+      _$OrderFromJson(json);
 
-  Map<String, dynamic> toJson() => _$RequestOrderToJson(this);
+  Map<String, dynamic> toJson() => _$OrderToJson(this);
+
+  Map<String, dynamic> convertToJson() {
+    return {
+      "idOrder": idOrder,
+      "orderUserInfo": orderUserInfo.toJson(),
+     // "cartList": cartList.map((e) => e.convertToJson()).toList(),
+      "orderPrice": orderPrice,
+      "shippingFee": shippingFee,
+      "orderDateTime": orderDateTime.toIso8601String(),
+      "status": status,
+      "note": note,
+      "paymentMethod": paymentMethod,
+      "reasonCancelOrder": reasonCancelOrder,
+    };
+  }
 
   double getTotalPrice() {
     return orderPrice + shippingFee;

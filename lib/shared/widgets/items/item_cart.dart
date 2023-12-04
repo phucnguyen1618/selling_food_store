@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:selling_food_store/modules/cart/bloc/cart_bloc.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
+import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
 
 import '../../utils/app_color.dart';
@@ -34,16 +37,19 @@ class _ItemCartState extends State<ItemCart> {
 
   @override
   void initState() {
-    quantity = widget.cart.orderQuantity;
-    product = widget.cart.product;
+    initData();
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant ItemCart oldWidget) {
     if (oldWidget.cart != widget.cart) {
-      product = widget.cart.product;
-      price = widget.cart.orderQuantity * product!.getPrice();
+      FirebaseService.getProductByID(widget.cart.productID, (productInfo) {
+        setState(() {
+          product = productInfo;
+        });
+      }, (error) => log('Error: $error'));
+      price = widget.cart.quantity * product!.getPrice();
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -93,7 +99,7 @@ class _ItemCartState extends State<ItemCart> {
                     ),
                   ),
                   subtitle: Text(
-                    "${'textAddToCart'.tr()} ${AppUtils.formatDateTime(widget.cart.dateTimeOrder)}",
+                    "${'textAddToCart'.tr()} ${AppUtils.formatDateTime(DateTime.now())}",
                     style: TextStyle(
                       color: Colors.grey.shade400,
                       fontSize: 12.0,
@@ -234,5 +240,14 @@ class _ItemCartState extends State<ItemCart> {
         );
       },
     );
+  }
+
+  void initData() {
+    quantity = widget.cart.quantity;
+    FirebaseService.getProductByID(widget.cart.productID, (productInfo) {
+      setState(() {
+        product = productInfo;
+      });
+    }, (error) => log('Error: $error'));
   }
 }

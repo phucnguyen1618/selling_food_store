@@ -42,11 +42,13 @@ class _RecommendProductListState extends State<RecommendProductList> {
                 context: context,
                 product: state.product,
                 onAdd: (productSelected, quantity) {
-                  productSelected.addCart(quantity, DateTime.now(), () {
+                  productSelected.addCart(quantity, () {
                     context
                         .read<CartButtonBloc>()
                         .add(cart.OnAddProductToCartEvent(1));
-                  }, (error) {});
+                  }, (error) {
+                    log('Error: $error');
+                  });
                 },
                 onClose: () {
                   context.read<HomeBloc>().add(OnBottomSheetCloseEvent());
@@ -82,7 +84,7 @@ class _RecommendProductListState extends State<RecommendProductList> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8.0),
+                        const SizedBox(height: 16.0),
                         SingleChildScrollView(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           scrollDirection: Axis.horizontal,

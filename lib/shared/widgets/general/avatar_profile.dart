@@ -109,14 +109,14 @@ class _AvatarProfileState extends State<AvatarProfile> {
       width: widget.width ?? 100.0,
       height: widget.height ?? 100.0,
       decoration: const BoxDecoration(
-        color: Colors.blue,
+        color: AppColor.baseColor,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
       child: Text(
-        AppUtils.generateAvatarText(input),
+        AppUtils.generateNameAvatar(input),
         style: const TextStyle(
-          fontSize: 24.0,
+          fontSize: 16.0,
           color: AppColor.whiteColor,
         ),
       ),

@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:momo_vn/momo_vn.dart';
 import 'package:selling_food_store/models/cart.dart';
 
-abstract class RequestOrderState extends Equatable {
+abstract class OrderState extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class InitRequestOrderState extends RequestOrderState {}
+class InitRequestOrderState extends OrderState {}
 
-class UpdateNumberProductState extends RequestOrderState {
+class UpdateNumberProductState extends OrderState {
   final double price;
 
   UpdateNumberProductState(this.price);
@@ -18,7 +18,7 @@ class UpdateNumberProductState extends RequestOrderState {
   List<Object?> get props => [price];
 }
 
-class DisplayProductForRequestOrderState extends RequestOrderState {
+class DisplayProductForRequestOrderState extends OrderState {
   final List<Cart> cartList;
   final double orderPrice;
   final double totalPrice;
@@ -30,7 +30,7 @@ class DisplayProductForRequestOrderState extends RequestOrderState {
   List<Object?> get props => [cartList];
 }
 
-class DisplayUserInfoState extends RequestOrderState {
+class DisplayUserInfoState extends OrderState {
   final String name;
   final String address;
 
@@ -40,7 +40,7 @@ class DisplayUserInfoState extends RequestOrderState {
   List<Object?> get props => [name, address];
 }
 
-class RequestOrderProductSuccessState extends RequestOrderState {
+class RequestOrderProductSuccessState extends OrderState {
   final String name;
   final String address;
 
@@ -50,13 +50,13 @@ class RequestOrderProductSuccessState extends RequestOrderState {
   List<Object?> get props => [name, address];
 }
 
-class RequestOrderProductFailureState extends RequestOrderState {
+class RequestOrderProductFailureState extends OrderState {
   final String message;
 
   RequestOrderProductFailureState(this.message);
 }
 
-class ChoosePaymentMethodState extends RequestOrderState {
+class ChoosePaymentMethodState extends OrderState {
   final int value;
 
   ChoosePaymentMethodState(this.value);
@@ -65,7 +65,7 @@ class ChoosePaymentMethodState extends RequestOrderState {
   List<Object?> get props => [value];
 }
 
-class PaymentSuccessState extends RequestOrderState {
+class PaymentSuccessState extends OrderState {
   final PaymentResponse response;
 
   PaymentSuccessState(this.response);

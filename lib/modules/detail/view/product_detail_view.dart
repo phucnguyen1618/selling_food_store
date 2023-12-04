@@ -19,7 +19,7 @@ import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/bottomsheet_utils.dart';
 import '../../../shared/widgets/general/loading_data_widget.dart';
 import '../../../shared/widgets/general/price_widget.dart';
-import '../../../shared/widgets/general/search_bar.dart';
+import '../../../shared/widgets/general/search_bar.dart' as searchBar;
 import '../../home/view/home_view.dart';
 
 class ProductDetailView extends StatefulWidget {
@@ -52,7 +52,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                       )),
                   backgroundColor: AppColor.whiteColor,
                   elevation: 0.0,
-                  title: SearchBar(
+                  title: searchBar.SearchBar(
                     hintText: productDetail!.name,
                     onSearch: () {
                       showSearch(
@@ -202,7 +202,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
               context: context,
               product: state.product,
               onAdd: (productSelected, quantity) {
-                productSelected.addCart(quantity, DateTime.now(), () {
+                productSelected.addCart(quantity, () {
                   EasyLoading.showSuccess('addCartSuccess'.tr());
                 }, (error) {
                   context.read<ProductDetailBloc>().add(OnFailureEvent(error));
@@ -214,11 +214,16 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     .add(OnBottomSheetCloseEvent());
               });
         } else if (state is BuyNowSuccessState) {
-          context.goNamed('requestOrder', extra: state.cartList);
+          context.goNamed('productDetailRequestOrder', extra: {
+            "cartList": state.cartList,
+            "isBuyNow": true,
+          });
         } else if (state is BuyNowFailureState) {
           EasyLoading.showError(state.error);
         } else if (state is RequestSignInState) {
           ShowDialogUtils.showDialogRequestSignIn(context, () {
+            context.goNamed('signIn');
+          }, () {
             context.read<ProductDetailBloc>().add(OnDialogCloseEvent());
           });
         } else if (state is BottomSheetCloseState) {

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:selling_food_store/models/request_order.dart';
+import 'package:selling_food_store/models/order.dart';
 
 abstract class OrderListState extends Equatable {
   @override
@@ -9,7 +9,7 @@ abstract class OrderListState extends Equatable {
 class LoadingOrderListState extends OrderListState {}
 
 class DisplayOrderListState extends OrderListState {
-  final List<RequestOrder> orders;
+  final List<Order> orders;
 
   DisplayOrderListState(this.orders);
 

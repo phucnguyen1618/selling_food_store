@@ -35,12 +35,12 @@ class ItemProductInOrder extends StatelessWidget {
                 height: 30.0,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: NetworkImage(cart.product.brand.logoBrand)),
+                  // image: DecorationImage(
+                  //     image: NetworkImage(cart.product.brand.logoBrand)),
                 )),
             contentPadding: EdgeInsets.zero,
             title: Text(
-              cart.product.brand.name,
+              'cart.product.brand.name',
               style: const TextStyle(
                 fontSize: 16.0,
                 color: AppColor.blackColor,
@@ -61,16 +61,16 @@ class ItemProductInOrder extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              CachedNetworkImage(
-                width: 80.0,
-                height: 80.0,
-                imageUrl: cart.product.image,
-                fit: BoxFit.cover,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) =>
-                    Icon(Icons.error, color: AppColor.hintGreyColor),
-              ),
+              // CachedNetworkImage(
+              //   width: 80.0,
+              //   height: 80.0,
+              //   imageUrl: cart.product.image,
+              //   fit: BoxFit.cover,
+              //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+              //       CircularProgressIndicator(value: downloadProgress.progress),
+              //   errorWidget: (context, url, error) =>
+              //       Icon(Icons.error, color: AppColor.hintGreyColor),
+              // ),
               const SizedBox(width: 12.0),
               Expanded(
                 child: Column(
@@ -78,7 +78,7 @@ class ItemProductInOrder extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      cart.product.name,
+                      'cart.product.name',
                       maxLines: 2,
                       style: const TextStyle(
                         color: AppColor.blackColor,
@@ -105,7 +105,7 @@ class ItemProductInOrder extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              AppUtils.formatPrice(cart.product.getPrice()),
+                              'AppUtils.formatPrice(cart.product.getPrice())',
                               style: const TextStyle(
                                 color: AppColor.blackColor,
                                 fontSize: 16.0,
@@ -113,7 +113,7 @@ class ItemProductInOrder extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'x${cart.orderQuantity}',
+                              'x${cart.quantity}',
                               style: const TextStyle(
                                 color: AppColor.blackColor,
                                 fontSize: 16.0,
@@ -166,9 +166,9 @@ class ItemProductInOrder extends StatelessWidget {
                         onTap: () {
                           ShowDialogUtils.showDialogFeedback(context, cart,
                               (rating, review) {
-                            context.read<OrderListBloc>().add(
-                                OnFeedbackProductEvent(
-                                    rating, review, cart.product));
+                            // context.read<OrderListBloc>().add(
+                            //     OnFeedbackProductEvent(
+                            //         rating, review, cart.product));
                           });
                         },
                         child: Container(

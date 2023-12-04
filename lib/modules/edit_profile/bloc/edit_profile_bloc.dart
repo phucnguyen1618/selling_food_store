@@ -7,10 +7,12 @@ import 'package:selling_food_store/shared/services/firebase_service.dart';
 
 class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   EditProfileBloc() : super(InitEditProfileState()) {
-    on<OnInitEditProfileEvent>(_onHandlerUserInfo);
-    on<OnChooseBirthDayEvent>(_onChooseBirthDay);
-    on<OnUpdateUserInfoEvent>(_onUpdateUserInfo);
-    on<OnUpdateAvatarUserEvent>(_onUpdateAvatar);
+    if (!isClosed) {
+      on<OnInitEditProfileEvent>(_onHandlerUserInfo);
+      on<OnChooseBirthDayEvent>(_onChooseBirthDay);
+      on<OnUpdateUserInfoEvent>(_onUpdateUserInfo);
+      on<OnUpdateAvatarUserEvent>(_onUpdateAvatar);
+    }
   }
 
   void _onHandlerUserInfo(

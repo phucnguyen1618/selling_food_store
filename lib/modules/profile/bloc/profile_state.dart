@@ -32,6 +32,8 @@ class SignOutState extends ProfileState {}
 
 class ConfirmSignOutState extends ProfileState {}
 
+class CloseDialog extends ProfileState {}
+
 class ErrorState extends ProfileState {
   final String error;
 

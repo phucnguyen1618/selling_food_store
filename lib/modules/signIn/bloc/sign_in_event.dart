@@ -14,3 +14,5 @@ class OnSignInFailureEvent extends SignInEvent {
 
   OnSignInFailureEvent(this.error);
 }
+
+class OnCloseDialogEvent extends SignInEvent {}

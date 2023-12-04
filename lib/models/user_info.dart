@@ -7,9 +7,9 @@ class UserInfo {
   String idAccount;
   String fullName;
   String? avatar;
-  DateTime birthDay;
-  String address;
-  int sex;
+  DateTime? birthDay;
+  String? address;
+  int? sex;
 
   UserInfo(
     this.idAccount,
@@ -26,6 +26,6 @@ class UserInfo {
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
 
   int getAge() {
-    return DateTime.now().difference(birthDay).inDays ~/ 365;
+    return DateTime.now().difference(birthDay!).inDays ~/ 365;
   }
 }

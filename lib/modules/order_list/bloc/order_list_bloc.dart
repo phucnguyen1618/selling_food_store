@@ -7,11 +7,11 @@ import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../models/request_order.dart';
+import '../../../models/order.dart';
 import '../../../shared/utils/strings.dart';
 
 class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
-  List<RequestOrder> orderList = [];
+  List<Order> orderList = [];
 
   OrderListBloc() : super(LoadingOrderListState()) {
     on<OnLoadingOrderListEvent>(_onLoadingOrderList);
@@ -29,6 +29,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
       OnLoadingOrderListEvent event, Emitter<OrderListState> emitter) {
     FirebaseService.getOrderList((dataList) {
       orderList = dataList;
+      orderList.sort((a, b) => b.orderDateTime.compareTo(a.orderDateTime));
       add(OnDisplayOrderListEvent(orderList));
     }, (error) {
       add(OnErrorEvent(error));
@@ -42,7 +43,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
 
   void _onFilterOrderList(
       OnFilterOrderListEvent event, Emitter<OrderListState> emitter) {
-    List<RequestOrder> requestOrders = filterOrderListFromStatus(event.value);
+    List<Order> requestOrders = filterOrderListFromStatus(event.value);
     emitter(DisplayOrderListState(requestOrders));
   }
 
@@ -93,22 +94,22 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     emitter(ErrorCancelOrderState(event.error));
   }
 
-  List<RequestOrder> filterOrderListFromStatus(int value) {
+  List<Order> filterOrderListFromStatus(int value) {
     switch (value) {
       case 1:
-        List<RequestOrder> dataList =
+        List<Order> dataList =
             orderList.where((element) => element.status == 0).toList();
         return dataList;
       case 2:
-        List<RequestOrder> dataList =
+        List<Order> dataList =
             orderList.where((element) => element.status == 1).toList();
         return dataList;
       case 3:
-        List<RequestOrder> dataList =
+        List<Order> dataList =
             orderList.where((element) => element.status == 2).toList();
         return dataList;
       case 4:
-        List<RequestOrder> dataList =
+        List<Order> dataList =
             orderList.where((element) => element.status == 3).toList();
         return dataList;
       default:

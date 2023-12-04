@@ -9,9 +9,10 @@ import 'package:selling_food_store/modules/detail/product_detail_page.dart';
 import 'package:selling_food_store/modules/edit_profile/edit_profile_page.dart';
 import 'package:selling_food_store/modules/forgotPassword/forgot_password_page.dart';
 import 'package:selling_food_store/modules/home/home_page.dart';
+import 'package:selling_food_store/modules/notification/notification_page.dart';
 import 'package:selling_food_store/modules/order_list/order_list_page.dart';
 import 'package:selling_food_store/modules/profile/profile_page.dart';
-import 'package:selling_food_store/modules/request_order/request_order_page.dart';
+import 'package:selling_food_store/modules/order/order_page.dart';
 import 'package:selling_food_store/modules/signIn/sign_in_page.dart';
 import 'package:selling_food_store/modules/splash/splash_page.dart';
 import 'package:selling_food_store/modules/signUp/signUp_page.dart';
@@ -20,12 +21,14 @@ import 'models/product.dart';
 
 final GoRouter appRouter = GoRouter(
   routes: <RouteBase>[
+    //Splash Page
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
         return const SplashPage();
       },
       routes: <RouteBase>[
+        //Home Page
         GoRoute(
             path: 'home',
             name: 'home',
@@ -33,36 +36,14 @@ final GoRouter appRouter = GoRouter(
               return const HomePage();
             },
             routes: [
+              //Notification Page
               GoRoute(
-                path: 'home/productDetail',
-                name: 'productDetail',
-                builder: (BuildContext context, GoRouterState state) {
-                  final dataValue = state.extra as Product;
-                  return ProductDetailPage(product: dataValue);
-                },
-              ),
-              GoRoute(
-                  path: 'home/signIn',
-                  name: 'signIn',
+                  path: 'home/notifications',
+                  name: 'notifications',
                   builder: (BuildContext context, GoRouterState state) {
-                    return const SignInPage();
-                  },
-                  routes: [
-                    GoRoute(
-                      path: 'signIn/signUp',
-                      name: 'signUp',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const SignUpPage();
-                      },
-                    ),
-                    GoRoute(
-                      path: 'signIn/forgotPassword',
-                      name: 'forgotPassword',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const ForgotPasswordPage();
-                      },
-                    ),
-                  ]),
+                    return const NotificationPage();
+                  }),
+              //Cart Page
               GoRoute(
                 path: 'home/cart',
                 name: 'cart',
@@ -70,6 +51,7 @@ final GoRouter appRouter = GoRouter(
                   return const CartPage();
                 },
               ),
+              //Profile Page
               GoRoute(
                   path: 'home/profile',
                   name: 'profile',
@@ -78,21 +60,23 @@ final GoRouter appRouter = GoRouter(
                   },
                   routes: [
                     GoRoute(
-                        path: 'cart',
-                        name: 'yourCart',
+                        path: 'profile/cart',
+                        name: 'profileCart',
                         builder: (BuildContext context, GoRouterState state) {
                           return const CartPage();
                         }),
+                    //Edit Profile Page
                     GoRoute(
-                      path: 'profle/editProfile',
+                      path: 'profile/editProfile',
                       name: 'editProfile',
                       builder: (BuildContext context, GoRouterState state) {
                         final dataValue = state.extra as UserInfo;
                         return EditProfilePage(userInfo: dataValue);
                       },
                     ),
+                    //Order List Page
                     GoRoute(
-                        path: 'profle/orderList',
+                        path: 'profile/orderList',
                         name: 'orderList',
                         builder: (BuildContext context, GoRouterState state) {
                           return const OrderListPage();
@@ -100,7 +84,7 @@ final GoRouter appRouter = GoRouter(
                         routes: [
                           GoRoute(
                             path: 'profile/requestOrder',
-                            name: 'requestOrderToBuyNow',
+                            name: 'orderListRequestOrder',
                             builder:
                                 (BuildContext context, GoRouterState state) {
                               final dataValue =
@@ -112,21 +96,47 @@ final GoRouter appRouter = GoRouter(
                             },
                           ),
                         ]),
+                    //Change Password Page
                     GoRoute(
-                      path: 'changePassword',
+                      path: 'profile/changePassword',
                       name: 'changePassword',
                       builder: (BuildContext context, GoRouterState state) {
                         return const ChangePasswordPage();
                       },
                     ),
+                    //Change Payment Page
                     GoRoute(
-                      path: 'changePayment',
+                      path: 'profile/changePayment',
                       name: 'changePayment',
                       builder: (BuildContext context, GoRouterState state) {
                         return const ChangePaymentPage();
                       },
                     ),
                   ]),
+              //SignIn Page
+              GoRoute(
+                  path: 'home/signIn',
+                  name: 'signIn',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const SignInPage();
+                  },
+                  routes: [
+                    //Forgot Password Page
+                    GoRoute(
+                        path: 'signIn/forgotPassword',
+                        name: 'forgotPassword',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const ForgotPasswordPage();
+                        }),
+                    //SignUp Page
+                    GoRoute(
+                        path: 'signIn/signUp',
+                        name: 'signUp',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SignUpPage();
+                        }),
+                  ]),
+              //Request Order Page
               GoRoute(
                   path: 'home/requestOrder',
                   name: 'requestOrder',
@@ -139,24 +149,43 @@ final GoRouter appRouter = GoRouter(
                   },
                   routes: [
                     GoRoute(
-                      path: 'editProfileForOrder',
-                      name: 'editProfileForOrder',
+                      path: 'requestOrder/editProfile',
+                      name: 'requestOrderEditProfile',
                       builder: (BuildContext context, GoRouterState state) {
                         final dataValue = state.extra as UserInfo;
                         return EditProfilePage(userInfo: dataValue);
                       },
                     ),
                   ]),
+              //Product Detail Page
               GoRoute(
-                  path: 'home/confirmOrder',
-                  name: 'confirmOrder',
+                  path: 'home/productDetail',
+                  name: 'productDetail',
                   builder: (BuildContext context, GoRouterState state) {
-                    final dataValue = state.extra as Map<String, dynamic>;
-                    String name = dataValue['name'];
-                    String address = dataValue['address'];
-                    return ConfirmOrderPage(name: name, address: address);
+                    final data = state.extra as Product;
+                    return ProductDetailPage(product: data);
                   }),
+              GoRoute(
+                path: 'productDetail/requestOrder',
+                name: 'productDetailRequestOrder',
+                builder: (BuildContext context, GoRouterState state) {
+                  final dataValue = state.extra as Map<String, dynamic>;
+                  final cartList = dataValue['cartList'];
+                  final isBuyNow = dataValue['isBuyNow'];
+                  return RequestOrderPage(carts: cartList, isBuyNow: isBuyNow);
+                },
+              ),
             ]),
+        //Confirm Order Page
+        GoRoute(
+            path: 'confirmOrder',
+            name: 'confirmOrder',
+            builder: (BuildContext context, GoRouterState state) {
+              final dataValue = state.extra as Map<String, dynamic>;
+              String name = dataValue['name'];
+              String address = dataValue['address'];
+              return ConfirmOrderPage(name: name, address: address);
+            }),
       ],
     ),
   ],

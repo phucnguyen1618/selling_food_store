@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
-import 'package:selling_food_store/modules/home/bloc/home_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/services/hive_service.dart';
 

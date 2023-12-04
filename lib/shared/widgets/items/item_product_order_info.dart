@@ -26,15 +26,15 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
 
   @override
   void initState() {
-    quantity = widget.cart.orderQuantity;
-    price = widget.cart.product.getPrice();
+    quantity = widget.cart.quantity;
+    //price = widget.cart.product.getPrice();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTime shippingDateTime =
-        widget.cart.dateTimeOrder.add(const Duration(days: 2));
+    DateTime shippingDateTime = DateTime.now();
+    //widget.cart.dateTimeOrder.add(const Duration(days: 2));
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -45,26 +45,26 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              CachedNetworkImage(
-                imageUrl: widget.cart.product.brand.logoBrand,
-                width: 30.0,
-                height: 30.0,
-                fit: BoxFit.cover,
-                imageBuilder: (context, provider) => Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.primaryAppColor,
-                    image: DecorationImage(image: provider),
-                  ),
-                ),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) =>
-                    Icon(Icons.error, color: AppColor.hintGreyColor),
-              ),
+              // CachedNetworkImage(
+              //   imageUrl: widget.cart.product.brand.logoBrand,
+              //   width: 30.0,
+              //   height: 30.0,
+              //   fit: BoxFit.cover,
+              //   imageBuilder: (context, provider) => Container(
+              //     decoration: BoxDecoration(
+              //       shape: BoxShape.circle,
+              //       color: AppColor.primaryAppColor,
+              //       image: DecorationImage(image: provider),
+              //     ),
+              //   ),
+              //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+              //       CircularProgressIndicator(value: downloadProgress.progress),
+              //   errorWidget: (context, url, error) =>
+              //       Icon(Icons.error, color: AppColor.hintGreyColor),
+              // ),
               const SizedBox(width: 12.0),
               Text(
-                widget.cart.product.brand.name,
+                'widget.cart.product.brand.name',
                 style: const TextStyle(
                   color: AppColor.blackColor,
                   fontWeight: FontWeight.bold,
@@ -75,16 +75,16 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
           const SizedBox(height: 12.0),
           Row(
             children: [
-              CachedNetworkImage(
-                imageUrl: widget.cart.product.image,
-                width: 100.0,
-                height: 100.0,
-                fit: BoxFit.cover,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
-                errorWidget: (context, url, error) =>
-                    Icon(Icons.error, color: AppColor.hintGreyColor),
-              ),
+              // CachedNetworkImage(
+              //   imageUrl: widget.cart.product.image,
+              //   width: 100.0,
+              //   height: 100.0,
+              //   fit: BoxFit.cover,
+              //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+              //       CircularProgressIndicator(value: downloadProgress.progress),
+              //   errorWidget: (context, url, error) =>
+              //       Icon(Icons.error, color: AppColor.hintGreyColor),
+              // ),
               const SizedBox(width: 12.0),
               Expanded(
                 child: Column(
@@ -92,7 +92,7 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      widget.cart.product.name,
+                      'widget.cart.product.name',
                       maxLines: 2,
                       style: const TextStyle(
                         fontSize: 14.0,
@@ -126,7 +126,7 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          '${AppUtils.formatPrice(widget.cart.product.cost)}đ',
+                          "'{AppUtils.formatPrice(widget.cart.product.cost)}đ'",
                           maxLines: 1,
                           style: const TextStyle(
                             fontSize: 14.0,

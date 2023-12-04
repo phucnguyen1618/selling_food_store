@@ -80,10 +80,10 @@ class _ProfileViewState extends State<ProfileView> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const AvatarProfile(
-                                avatar: Strings.avatarDemo,
+                              AvatarProfile(
+                                avatar: userInfo!.fullName,
                                 width: 64.0,
                                 height: 64.0,
                                 isEdit: false,
@@ -101,15 +101,21 @@ class _ProfileViewState extends State<ProfileView> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(height: 4.0),
-                                  Text(
-                                    userInfo!.address,
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey.shade400,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4.0),
+                                  userInfo!.address != null &&
+                                          userInfo!.address!.isEmpty &&
+                                          userInfo!.address != ''
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4.0),
+                                          child: Text(
+                                            userInfo!.address!,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.grey.shade400,
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(height: 8.0),
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -124,7 +130,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       ),
                                       const SizedBox(width: 12.0),
                                       Text(
-                                        '${'birthDayProfile'.tr()} ${AppUtils.formatDateTime(userInfo!.birthDay)}',
+                                        '${'birthDayProfile'.tr()} ${AppUtils.formatDateTime(userInfo!.birthDay!)}',
                                         style: TextStyle(
                                           fontSize: 14.0,
                                           color: Colors.grey.shade400,
@@ -143,21 +149,21 @@ class _ProfileViewState extends State<ProfileView> {
                               onClicked: () {
                                 context.goNamed('orderList');
                               }),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 8.0),
                           _buildLabel(
                               name: 'paymentManage'.tr(),
                               icon: Icons.attach_money_outlined,
                               onClicked: () {
                                 context.goNamed('changePayment');
                               }),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 8.0),
                           _buildLabel(
                               name: 'yourCart'.tr(),
                               icon: Icons.shopping_bag_outlined,
                               onClicked: () {
-                                context.goNamed('yourCart');
+                                context.goNamed('profileCart');
                               }),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 8.0),
                           _buildLabel(
                             name: 'changeLanguage'.tr(),
                             icon: Icons.language,
@@ -168,7 +174,7 @@ class _ProfileViewState extends State<ProfileView> {
                                   .add(OnChangeLanguageEvent(locale));
                             },
                           ),
-                          const SizedBox(height: 12.0),
+                          const SizedBox(height: 8.0),
                           _buildLabel(
                               name: 'changePassword'.tr(),
                               icon: Icons.autorenew,
@@ -208,12 +214,14 @@ class _ProfileViewState extends State<ProfileView> {
           context.pop();
         } else if (state is SignOutState) {
           ShowDialogUtils.showDialogNotify(
-              context: context,
-              typeDialog: NotifyTypeDialog.notifyConfirmSignOut,
-              message: 'signOutRequest'.tr(),
-              onConfirm: () {
-                context.read<ProfileBloc>().add(OnConfirmSignOutEvent());
-              });
+            context: context,
+            typeDialog: NotifyTypeDialog.notifyConfirmSignOut,
+            message: 'signOutRequest'.tr(),
+            onConfirm: () {
+              context.read<ProfileBloc>().add(OnConfirmSignOutEvent());
+            },
+            onClose: () {},
+          );
         } else if (state is ErrorState) {
           EasyLoading.showError(state.error);
         } else if (state is ChangeLanguageState) {

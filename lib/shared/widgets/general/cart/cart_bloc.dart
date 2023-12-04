@@ -13,7 +13,7 @@ class CartButtonBloc extends Bloc<CartButtonEvent, CartButtonState> {
 
   void _onAddProductToCart(
       OnAddProductToCartEvent event, Emitter<CartButtonState> emitter) {
-    int numberProductInCart = event.value++;
+    int numberProductInCart = HiveService.getCartList().length;
     emitter(UpdateNumberProductInCartWhenAddState(numberProductInCart));
   }
 

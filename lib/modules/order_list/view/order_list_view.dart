@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:selling_food_store/models/request_order.dart';
+import 'package:selling_food_store/models/order.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_state.dart';
@@ -20,7 +20,7 @@ class OrderListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<RequestOrder> orders = [];
+    List<Order> orders = [];
     bool isLoading = true;
     return BlocConsumer<OrderListBloc, OrderListState>(
       builder: (context, state) {

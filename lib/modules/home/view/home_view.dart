@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -12,7 +13,7 @@ import 'package:selling_food_store/modules/home/bloc/home_state.dart';
 import 'package:selling_food_store/modules/home/view/bestselling_product_list.dart';
 import 'package:selling_food_store/modules/home/view/hotselling_product_list.dart';
 import 'package:selling_food_store/modules/home/view/recommend_product_list.dart';
-import 'package:selling_food_store/modules/home/view/type_product_list.dart';
+import 'package:selling_food_store/modules/home/view/category_list.dart';
 import 'package:selling_food_store/shared/utils/image_constants.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import 'package:selling_food_store/shared/widgets/banner/slide_banner.dart';
@@ -23,7 +24,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../shared/utils/app_color.dart';
 import '../../../shared/utils/strings.dart';
 import '../../../shared/widgets/banner/banner_ads.dart';
-import '../../../shared/widgets/general/search_bar.dart';
+import '../../../shared/widgets/general/search_bar.dart' as searchBar;
 
 import 'package:badges/badges.dart' as badges;
 
@@ -37,7 +38,7 @@ class HomeView extends StatelessWidget {
         backgroundColor: AppColor.whiteColor,
         appBar: AppBar(
           backgroundColor: AppColor.whiteColor,
-          title: SearchBar(
+          title: searchBar.SearchBar(
             onSearch: () {
               showSearch(
                 context: context,
@@ -60,36 +61,44 @@ class HomeView extends StatelessWidget {
             ),
           ),
           elevation: 0.0,
-          actions: const [
-            CartButton(),
+          actions: [
+            const CartButton(),
             Center(
               child: badges.Badge(
-                showBadge: true,
-                badgeContent: Text(
-                  Strings.upTenCart,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 8.0,
+                  showBadge: true,
+                  badgeContent: const Text(
+                    Strings.upTenCart,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 8.0,
+                    ),
                   ),
-                ),
-                child: Icon(
-                  Icons.notifications_none_outlined,
-                  color: AppColor.blackColor,
-                ),
-              ),
+                  child: InkWell(
+                    onTap: () {
+                      context.goNamed('notifications');
+                    },
+                    focusColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    child: const Icon(
+                      Icons.notifications_none_outlined,
+                      color: AppColor.blackColor,
+                    ),
+                  )),
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
           ],
         ),
-        body: SingleChildScrollView(
+        body: const SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               SlideBanner(),
               SizedBox(height: 16.0),
               RecommendProductList(),
               SizedBox(height: 24.0),
-              TypeProductList(),
+              CategoryList(),
               SizedBox(height: 24.0),
               HotSellingProductList(),
               SizedBox(height: 12.0),
@@ -116,7 +125,9 @@ class HomeView extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                _makePhoneCall('0941699575');
+              },
               heroTag: "Call",
               backgroundColor: Colors.redAccent,
               child: const Icon(
@@ -130,6 +141,8 @@ class HomeView extends StatelessWidget {
     }, listener: (context, state) {
       if (state is RequestSignInState) {
         ShowDialogUtils.showDialogRequestSignIn(context, () {
+          context.goNamed('signIn');
+        }, () {
           context.read<HomeBloc>().add(OnCloseDialogEvent());
         });
       } else if (state is DialogCloseState) {
@@ -139,16 +152,39 @@ class HomeView extends StatelessWidget {
   }
 
   Future<void> _openChatBot() async {
+    bool isInstalled = await isAppInstalled();
     String uri = '';
-    if (Platform.isAndroid) {
-      uri = 'fb-messenger://user/${Strings.facebookId}';
-    } else if (Platform.isIOS) {
-      uri = 'https://m.me/${Strings.facebookId}';
+    if (isInstalled) {
+      if (Platform.isAndroid) {
+        uri = 'fb-messenger://user/${Strings.facebookId}';
+      } else if (Platform.isIOS) {
+        uri = 'https://m.me/${Strings.facebookId}';
+      }
+      final Uri url = Uri.parse(uri);
+      if (!await launchUrl(url)) {
+        EasyLoading.showError('Could not launch $url');
+      }
+    } else {
+      uri = 'https://www.facebook.com/${Strings.facebookId}';
+      final Uri url = Uri.parse(uri);
+      if (!await launchUrl(url,
+          mode: LaunchMode.externalNonBrowserApplication)) {
+        EasyLoading.showError('Could not launch $url');
+      }
     }
-    final Uri url = Uri.parse(uri);
-    if (!await launchUrl(url)) {
-      EasyLoading.showError('Could not launch $url');
-    }
+  }
+
+  Future<bool> isAppInstalled() {
+    return DeviceApps.getInstalledApplications().then((value) =>
+        value.any((element) => element.packageName == 'com.facebook.orca'));
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 }
 

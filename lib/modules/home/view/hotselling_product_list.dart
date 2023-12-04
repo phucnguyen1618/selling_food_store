@@ -51,7 +51,7 @@ class _HotSellingProductListState extends State<HotSellingProductList> {
                     const SizedBox(height: 8.0),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 365.0,
+                      height: 450.0,
                       child: ListView.builder(
                           itemCount: productList.length,
                           scrollDirection: Axis.horizontal,

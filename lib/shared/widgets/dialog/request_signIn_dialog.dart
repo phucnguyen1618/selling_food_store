@@ -54,7 +54,7 @@ class RequestSignInDialog extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: MaterialButton(
                 onPressed: () {
-                  context.goNamed('signIn');
+                  context.pop('signIn');
                 },
                 minWidth: double.infinity,
                 shape: RoundedRectangleBorder(

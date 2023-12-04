@@ -41,7 +41,7 @@ class ItemSuggest extends StatelessWidget {
             ),
             const SizedBox(height: 12.0),
             Text(
-              AppUtils.formatPrice(product.getPrice()),
+              '${AppUtils.formatPrice(product.getPrice())}đ',
               maxLines: 1,
               style: const TextStyle(
                 color: AppColor.priceProductColor,

@@ -18,13 +18,15 @@ class ForgotPasswordBloc extends BlocBase<ForgotPasswordState> {
         context: context,
         message: 'contentForgotPasswordSuccess'.tr(),
         typeDialog: NotifyTypeDialog.notifySuccess,
+        onClose: () {},
       );
     }, (error) {
       log('Error: ${error.toString()}');
       ShowDialogUtils.showDialogNotify(
           context: context,
           message: error,
-          typeDialog: NotifyTypeDialog.notifyError);
+          typeDialog: NotifyTypeDialog.notifyError,
+          onClose: () {});
     });
   }
 }

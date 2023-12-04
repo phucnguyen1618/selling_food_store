@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +26,7 @@ class SignInView extends StatefulWidget {
 class _SignInViewState extends State<SignInView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  int role = 0;
+  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,36 +37,7 @@ class _SignInViewState extends State<SignInView> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   _buildFormUserSignIn(),
-                  const SizedBox(height: 12.0),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          context.goNamed('forgotPassword');
-                        },
-                        child: Text(
-                          'forgotPassword'.tr(),
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            color: AppColor.primaryAppColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 16.0),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: GeneralButton(
-                        title: 'textSignIn'.tr(),
-                        radius: 100.0,
-                        onClick: () {
-                          context.read<SignInBloc>().add(OnUserSignInEvent(
-                              emailController.text, passwordController.text));
-                        }),
-                  ),
                   RichText(
                       text: TextSpan(
                           text: 'dontHaveAnAccount'.tr(),
@@ -94,90 +66,128 @@ class _SignInViewState extends State<SignInView> {
           if (state is SignInSuccessState) {
             context.go('/home');
           } else if (state is SignInFailureState) {
+            globalKey.currentState!.reset();
             ShowDialogUtils.showDialogNotify(
                 context: context,
                 message: state.error,
-                typeDialog: NotifyTypeDialog.notifyError);
+                typeDialog: NotifyTypeDialog.notifyError,
+                onClose: () {
+                  context.read<SignInBloc>().add(OnCloseDialogEvent());
+                });
+          } else if (state is CloseDialogState) {
+            log('Dialog is closed');
           }
         });
   }
 
   Widget _buildFormUserSignIn() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Form(
+      key: globalKey,
+      autovalidateMode: AutovalidateMode.always,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset(
-              ImageConstants.logoApp,
-              width: 64.0,
-              height: 64.0,
-            ),
-            const SizedBox(width: 12.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Text(
-                  Strings.appName,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    color: AppColor.primaryAppColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  ImageConstants.logoApp,
+                  width: 64.0,
+                  height: 64.0,
                 ),
-                Text(
-                  Strings.sologanApp,
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: AppColor.primaryAppColor,
-                    fontStyle: FontStyle.italic,
-                  ),
+                const SizedBox(width: 12.0),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      Strings.appName,
+                      style: TextStyle(
+                        fontSize: 24.0,
+                        color: AppColor.primaryAppColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      Strings.sologanApp,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: AppColor.primaryAppColor,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
+            const SizedBox(height: 48.0),
+            TextFormField(
+              autofocus: true,
+              controller: emailController,
+              validator: (value) =>
+                  value == null || value.isEmpty ? 'Email là bắt buộc' : null,
+              decoration: InputDecoration(
+                labelText: 'email'.tr(),
+                labelStyle: const TextStyle(color: AppColor.primaryAppColor),
+                hintText: 'hintEmailText'.tr(),
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  color: AppColor.primaryAppColor,
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.primaryAppColor)),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              autofocus: true,
+              controller: passwordController,
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Mật khẩu là bắt buộc'
+                  : null,
+              decoration: InputDecoration(
+                labelText: 'password'.tr(),
+                labelStyle: const TextStyle(color: AppColor.primaryAppColor),
+                hintText: 'hintPasswordText'.tr(),
+                prefixIcon: const Icon(
+                  Icons.lock_outline,
+                  color: AppColor.primaryAppColor,
+                ),
+                border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColor.primaryAppColor)),
+              ),
+            ),
+            const SizedBox(height: 12.0),
+            Align(
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                onTap: () {
+                  context.goNamed('forgotPassword');
+                },
+                child: Text(
+                  'forgotPassword'.tr(),
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    color: AppColor.primaryAppColor,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            GeneralButton(
+                title: 'textSignIn'.tr(),
+                radius: 100.0,
+                onClick: () {
+                  if (globalKey.currentState!.validate()) {
+                    context.read<SignInBloc>().add(OnUserSignInEvent(
+                        emailController.text, passwordController.text));
+                  }
+                }),
           ],
         ),
-        const SizedBox(height: 48.0),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: TextField(
-            autofocus: true,
-            controller: emailController,
-            decoration: InputDecoration(
-              labelText: 'email'.tr(),
-              labelStyle: const TextStyle(color: AppColor.primaryAppColor),
-              hintText: 'hintEmailText'.tr(),
-              prefixIcon: const Icon(
-                Icons.email_outlined,
-                color: AppColor.primaryAppColor,
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.primaryAppColor)),
-            ),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: TextField(
-            autofocus: true,
-            controller: passwordController,
-            decoration: InputDecoration(
-              labelText: 'password'.tr(),
-              labelStyle: const TextStyle(color: AppColor.primaryAppColor),
-              hintText: 'hintPasswordText'.tr(),
-              prefixIcon: const Icon(
-                Icons.lock_outline,
-                color: AppColor.primaryAppColor,
-              ),
-              border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.primaryAppColor)),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

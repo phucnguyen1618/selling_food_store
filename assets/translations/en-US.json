@@ -23,7 +23,7 @@
     "errorStr": "An error has occurred",
     "userNotFoundErrorText": "No accounts exist with this email",
     "yourCart": "Your cart",
-    "signUp": "Register",
+    "signUp": "Register an account",
     "titleAccept": "By creating an account, you agree to the",
     "terms": " Terms of use ",
     "toOur": "ours",
@@ -65,7 +65,6 @@
     "uses": "Uses: ",
     "howToUse": "User manual: ",
     "addCartSuccess": "Cart added successfully",
-    "titleInputUserInfo": "Enter personal information",
     "fullNameInputUserInfo": "Full name",
     "hintTextInputNameUserInfo": "Enter full name",
     "birthDayInputUserInfo": "Date of birth",
@@ -154,5 +153,8 @@
     "text_ordered": "Receive goods: After 2-3 working days",
     "text_delivering": "Order is being shipped",
     "text_order_success": "Order has been completed",
-    "text_canceled": "Order was cancelled"
+    "text_canceled": "Order was cancelled",
+    "notification": "Notification",
+    "sign_up_title": "Registration information",
+    "user_info": "Personal information"
 }

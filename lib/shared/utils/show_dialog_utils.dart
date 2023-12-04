@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:selling_food_store/models/review.dart';
 import 'package:selling_food_store/shared/widgets/dialog/feedback_product_dialog.dart';
 import 'package:selling_food_store/shared/widgets/dialog/notify_dialog.dart';
 import 'package:selling_food_store/shared/widgets/dialog/request_signIn_dialog.dart';
@@ -8,12 +7,19 @@ import '../../models/cart.dart';
 
 class ShowDialogUtils {
   static void showDialogRequestSignIn(
-      BuildContext context, Function() onClose) {
+    BuildContext context,
+    Function() onSignIn,
+    Function() onClose,
+  ) {
     showDialog(
       context: context,
       builder: (context) => const RequestSignInDialog(),
     ).then((value) {
-      onClose();
+      if (value != null) {
+        onSignIn();
+      } else {
+        onClose();
+      }
     });
   }
 
@@ -22,6 +28,7 @@ class ShowDialogUtils {
     String? message,
     required NotifyTypeDialog typeDialog,
     Function()? onConfirm,
+    required Function() onClose,
   }) {
     showDialog(
       context: context,
@@ -34,6 +41,8 @@ class ShowDialogUtils {
         if (onConfirm != null) {
           onConfirm();
         }
+      } else {
+        onClose();
       }
     });
   }

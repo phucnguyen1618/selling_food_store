@@ -17,29 +17,32 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   SignUpBloc() : super(InitialSignUpState()) {
     on<OnSignUpAccountEvent>(_onSignUp);
     on<OnInitInputUserProfileEvent>(_onInputUserProfile);
-    on<OnConfirmInputUserProfileEvent>(_onCofirmInputUserProfile);
     on<OnErrorEvent>(_onErrorSignUp);
   }
 
-  void _onSignUp(OnSignUpAccountEvent event, Emitter<SignUpState> emitter) {
+  Future<void> _onSignUp(
+      OnSignUpAccountEvent event, Emitter<SignUpState> emitter) async {
     if (event.email.isNotEmpty && event.password.isNotEmpty) {
-      FirebaseService.signUpFirebaseWithEmail(event.email, event.password,
-          (idUser) async {
+      final authCredential = await FirebaseService.signUpFirebaseWithEmail(
+          event.email, event.password, (error) => add(OnErrorEvent(error)));
+      if (authCredential != null && authCredential.user != null) {
+        String idUser = authCredential.user!.uid;
         prefs.setString(Strings.email, event.email);
         prefs.setString(Strings.idUser, idUser);
         final credential = Credential(
-            idUser: idUser,
-            email: event.email,
-            password: event.password,
-            role: 0);
-        FirebaseService.insertAccountInfoToDb(credential, () {
-          add(OnInitInputUserProfileEvent());
+            idUser: idUser, email: event.email, createAt: DateTime.now());
+        FirebaseService.insertCredentialToDb(credential, () {
+          final userInfo = UserInfo(idUser, event.name, null, event.birthDay,
+              event.address, event.sex);
+          FirebaseService.insertUserInfoToDb(userInfo, () {
+            EasyLoading.showSuccess('signUpSuccess'.tr());
+          }, (error) {
+            add(OnErrorEvent(error));
+          });
         }, (error) {
           add(OnErrorEvent(error));
         });
-      }, (error) {
-        add(OnErrorEvent(error));
-      });
+      }
     } else {
       add(OnErrorEvent('emptyInputData'.tr()));
     }
@@ -48,19 +51,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   void _onInputUserProfile(
       OnInitInputUserProfileEvent event, Emitter<SignUpState> emitter) {
     emitter(SuccessSignUpWithEmailPasswordState());
-  }
-
-  void _onCofirmInputUserProfile(
-      OnConfirmInputUserProfileEvent event, Emitter<SignUpState> emitter) {
-    final prefs = getIt.get<SharedPreferences>();
-    String idUser = prefs.getString(Strings.idUser) ?? '';
-    final userInfo = UserInfo(
-        idUser, event.name, null, event.dateTime, event.address, event.sex);
-    FirebaseService.insertUserInfoToDb(userInfo, () {
-      EasyLoading.showSuccess('signUpSuccess'.tr());
-    }, (error) {
-      add(OnErrorEvent(error));
-    });
   }
 
   void _onErrorSignUp(OnErrorEvent event, Emitter<SignUpState> emitter) {

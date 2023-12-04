@@ -8,17 +8,13 @@ part of 'credential.dart';
 
 Credential _$CredentialFromJson(Map<String, dynamic> json) => Credential(
       idUser: json['idUser'] as String,
-      phone: json['phone'] as String?,
-      email: json['email'] as String?,
-      password: json['password'] as String?,
-      role: json['role'] as int,
+      email: json['email'] as String,
+      createAt: DateTime.parse(json['create_at'] as String),
     );
 
 Map<String, dynamic> _$CredentialToJson(Credential instance) =>
     <String, dynamic>{
       'idUser': instance.idUser,
-      'phone': instance.phone,
       'email': instance.email,
-      'password': instance.password,
-      'role': instance.role,
+      'create_at': instance.createAt.toIso8601String(),
     };

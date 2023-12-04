@@ -1,5 +1,5 @@
 class Strings {
-  static const String appName = 'Healthy Care';
+  static const String appName = 'Beauty Hub';
   static const String databaseUrl =
       'https://selling-food-store-default-rtdb.firebaseio.com/';
   static const String avatarDemo =
