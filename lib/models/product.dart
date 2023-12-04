@@ -63,7 +63,7 @@ class Product {
     Function(String) onError,
   ) {
     String idCart = const Uuid().v4();
-    Cart cart = Cart(idCart, idProduct, quantity);
+    Cart cart = Cart(idCart, idProduct, quantity, DateTime.now());
     HiveService.addCart(cart);
   }
 }

@@ -22,4 +22,5 @@ class AppColor {
   static Color divider100Color = Colors.grey.shade100;
   static const Color darkColor = Color(0xFF1B1D21);
   static const Color baseColor = Colors.green;
+  static Color grey400Color = Colors.grey.shade400;
 }

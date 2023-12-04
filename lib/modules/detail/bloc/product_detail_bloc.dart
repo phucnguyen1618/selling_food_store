@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/models/review.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,18 +24,20 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     on<OnDialogCloseEvent>(_onDialogClose);
   }
 
-  void _onLoading(
-      LoadingProductDetailEvent event, Emitter<ProductDetailState> emitter) {
-    FirebaseService.fetchDataProductDetail(event.idProduct, (detailProduct) {
-      add(DisplayProductDetailEvent(detailProduct));
-    }, (error) {
-      add(OnFailureEvent(error));
-    });
+  Future<void> _onLoading(LoadingProductDetailEvent event,
+      Emitter<ProductDetailState> emitter) async {
+    final detailProduct = await FirebaseService.fetchDataProductDetail(
+        event.idProduct, (error) => add(OnFailureEvent(error)));
+    List<Review> reviews =
+        await FirebaseService.getReviewsForProduct(event.idProduct);
+    if (detailProduct != null) {
+      add(DisplayProductDetailEvent(detailProduct, reviews));
+    }
   }
 
   void _onDisplay(
       DisplayProductDetailEvent event, Emitter<ProductDetailState> emitter) {
-    emitter(DisplayProductDetailState(productDetail: event.detail));
+    emitter(DisplayProductDetailState(productDetail: event.detail, reviews: event.reviews));
   }
 
   void _onAddProductToCart(
@@ -50,7 +53,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     if (FirebaseService.checkUserIsSignIn()) {
       List<Cart> cartList = [];
       String idCart = const Uuid().v1();
-      Cart cart = Cart(idCart, event.product.idProduct, 1);
+      Cart cart = Cart(idCart, event.product.idProduct, 1, DateTime.now());
       cartList.add(cart);
       emitter(BuyNowSuccessState(cartList));
     } else {

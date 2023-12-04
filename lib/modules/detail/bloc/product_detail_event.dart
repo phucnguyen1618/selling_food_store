@@ -12,8 +12,9 @@ class LoadingProductDetailEvent extends ProductDetailEvent {
 
 class DisplayProductDetailEvent extends ProductDetailEvent {
   ProductDetail detail;
+  List<Review> reviews;
 
-  DisplayProductDetailEvent(this.detail);
+  DisplayProductDetailEvent(this.detail, this.reviews);
 }
 
 class OnAddProductToCartEvent extends ProductDetailEvent {

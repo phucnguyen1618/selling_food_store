@@ -12,6 +12,7 @@ class OnLoadingRequestOrderEvent extends OrderEvent {
 
 class OnLoadingUserInfoEvent extends OrderEvent {}
 
+//Event Hien thi thong tin nguoi dat hang
 class OnDisplayUserInfoEvent extends OrderEvent {
   String name;
   String address;
@@ -19,12 +20,20 @@ class OnDisplayUserInfoEvent extends OrderEvent {
   OnDisplayUserInfoEvent(this.name, this.address);
 }
 
+//Event Hien thi thong tin cac sp trong gio hang
 class OnDisplayRequestOrderEvent extends OrderEvent {
   List<Cart> cartList;
 
   OnDisplayRequestOrderEvent(this.cartList);
 }
 
+class OnDisplayTotalPriceEvent extends OrderEvent {
+  double value;
+
+  OnDisplayTotalPriceEvent(this.value);
+}
+
+//Event tao order
 class OnRequestOrderProductEvent extends OrderEvent {
   List<Cart> cartList;
   String? note;
@@ -65,4 +74,10 @@ class OnUpdateNumberProductEvent extends OrderEvent {
   double value;
 
   OnUpdateNumberProductEvent(this.value);
+}
+
+class OnCalculateTotalPriceEvent extends OrderEvent {
+  double value;
+
+  OnCalculateTotalPriceEvent(this.value);
 }

@@ -72,13 +72,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     final prefs = getIt.get<SharedPreferences>();
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
-      final review = Review(
-          idReview,
-          idUser,
-          event.review,
-          Strings.titleNameUserFeedbackDemo,
-          Strings.avatarDemo,
-          event.rating ?? 0);
+      final review = Review(idReview, idUser, event.review, event.rating ?? 0);
       FirebaseService.writeReviewForProduct(event.product.idProduct, review);
       emitter(FeedbackProductState());
     }

@@ -60,21 +60,37 @@ class FirebaseService {
     return products;
   }
 
-  static void fetchDataProductDetail(
+  static void getProductByID(
     String id,
-    Function(ProductDetail) onComplete,
+    Function(Product) onComplete,
     Function(String) onError,
   ) {
-    _dbRef.child('DetailProducts').child(id).get().then((snapshot) {
+    _dbRef.child('Products').child(id).get().then((snapshot) {
+      if (snapshot.exists) {
+        final data =
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+        Product product = Product.fromJson(data);
+        onComplete(product);
+      }
+    }).onError((error, stackTrace) => onError(error.toString()));
+  }
+
+  static Future<ProductDetail?> fetchDataProductDetail(
+      String id, Function(String) onError) async {
+    try {
+      DataSnapshot snapshot =
+          await _dbRef.child('DetailProducts').child(id).get();
       if (snapshot.exists) {
         final result =
             jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
         ProductDetail detail = ProductDetail.fromJson(result);
-        onComplete(detail);
+        return detail;
       }
-    }).onError(
-      (error, stackTrace) => onError(error.toString()),
-    );
+    } catch (error) {
+      log('Error: ${error.toString()}');
+      return null;
+    }
+    return null;
   }
 
   static void writeReviewForProduct(String idProduct, Review review) {
@@ -83,10 +99,22 @@ class FirebaseService {
       _dbRef
           .child('Reviews')
           .child(idProduct)
-          .child(idUser)
           .child(review.id)
           .set(review.toJson());
     }
+  }
+
+  static Future<List<Review>> getReviewsForProduct(String idProduct) async {
+    List<Review> reviews = [];
+    DataSnapshot snapshot =
+        await _dbRef.child('Reviews').child(idProduct).get();
+    for (DataSnapshot dataSnapshot in snapshot.children) {
+      final data =
+          jsonDecode(jsonEncode(dataSnapshot.value)) as Map<String, dynamic>;
+      Review review = Review.fromJson(data);
+      reviews.add(review);
+    }
+    return reviews;
   }
 
   //Cart
@@ -147,21 +175,6 @@ class FirebaseService {
         'quantity': value,
       });
     }
-  }
-
-  static void getProductByID(
-    String id,
-    Function(Product) onComplete,
-    Function(String) onError,
-  ) {
-    _dbRef.child('Products').child(id).get().then((snapshot) {
-      if (snapshot.exists) {
-        final data =
-            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
-        Product product = Product.fromJson(data);
-        onComplete(product);
-      }
-    }).onError((error, stackTrace) => onError(error.toString()));
   }
 
   //Authentication
@@ -446,6 +459,21 @@ class FirebaseService {
         "avatar": avatar,
       });
     }
+  }
+
+  static void getUserInfoByID(
+    String id,
+    Function(user.UserInfo) onComplete,
+    Function(String) onError,
+  ) {
+    _dbRef.child('Users').child(id).get().then((snapshot) {
+      if (snapshot.exists) {
+        final data =
+            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+        user.UserInfo userInfo = user.UserInfo.fromJson(data);
+        onComplete(userInfo);
+      }
+    }).onError((error, stackTrace) => onError(error.toString()));
   }
 
   //Brand

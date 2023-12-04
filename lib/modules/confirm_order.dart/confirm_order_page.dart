@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:selling_food_store/modules/confirm_order.dart/suggestion_product_list.dart';
 
 import '../../shared/utils/app_color.dart';
 
@@ -90,6 +91,8 @@ class ConfirmOrderPage extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 24.0),
+            const SuggestionProductList(),
           ],
         ),
       ),

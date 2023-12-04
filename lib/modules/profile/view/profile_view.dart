@@ -291,9 +291,12 @@ class _ProfileViewState extends State<ProfileView> {
                     },
                   ),
                   onTap: () {
-                    if (onSelect != null) {
-                      onSelect(const Locale('vi', 'VN'));
-                    }
+                    setState(() {
+                      chooseLanguage = 'vi';
+                      if (onSelect != null) {
+                        onSelect(const Locale('vi', 'VN'));
+                      }
+                    });
                   },
                 ),
                 ListTile(
@@ -324,9 +327,12 @@ class _ProfileViewState extends State<ProfileView> {
                     },
                   ),
                   onTap: () {
-                    if (onSelect != null) {
-                      onSelect(const Locale('en', 'US'));
-                    }
+                    setState(() {
+                      chooseLanguage = 'en';
+                      if (onSelect != null) {
+                        onSelect(const Locale('en', 'US'));
+                      }
+                    });
                   },
                 ),
               ],

@@ -10,8 +10,8 @@ UserInfoOrder _$UserInfoOrderFromJson(Map<String, dynamic> json) =>
     UserInfoOrder(
       json['idUser'] as String,
       json['name'] as String,
-      json['phone'] as String,
-      json['address'] as String,
+      json['phone'] as String?,
+      json['address'] as String?,
     );
 
 Map<String, dynamic> _$UserInfoOrderToJson(UserInfoOrder instance) =>

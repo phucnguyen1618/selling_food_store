@@ -20,12 +20,14 @@ class DialogCloseState extends HomeState {}
 class DisplayProductListState extends HomeState {
   final List<Product> recommendProductList;
   final List<Product> hotSellingProductList;
+  final List<Product> bestSellingProductList;
   final List<Product> productList;
   final List<Category> categories;
 
   DisplayProductListState(
     this.recommendProductList,
     this.hotSellingProductList,
+    this.bestSellingProductList,
     this.productList,
     this.categories,
   );
@@ -34,8 +36,9 @@ class DisplayProductListState extends HomeState {
   List<Object?> get props => [
         recommendProductList,
         hotSellingProductList,
+        bestSellingProductList,
         productList,
-        categories,
+        categories
       ];
 }
 

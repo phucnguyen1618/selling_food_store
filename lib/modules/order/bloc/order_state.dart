@@ -20,14 +20,20 @@ class UpdateNumberProductState extends OrderState {
 
 class DisplayProductForRequestOrderState extends OrderState {
   final List<Cart> cartList;
-  final double orderPrice;
-  final double totalPrice;
 
-  DisplayProductForRequestOrderState(
-      this.cartList, this.orderPrice, this.totalPrice);
+  DisplayProductForRequestOrderState(this.cartList);
 
   @override
   List<Object?> get props => [cartList];
+}
+
+class DisplayTotalPriceState extends OrderState {
+  final double value;
+
+  DisplayTotalPriceState(this.value);
+
+  @override
+  List<Object?> get props => [value];
 }
 
 class DisplayUserInfoState extends OrderState {

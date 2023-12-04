@@ -24,7 +24,10 @@ class DisplayPrice extends StatelessWidget {
     double totalPrice = total;
     return BlocBuilder<UpdateNumberProductBloc, OrderState>(
         builder: (context, state) {
-      if (state is UpdateNumberProductState) {
+      if (state is DisplayTotalPriceState) {
+        orderPrice = state.value;
+        totalPrice = orderPrice + 20000;
+      } else if (state is UpdateNumberProductState) {
         orderPrice = state.price;
         totalPrice = orderPrice + 20000;
       }

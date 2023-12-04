@@ -12,9 +12,9 @@ class HiveService {
   }
 
   static List<Cart> getCartList() {
-    var cartBox = Hive.box<dynamic>('cartList');
+    var cartBox = Hive.box<Cart>('cartList');
     final cartModelList = cartBox.values.toList();
-    return cartModelList.map((e) => Cart.fromJson(e)).toList();
+    return cartModelList;
   }
 
   static void addAllCartList(List<Cart> dataList) {

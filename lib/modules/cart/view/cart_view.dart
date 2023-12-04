@@ -20,7 +20,6 @@ import 'package:selling_food_store/shared/widgets/items/item_product.dart';
 
 import '../../../models/cart.dart';
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/app_utils.dart';
 import '../../../shared/widgets/items/item_cart.dart';
 
 class CartView extends StatefulWidget {
@@ -42,8 +41,6 @@ class _CartViewState extends State<CartView> {
     return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
       if (state is DisplayCartListState) {
         _cartItems = state.cartList;
-        double totalPrice = AppUtils.calculateTotalPrice(_cartItems);
-        context.read<ItemCartBloc>().add(OnDisplayTotalPriceEvent(totalPrice));
       }
       return Scaffold(
         backgroundColor: AppColor.whiteColor,

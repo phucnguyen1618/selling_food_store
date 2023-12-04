@@ -32,6 +32,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       OnLoadingProductList event, Emitter<HomeState> emitter) async {
     List<Product> recommendProductList = [];
     List<Product> hotSellingProductList = [];
+    List<Product> bestSellingProductList = [];
     List<Product> productListWithCategory = [];
     List<Category> typeProducts = [];
 
@@ -43,22 +44,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       hotSellingProductList =
           productList.where((e) => e.sold != null && e.sold! > 500).toList();
       productListWithCategory = _filterProductListWithType(Strings.typeProduct);
+      bestSellingProductList = productList
+          .where((e) =>
+              e.sold != null &&
+              e.sold! > 500 &&
+              _filterCategoryListWithType(e.categories, Strings.category))
+          .toList();
       add(OnDisplayProductList(recommendProductList, hotSellingProductList,
-          typeProducts, productListWithCategory));
+          bestSellingProductList, typeProducts, productListWithCategory));
     }
   }
 
   void _onDisplayProductList(
       OnDisplayProductList event, Emitter<HomeState> emitter) {
-    emitter(DisplayProductListState(event.recommendedProducts,
-        event.hotSellingProducts, event.productList, event.categories));
+    emitter(DisplayProductListState(
+        event.recommendedProducts,
+        event.hotSellingProducts,
+        event.bestSellingProducts,
+        event.productList,
+        event.categories));
   }
 
   void _onBuyNowProduct(OnBuyNowEvent event, Emitter<HomeState> emitter) {
     if (FirebaseService.checkUserIsSignIn()) {
       List<Cart> cartList = [];
       String idCart = const Uuid().v1();
-      Cart cart = Cart(idCart, event.product.idProduct, 1);
+      Cart cart = Cart(idCart, event.product.idProduct, 1, DateTime.now());
       cartList.add(cart);
       emitter(BuyNowState(cartList));
     } else {
@@ -106,5 +117,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         .where((element) =>
             element.categories.where((e) => e.name == type).isNotEmpty)
         .toList();
+  }
+
+  bool _filterCategoryListWithType(List<Category> categories, String type) {
+    return categories.where((e) => !e.name.contains(type)).isNotEmpty;
   }
 }

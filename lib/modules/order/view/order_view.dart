@@ -9,13 +9,11 @@ import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/modules/order/bloc/order_bloc.dart';
 import 'package:selling_food_store/modules/order/bloc/order_event.dart';
 import 'package:selling_food_store/modules/order/bloc/order_state.dart';
-import 'package:selling_food_store/modules/order/bloc/update_number_product_bloc.dart';
+import 'package:selling_food_store/modules/order/view/bottom_panel.dart';
 import 'package:selling_food_store/modules/order/view/choose_payment_method.dart';
 import 'package:selling_food_store/modules/order/view/display_price.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/utils/app_utils.dart';
-import '../../../shared/widgets/general/general_button.dart';
 import 'cart_order_info.dart';
 import 'user_info_widget.dart';
 
@@ -37,8 +35,6 @@ class _RequestOrderViewState extends State<RequestOrderView> {
       builder: ((context, state) {
         if (state is DisplayProductForRequestOrderState) {
           cartList = state.cartList;
-          orderPrice = state.orderPrice;
-          totalPrice = state.totalPrice;
         }
         return Scaffold(
           backgroundColor: AppColor.whiteColor,
@@ -86,53 +82,13 @@ class _RequestOrderViewState extends State<RequestOrderView> {
             ),
           ),
           persistentFooterButtons: [
-            BlocBuilder<UpdateNumberProductBloc, OrderState>(
-                builder: ((context, state) {
-              if (state is UpdateNumberProductState) {
-                totalPrice = state.price + 20000;
-              }
-              return Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'totalPrice'.tr(),
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            color: AppColor.blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '${AppUtils.formatPrice(totalPrice)}đ',
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            color: AppColor.blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12.0),
-                    GeneralButton(
-                      title: 'order'.tr(),
-                      onClick: () {
-                        context
-                            .read<OrderBloc>()
-                            .add(OnRequestOrderProductEvent(cartList, null));
-                      },
-                    )
-                  ],
-                ),
-              );
-            }))
+            BottomPanel(
+              onOrder: () {
+                context
+                    .read<OrderBloc>()
+                    .add(OnRequestOrderProductEvent(cartList, null));
+              },
+            )
           ],
         );
       }),

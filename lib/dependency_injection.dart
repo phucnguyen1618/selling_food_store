@@ -12,7 +12,7 @@ class DependencyInjection {
   static Future<void> setUp() async {
     await Hive.initFlutter();
     Hive.registerAdapter(CartAdapter());
-    await Hive.openBox<dynamic>('cartList');
+    await Hive.openBox<Cart>('cartList');
     await Hive.openBox<String>('keywords');
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     final prefs = await SharedPreferences.getInstance();

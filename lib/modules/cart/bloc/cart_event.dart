@@ -12,6 +12,12 @@ class DisplayCartListEvent extends CartEvent {
   DisplayCartListEvent(this.cartList);
 }
 
+class OnCalculateTotalPriceEvent extends CartEvent {
+  double price;
+
+  OnCalculateTotalPriceEvent(this.price);
+}
+
 class OnDisplayTotalPriceEvent extends CartEvent {
   double price;
 

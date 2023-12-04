@@ -3,9 +3,11 @@ import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/services/hive_service.dart';
+import 'package:selling_food_store/shared/utils/app_utils.dart';
 
 class ItemCartBloc extends Bloc<CartEvent, CartState> {
   double _totalPrice = 0;
+  List<double> prices = [];
 
   ItemCartBloc() : super(OnInitQuantityState()) {
     if (!isClosed) {
@@ -15,13 +17,20 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
       on<OnDecreaseQuantityEvent>(_onDecreaseQuantity);
       on<OnConfirmDeleteCart>(_onConfirmDeleteCart);
       on<OnCancelDeleteCart>(_onCancelDeleteCart);
+      on<OnCalculateTotalPriceEvent>(_onCalculateTotalPrice);
     }
+  }
+
+  void _onCalculateTotalPrice(
+      OnCalculateTotalPriceEvent event, Emitter<CartState> emitter) {
+    prices.add(event.price);
+    _totalPrice = AppUtils.calculateTotalPrice(prices);
+    add(OnDisplayTotalPriceEvent(_totalPrice));
   }
 
   void _onDisplayTotalPrice(
       OnDisplayTotalPriceEvent event, Emitter<CartState> emitter) {
-    _totalPrice = event.price;
-    emitter(DisplayTotalPriceState(value: _totalPrice));
+    emitter(DisplayTotalPriceState(value: event.price));
   }
 
   void _onIncreaseQuantity(
@@ -41,7 +50,7 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _onConfirmDeleteCart(
-      OnConfirmDeleteCart event, Emitter<CartState> emitter) {  
+      OnConfirmDeleteCart event, Emitter<CartState> emitter) {
     HiveService.deleteItemCart(event.removeCartList);
     FirebaseService.removeCartList(cartList: event.removeCartList);
     emitter(ConfirmDeleteCartState());

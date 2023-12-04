@@ -27,6 +27,7 @@ class Strings {
   static const String upTenCart = '10+';
 
   static const String typeProduct = 'Mỹ phẩm thiên nhiên';
+  static const String category = 'Mỹ phẩm';
 
   static const String language = 'language';
   static const String paymentMethod = 'paymentMethod';

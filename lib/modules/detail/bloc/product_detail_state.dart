@@ -13,11 +13,15 @@ class LoadingProductDetailState extends ProductDetailState {}
 @immutable
 class DisplayProductDetailState extends ProductDetailState {
   final ProductDetail productDetail;
+  final List<Review> reviews;
 
-  const DisplayProductDetailState({required this.productDetail});
+  const DisplayProductDetailState({
+    required this.productDetail,
+    required this.reviews,
+  });
 
   @override
-  List<Object?> get props => [productDetail];
+  List<Object?> get props => [productDetail, reviews];
 }
 
 class BuyNowSuccessState extends ProductDetailState {

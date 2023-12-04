@@ -195,7 +195,7 @@ class _AddToCartBottomSheetState extends State<AddToCartBottomSheet> {
             onPressed: () {
               context.pop({
                 'quantity': quantity,
-                'product': widget.product.toJson(),
+                'product': widget.product.convertToJson(),
               });
             },
             color: AppColor.primaryAppColor,

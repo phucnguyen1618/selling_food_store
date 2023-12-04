@@ -15,8 +15,10 @@ class Cart extends HiveObject {
   @HiveField(2)
   @JsonKey(name: 'quantity')
   int quantity;
+   @HiveField(3)
+  DateTime dateTime;
 
-  Cart(this.cartID, this.productID, this.quantity);
+  Cart(this.cartID, this.productID, this.quantity, this.dateTime);
 
   factory Cart.fromJson(Map<String, dynamic> json) => _$CartFromJson(json);
 

@@ -10,10 +10,9 @@ class UserInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<OrderBloc, OrderState>(
-        builder: (context, state) {
+    return BlocBuilder<OrderBloc, OrderState>(builder: (context, state) {
       String name = '';
-      String address = '';
+      String address = 'phucnguyen.mobiledeveloper@gmail.com';
       if (state is DisplayUserInfoState) {
         name = state.name;
         address = state.address;
@@ -23,7 +22,7 @@ class UserInfoWidget extends StatelessWidget {
             const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
         minLeadingWidth: 12.0,
         horizontalTitleGap: 12.0,
-        leading: const Icon(Icons.location_on_outlined),
+        leading: const Icon(Icons.contact_mail_outlined),
         title: Text(
           name,
           style: const TextStyle(

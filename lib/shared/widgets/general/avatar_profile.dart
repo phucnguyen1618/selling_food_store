@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,15 +14,19 @@ class AvatarProfile extends StatefulWidget {
   final double? width;
   final double? height;
   final bool? isEdit;
+  final double? textSize;
+  final double? padding;
   final Function(File)? onEdit;
 
   const AvatarProfile({
     super.key,
     required this.avatar,
-    this.onEdit,
     this.width,
     this.height,
     this.isEdit,
+    this.textSize,
+    this.padding,
+    this.onEdit,
   });
 
   @override
@@ -37,7 +40,6 @@ class _AvatarProfileState extends State<AvatarProfile> {
   @override
   void initState() {
     avatar = widget.avatar;
-    log('Init State');
     super.initState();
   }
 
@@ -113,10 +115,12 @@ class _AvatarProfileState extends State<AvatarProfile> {
         shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
+      padding: EdgeInsets.all(widget.padding ?? 0),
       child: Text(
         AppUtils.generateNameAvatar(input),
-        style: const TextStyle(
-          fontSize: 16.0,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: widget.textSize ?? 16.0,
           color: AppColor.whiteColor,
         ),
       ),

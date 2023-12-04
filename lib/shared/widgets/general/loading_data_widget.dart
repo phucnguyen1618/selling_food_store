@@ -23,6 +23,10 @@ class LoadingDataWidget extends StatelessWidget {
         return _buildLoadingCartList();
       case LoadingDataType.loadingUserInfo:
         return _buildLoadingUserInfo(context);
+      case LoadingDataType.loadingItemEmpty:
+        return _buildLoadingItemEmpty();
+      case LoadingDataType.loadingBrandInfo:
+        return _buildLoadingBrandInfo(context);
     }
   }
 
@@ -667,6 +671,167 @@ class LoadingDataWidget extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildLoadingItemEmpty() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 200.0,
+          height: 12.0,
+          color: AppColor.shimmerColor,
+        ),
+        const SizedBox(height: 8.0),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 80.0,
+              height: 80.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: AppColor.shimmerColor,
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 200.0,
+                    height: 12.0,
+                    margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                    color: AppColor.shimmerColor,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 14.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                          color: AppColor.shimmerColor,
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Container(
+                          height: 14.0,
+                          margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                          color: AppColor.shimmerColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8.0),
+                  Container(
+                    width: 150.0,
+                    height: 12.0,
+                    margin: const EdgeInsets.symmetric(horizontal: 12.0),
+                    color: AppColor.shimmerColor,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingBrandInfo(BuildContext context) {
+    double baseWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Row(
+              children: [
+                Container(
+                    width: 40.0,
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColor.shimer200Color,
+                    )),
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          width: 60.0,
+                          height: 10.0,
+                          color: AppColor.shimer200Color),
+                      const SizedBox(height: 4.0),
+                      Container(
+                          width: 100.0,
+                          height: 5.0,
+                          color: AppColor.shimer200Color),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12.0),
+          Container(
+            width: baseWidth,
+            height: 10.0,
+            color: AppColor.shimer200Color,
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+          ),
+          const SizedBox(height: 8.0),
+          Container(
+            width: baseWidth,
+            height: 10.0,
+            color: AppColor.shimer200Color,
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+          ),
+          const SizedBox(height: 8.0),
+          Container(
+            width: baseWidth,
+            height: 10.0,
+            color: AppColor.shimer200Color,
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+          ),
+          const SizedBox(height: 16.0),
+          Container(
+            width: 150.0,
+            height: 10.0,
+            color: AppColor.shimer200Color,
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+          ),
+          const SizedBox(height: 12.0),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(left: 12.0),
+            child: Row(
+                children: List.generate(
+              10,
+              (index) => Container(
+                width: 150.0,
+                height: 200.0,
+                color: AppColor.shimer200Color,
+                margin: const EdgeInsets.only(right: 12.0),
+              ),
+            )),
+          )
+        ],
+      ),
+    );
+  }
 }
 
 enum LoadingDataType {
@@ -675,4 +840,6 @@ enum LoadingDataType {
   loadingProductDetail,
   loadingCartList,
   loadingUserInfo,
+  loadingItemEmpty,
+  loadingBrandInfo,
 }

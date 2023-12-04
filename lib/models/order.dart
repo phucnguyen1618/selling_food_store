@@ -41,7 +41,7 @@ class Order {
     return {
       "idOrder": idOrder,
       "orderUserInfo": orderUserInfo.toJson(),
-     // "cartList": cartList.map((e) => e.convertToJson()).toList(),
+      "cartList": cartList.map((e) => e.toJson()).toList(),
       "orderPrice": orderPrice,
       "shippingFee": shippingFee,
       "orderDateTime": orderDateTime.toIso8601String(),

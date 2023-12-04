@@ -10,12 +10,14 @@ class OnLoadingProductList extends HomeEvent {}
 class OnDisplayProductList extends HomeEvent {
   List<Product> recommendedProducts;
   List<Product> hotSellingProducts;
+  List<Product> bestSellingProducts;
   List<Category> categories;
   List<Product> productList;
 
   OnDisplayProductList(
     this.recommendedProducts,
     this.hotSellingProducts,
+    this.bestSellingProducts,
     this.categories,
     this.productList,
   );

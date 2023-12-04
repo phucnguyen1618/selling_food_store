@@ -6,8 +6,8 @@ part 'user_info_order.g.dart';
 class UserInfoOrder {
   String idUser;
   String name;
-  String phone;
-  String address;
+  String? phone;
+  String? address;
 
   UserInfoOrder(this.idUser, this.name, this.phone, this.address);
 

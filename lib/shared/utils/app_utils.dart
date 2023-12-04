@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/cart.dart';
-
 class AppUtils {
   static String formatPrice(double value) {
     var priceFormat = NumberFormat('#,###');
@@ -18,10 +16,10 @@ class AppUtils {
     return DateFormat('dd/MM/yyyy').format(dateTime);
   }
 
-  static double calculateTotalPrice(List<Cart> dataList) {
+  static double calculateTotalPrice(List<double> dataList) {
     double totalPrice = 0;
-    for (Cart cart in dataList) {
-      totalPrice = totalPrice + cart.quantity;
+    for (double value in dataList) {
+      totalPrice = totalPrice + value;
     }
     return totalPrice;
   }

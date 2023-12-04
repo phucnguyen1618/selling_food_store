@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/modules/detail/bloc/brand_info_bloc.dart';
 import 'package:selling_food_store/modules/detail/bloc/brand_info_state.dart';
 import 'package:selling_food_store/modules/detail/view/introduct_text_view.dart';
+import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/items/item_suggest.dart';
 
 import '../../../shared/utils/app_color.dart';
@@ -111,6 +112,7 @@ class BrandInfo extends StatelessWidget {
                   ],
                 ),
               )
-            : const Center(child: CircularProgressIndicator()));
+            : const LoadingDataWidget(
+                loadingType: LoadingDataType.loadingBrandInfo));
   }
 }
