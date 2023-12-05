@@ -6,11 +6,12 @@ class SuggestionProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: 20,
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemBuilder: (context, index) => const ItemSuggestionProduct(),
-    );
+    return Column();
+    // GridView.builder(
+    //   itemCount: 20,
+    //   gridDelegate:
+    //       const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+    //   itemBuilder: (context, index) => const ItemSuggestionProduct(),
+    // );
   }
 }

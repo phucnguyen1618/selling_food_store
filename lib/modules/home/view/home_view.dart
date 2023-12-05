@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
+import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/modules/home/bloc/home_bloc.dart';
 import 'package:selling_food_store/modules/home/bloc/home_event.dart';
 import 'package:selling_food_store/modules/home/bloc/home_state.dart';
@@ -14,11 +15,14 @@ import 'package:selling_food_store/modules/home/view/bestselling_product_list.da
 import 'package:selling_food_store/modules/home/view/hotselling_product_list.dart';
 import 'package:selling_food_store/modules/home/view/recommend_product_list.dart';
 import 'package:selling_food_store/modules/home/view/category_list.dart';
+import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/utils/image_constants.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import 'package:selling_food_store/shared/widgets/banner/slide_banner.dart';
 import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
 import 'package:selling_food_store/shared/widgets/general/cart/cart_button.dart';
+import 'package:selling_food_store/shared/widgets/items/item_result_search.dart';
+import 'package:selling_food_store/shared/widgets/items/item_suggestion_product.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../shared/utils/app_color.dart';
@@ -189,6 +193,12 @@ class HomeView extends StatelessWidget {
 }
 
 class ProductSearchDelegate extends SearchDelegate {
+  List<Product> productList = [];
+
+  ProductSearchDelegate() {
+    getProductList();
+  }
+
   @override
   ThemeData appBarTheme(BuildContext context) {
     return ThemeData(
@@ -208,7 +218,7 @@ class ProductSearchDelegate extends SearchDelegate {
     return [
       IconButton(
           onPressed: () {
-            if (query.isEmpty) {
+            if (query.isNotEmpty) {
               query = '';
             } else {
               context.pop();
@@ -231,15 +241,36 @@ class ProductSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Column(
-      children: [],
-    );
+    List<Product> resultList =
+        productList.where((e) => e.name == query).toList();
+    return GridView.builder(
+        itemCount: resultList.length,
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.55,
+        ),
+        itemBuilder: ((context, index) =>
+            ItemResultSearch(product: resultList[index])));
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Column(
-      children: [],
-    );
+    List<Product> suggestionList =
+        productList.where((e) => e.name.contains(query)).toList();
+    return ListView.separated(
+        shrinkWrap: true,
+        itemBuilder: (context, index) => ItemSuggestionProduct(
+              product: suggestionList[index],
+              onClick: (nameProduct) {
+                query = nameProduct;
+              },
+            ),
+        separatorBuilder: (context, index) => const Divider(),
+        itemCount: suggestionList.length);
+  }
+
+  Future<void> getProductList() async {
+    productList = await FirebaseService.fetchProducts();
   }
 }
