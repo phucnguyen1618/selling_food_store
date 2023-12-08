@@ -68,3 +68,5 @@ class AddProductToCartState extends HomeState {
   @override
   List<Object?> get props => [product];
 }
+
+class ConfirmAddProductToCartState extends HomeState {}

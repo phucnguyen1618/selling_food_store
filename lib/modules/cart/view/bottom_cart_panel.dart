@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
-import 'package:selling_food_store/shared/widgets/general/cart/cart_bloc.dart';
-import 'package:selling_food_store/shared/widgets/general/cart/cart_event.dart';
 
 import '../../../models/cart.dart';
 import '../../../shared/utils/app_color.dart';
@@ -32,15 +30,15 @@ class BottomCartPanel extends StatelessWidget {
         totalPrice = state.value;
       } else if (state is ConfirmDeleteCartState) {
         isVisibleTotalPricePanel = false;
-        context.read<CartButtonBloc>().add(OnRemoveProductInCartEvent());
       } else if (state is OnDeleteItemCartState) {
         isVisibleTotalPricePanel = state.value;
       } else if (state is CancelDeleteCartState) {
-        isVisibleTotalPricePanel = false;
+        isVisibleTotalPricePanel = true;
+        totalPrice = state.value;
       }
       return !isVisibleTotalPricePanel
           ? _buildBottomDelete(onCancel: () {
-              context.read<ItemCartBloc>().add(OnCancelDeleteCart());
+              context.read<ItemCartBloc>().add(OnCancelDeleteCart(totalPrice));
             }, onConfirm: () {
               onConfirmDelete();
             })

@@ -102,12 +102,13 @@
     "updateAvatarSuccess": "Đã cập nhật ảnh đại diện",
     "order": "Đặt hàng",
     "totalPrice": "Tổng tiền",
-    "requestOrder": "Tóm tăt yêu cầu",
+    "requestOrder": "Tóm tắt yêu cầu",
     "detailRequestOrder": "Chi tiết yêu cầu",
     "totalProductPrice": "Tổng phụ",
     "shippingFee": "Phí vận chuyển",
     "paymentMethod": "Phương thức thanh toán",
     "codPaymentMethod": "Thanh toán khi nhận hàng",
+    "paypalPaymentMethod": "Thanh toán với PayPal",
     "momoPaymentMethod": "Ví điện tử MOMO",
     "shippingOrderDate": "Ngày giao hàng: ",
     "titleConfirmOrder": "Đã xác nhận đơn hàng của bạn",
@@ -156,5 +157,6 @@
     "text_canceled": "Đơn hàng bị huỷ",
     "notification": "Thông báo",
     "sign_up_title": "Thông tin đăng ký",
-    "user_info": "Thông tin cá nhân"
+    "user_info": "Thông tin cá nhân",
+    "isProductExistsInCart": "Sản phẩm đã tồn tại trong giỏ hàng"
 }

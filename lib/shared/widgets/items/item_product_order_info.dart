@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/modules/order/bloc/order_bloc.dart';
 import 'package:selling_food_store/modules/order/bloc/order_event.dart';
 import 'package:selling_food_store/modules/order/bloc/update_number_product_bloc.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
@@ -232,6 +233,8 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
           context
               .read<UpdateNumberProductBloc>()
               .add(OnCalculateTotalPriceEvent(pricePerItem));
+          context.read<OrderBloc>().add(OnAddProductToOrderInfoEvent(
+              product!.convertProductToItem(quantity)));
         }
       });
     }, (error) => log('Error: $error'));

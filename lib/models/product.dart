@@ -1,7 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:paypal_api/models/models.dart';
 import 'package:selling_food_store/models/brand.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/category.dart';
+import 'package:selling_food_store/shared/utils/app_utils.dart';
 import 'package:uuid/uuid.dart';
 
 import '../shared/services/hive_service.dart';
@@ -57,13 +59,23 @@ class Product {
         : cost;
   }
 
-  void addCart(
-    int quantity,
-    Function() onComplete,
-    Function(String) onError,
-  ) {
+  void addCart(int quantity) {
     String idCart = const Uuid().v4();
     Cart cart = Cart(idCart, idProduct, quantity, DateTime.now());
     HiveService.addCart(cart);
+  }
+
+  bool isProductExistsInCart(String idProduct) {
+    final cartList = HiveService.getCartList();
+    return cartList.where((e) => e.productID == idProduct).isNotEmpty;
+  }
+
+  Item convertProductToItem(int quantity) {
+    return Item(
+        name,
+        idProduct,
+        quantity.toString(),
+        UnitAmount('USD', AppUtils.convertVNDToUSD(cost)),
+        discount != null ? Discount(discount.toString(), null) : null);
   }
 }

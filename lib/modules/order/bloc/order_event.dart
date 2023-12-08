@@ -1,5 +1,5 @@
+import 'package:paypal_api/models/models.dart';
 import 'package:selling_food_store/models/cart.dart';
-import 'package:selling_food_store/models/order.dart';
 
 abstract class OrderEvent {}
 
@@ -47,28 +47,11 @@ class OnChoosePaymentMethodEvent extends OrderEvent {
   OnChoosePaymentMethodEvent(this.value);
 }
 
-class OnRequestOrderProductSuccessEvent extends OrderEvent {
-  String name;
-  String address;
-
-  OnRequestOrderProductSuccessEvent(this.name, this.address);
-}
-
 class OnRequestOrderProductFailureEvent extends OrderEvent {
   String error;
 
   OnRequestOrderProductFailureEvent(this.error);
 }
-
-class OnRequestPaymentEvent extends OrderEvent {
-  Order order;
-
-  OnRequestPaymentEvent(this.order);
-}
-
-class OnPaymentSuccessEvent extends OrderEvent {}
-
-class OnPaymentFailureEvent extends OrderEvent {}
 
 class OnUpdateNumberProductEvent extends OrderEvent {
   double value;
@@ -80,4 +63,16 @@ class OnCalculateTotalPriceEvent extends OrderEvent {
   double value;
 
   OnCalculateTotalPriceEvent(this.value);
+}
+
+class OnAddProductToOrderInfoEvent extends OrderEvent {
+  Item item;
+
+  OnAddProductToOrderInfoEvent(this.item);
+}
+
+class OnAddTrackingOrderEvent extends OrderEvent {
+  String idInvoice;
+
+  OnAddTrackingOrderEvent(this.idInvoice);
 }

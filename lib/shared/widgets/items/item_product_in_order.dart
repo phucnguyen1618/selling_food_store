@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/models/order_item.dart';
 import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
@@ -16,12 +16,12 @@ import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import '../../utils/app_color.dart';
 
 class ItemProductInOrder extends StatefulWidget {
-  final Cart cart;
-  final int status;
+  final OrderItem orderItem;
+  final String status;
 
   const ItemProductInOrder({
     super.key,
-    required this.cart,
+    required this.orderItem,
     required this.status,
   });
 
@@ -66,7 +66,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                     ),
                   ),
                   trailing: Text(
-                    AppUtils.formatOrderStatus(widget.status),
+                    widget.status,
                     style: const TextStyle(
                       color: AppColor.blackColor,
                       fontSize: 14.0,
@@ -112,7 +112,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                AppUtils.formatOrderTitleStatus(widget.status),
+                                widget.status,
                                 style: const TextStyle(
                                   color: AppColor.blackColor,
                                   fontSize: 14.0,
@@ -134,7 +134,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                                     ),
                                   ),
                                   Text(
-                                    'x${widget.cart.quantity}',
+                                    'x${widget.orderItem.quantity}',
                                     style: const TextStyle(
                                       color: AppColor.blackColor,
                                       fontSize: 16.0,
@@ -163,7 +163,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                               onTap: () {
                                 context
                                     .goNamed('orderListRequestOrder', extra: {
-                                  "cartList": [widget.cart],
+                                  "orderItems": [widget.orderItem],
                                   "isBuyNow": true,
                                 });
                               },
@@ -188,12 +188,12 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                             const SizedBox(width: 12.0),
                             InkWell(
                               onTap: () {
-                                ShowDialogUtils.showDialogFeedback(
-                                    context, widget.cart, (rating, review) {
-                                  context.read<OrderListBloc>().add(
-                                      OnFeedbackProductEvent(
-                                          rating, review, product!));
-                                });
+                                // ShowDialogUtils.showDialogFeedback(
+                                //     context, widget.cart, (rating, review) {
+                                //   context.read<OrderListBloc>().add(
+                                //       OnFeedbackProductEvent(
+                                //           rating, review, product!));
+                                // });
                               },
                               child: Container(
                                 width: baseWidth / 3,
@@ -219,7 +219,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                         ? InkWell(
                             onTap: () {
                               context.goNamed('orderListRequestOrder',
-                                  extra: [widget.cart]);
+                                  extra: [widget.orderItem]);
                             },
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -250,7 +250,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
   }
 
   void getProductInfo() {
-    FirebaseService.getProductByID(widget.cart.productID, (productInfo) {
+    FirebaseService.getProductByID(widget.orderItem.productId, (productInfo) {
       setState(() {
         product = productInfo;
       });

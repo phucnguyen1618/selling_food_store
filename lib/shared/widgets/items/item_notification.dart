@@ -36,32 +36,6 @@ class ItemNotification extends StatelessWidget {
           color: Colors.black26,
         ),
       ),
-      trailing: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.red,
-            ),
-            padding: const EdgeInsets.all(4.0),
-            child: const Text(
-              '23',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12.0,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8.0),
-          const Icon(
-            Icons.arrow_forward_ios,
-            color: Colors.black38,
-            size: 16.0,
-          )
-        ],
-      ),
     );
   }
 }

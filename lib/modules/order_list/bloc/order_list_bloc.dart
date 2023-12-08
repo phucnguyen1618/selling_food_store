@@ -29,7 +29,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
       OnLoadingOrderListEvent event, Emitter<OrderListState> emitter) {
     FirebaseService.getOrderList((dataList) {
       orderList = dataList;
-      orderList.sort((a, b) => b.orderDateTime.compareTo(a.orderDateTime));
+      orderList.sort((a, b) => b.orderDate.compareTo(a.orderDate));
       add(OnDisplayOrderListEvent(orderList));
     }, (error) {
       add(OnErrorEvent(error));

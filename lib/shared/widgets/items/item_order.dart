@@ -8,10 +8,19 @@ import 'package:selling_food_store/shared/widgets/items/item_product_in_order.da
 import '../../../models/order.dart';
 import '../../utils/app_color.dart';
 
-class ItemOrder extends StatelessWidget {
-  final Order requestOrder;
-  const ItemOrder({super.key, required this.requestOrder});
+class ItemOrder extends StatefulWidget {
+  final Order order;
 
+  const ItemOrder({
+    super.key,
+    required this.order,
+  });
+
+  @override
+  State<ItemOrder> createState() => _ItemOrderState();
+}
+
+class _ItemOrderState extends State<ItemOrder> {
   @override
   Widget build(BuildContext context) {
     double baseWidth = MediaQuery.of(context).size.width;
@@ -20,18 +29,18 @@ class ItemOrder extends StatelessWidget {
       children: [
         ListView.builder(
             shrinkWrap: true,
-            itemCount: requestOrder.cartList.length,
+            itemCount: widget.order.orderItems.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => ItemProductInOrder(
-                  cart: requestOrder.cartList[index],
-                  status: requestOrder.status,
+                  orderItem: widget.order.orderItems[index],
+                  status: widget.order.status,
                 )),
-        requestOrder.status == 0
+        widget.order.status == 0
             ? InkWell(
                 onTap: () {
                   context
                       .read<OrderListBloc>()
-                      .add(OnCancelOrderEvent(requestOrder.idOrder));
+                      .add(OnCancelOrderEvent(widget.order.orderId));
                 },
                 child: Container(
                   width: baseWidth - 2 * 12,

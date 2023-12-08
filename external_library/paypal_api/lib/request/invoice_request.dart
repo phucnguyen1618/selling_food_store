@@ -18,11 +18,11 @@ class InvoiceRequest {
   InvoiceAmount? amount;
 
   InvoiceRequest(
-    this.detail,
+    {required this.detail,
     this.invoicer,
     this.recipients,
-    this.items,
-    this.amount,
+    required this.items,
+    this.amount,}
   );
 
   factory InvoiceRequest.fromJson(Map<String, dynamic> json) =>

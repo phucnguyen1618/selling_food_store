@@ -28,5 +28,9 @@ class ImageConstants {
       '${AssetConstants.imageConstants}flag_of_vietnam.png';
   static const String flagOfEngland =
       '${AssetConstants.imageConstants}flag_of_england.png';
-  static const String iconMOMO = '${AssetConstants.imageConstants}icon_momo.jpg';
+  static const String iconMOMO =
+      '${AssetConstants.imageConstants}icon_momo.jpg';
+  static const String iconPayPal =
+      '${AssetConstants.imageConstants}icon_paypal.png';
+  static const String iconCOD = '${AssetConstants.imageConstants}icon_cod.png';
 }

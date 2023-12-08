@@ -81,7 +81,7 @@ class OrderListView extends StatelessWidget {
                               itemCount: orders.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) =>
-                                  ItemOrder(requestOrder: orders[index]),
+                                  ItemOrder(order: orders[index]),
                               separatorBuilder: (context, index) => Container(
                                 height: 10.0,
                                 color: Colors.grey.shade100,

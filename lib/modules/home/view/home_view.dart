@@ -16,11 +16,12 @@ import 'package:selling_food_store/modules/home/view/hotselling_product_list.dar
 import 'package:selling_food_store/modules/home/view/recommend_product_list.dart';
 import 'package:selling_food_store/modules/home/view/category_list.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
+import 'package:selling_food_store/shared/services/hive_service.dart';
 import 'package:selling_food_store/shared/utils/image_constants.dart';
 import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
 import 'package:selling_food_store/shared/widgets/banner/slide_banner.dart';
 import 'package:selling_food_store/shared/widgets/general/avatar_profile.dart';
-import 'package:selling_food_store/shared/widgets/general/cart/cart_button.dart';
+import 'package:selling_food_store/shared/widgets/general/cart_button.dart';
 import 'package:selling_food_store/shared/widgets/items/item_result_search.dart';
 import 'package:selling_food_store/shared/widgets/items/item_suggestion_product.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,122 +38,132 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeBloc, HomeState>(builder: (context, state) {
-      return Scaffold(
-        backgroundColor: AppColor.whiteColor,
-        appBar: AppBar(
+    int numberCart = 0;
+    return BlocConsumer<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (state is DisplayProductListState) {
+          numberCart = HiveService.getCartList().length;
+        }
+        return Scaffold(
           backgroundColor: AppColor.whiteColor,
-          title: searchBar.SearchBar(
-            onSearch: () {
-              showSearch(
-                context: context,
-                delegate: ProductSearchDelegate(),
-              );
-            },
-          ),
-          titleSpacing: 0.0,
-          automaticallyImplyLeading: false,
-          leading: InkWell(
-            onTap: () {
-              context.goNamed('profile');
-            },
-            child: Container(
-              margin: const EdgeInsets.all(6.0),
-              child: const AvatarProfile(
-                avatar: Strings.avatarDemo,
-                isEdit: false,
+          appBar: AppBar(
+            backgroundColor: AppColor.whiteColor,
+            title: searchBar.SearchBar(
+              onSearch: () {
+                showSearch(
+                  context: context,
+                  delegate: ProductSearchDelegate(),
+                );
+              },
+            ),
+            titleSpacing: 0.0,
+            automaticallyImplyLeading: false,
+            leading: InkWell(
+              onTap: () {
+                context.goNamed('profile');
+              },
+              child: Container(
+                margin: const EdgeInsets.all(6.0),
+                child: const AvatarProfile(
+                  avatar: Strings.avatarDemo,
+                  isEdit: false,
+                ),
               ),
             ),
-          ),
-          elevation: 0.0,
-          actions: [
-            const CartButton(),
-            Center(
-              child: badges.Badge(
-                  showBadge: true,
-                  badgeContent: const Text(
-                    Strings.upTenCart,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 8.0,
+            elevation: 0.0,
+            actions: [
+              CartButton(numberCart: numberCart),
+              Center(
+                child: badges.Badge(
+                    showBadge: true,
+                    badgeContent: const Text(
+                      Strings.upTenCart,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 8.0,
+                      ),
                     ),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      context.goNamed('notifications');
-                    },
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    child: const Icon(
-                      Icons.notifications_none_outlined,
-                      color: AppColor.blackColor,
-                    ),
-                  )),
-            ),
-            const SizedBox(width: 16.0),
-          ],
-        ),
-        body: const SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SlideBanner(),
-              SizedBox(height: 16.0),
-              RecommendProductList(),
-              SizedBox(height: 24.0),
-              CategoryList(),
-              SizedBox(height: 24.0),
-              HotSellingProductList(),
-              SizedBox(height: 12.0),
-              BannerAds(image: ImageConstants.bannerOne),
-              SizedBox(height: 12.0),
-              BestSellingProductList(),
-              SizedBox(height: 12.0),
-              BannerAds(image: ImageConstants.bannerTwo),
+                    child: InkWell(
+                      onTap: () {
+                        context.goNamed('notifications');
+                      },
+                      focusColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      child: const Icon(
+                        Icons.notifications_none_outlined,
+                        color: AppColor.blackColor,
+                      ),
+                    )),
+              ),
+              const SizedBox(width: 16.0),
             ],
           ),
-        ),
-        floatingActionButton: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              onPressed: () {
-                _openChatBot();
-              },
-              heroTag: "Messenger",
-              backgroundColor: AppColor.transparentColor,
-              child: Image.asset(ImageConstants.iconChatBot),
+          body: const SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SlideBanner(),
+                SizedBox(height: 16.0),
+                RecommendProductList(),
+                SizedBox(height: 24.0),
+                CategoryList(),
+                SizedBox(height: 24.0),
+                HotSellingProductList(),
+                SizedBox(height: 12.0),
+                BannerAds(image: ImageConstants.bannerOne),
+                SizedBox(height: 12.0),
+                BestSellingProductList(),
+                SizedBox(height: 12.0),
+                BannerAds(image: ImageConstants.bannerTwo),
+              ],
             ),
-            const SizedBox(height: 16.0),
-            FloatingActionButton(
-              onPressed: () {
-                _makePhoneCall('0941699575');
-              },
-              heroTag: "Call",
-              backgroundColor: Colors.redAccent,
-              child: const Icon(
-                Icons.call,
-                color: AppColor.whiteColor,
+          ),
+          floatingActionButton: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                onPressed: () {
+                  _openChatBot();
+                },
+                heroTag: "Messenger",
+                backgroundColor: AppColor.transparentColor,
+                child: Image.asset(ImageConstants.iconChatBot),
               ),
-            )
-          ],
-        ),
-      );
-    }, listener: (context, state) {
-      if (state is RequestSignInState) {
-        ShowDialogUtils.showDialogRequestSignIn(context, () {
-          context.goNamed('signIn');
-        }, () {
-          context.read<HomeBloc>().add(OnCloseDialogEvent());
-        });
-      } else if (state is DialogCloseState) {
-        log('Dialog is closed');
-      }
-    });
+              const SizedBox(height: 16.0),
+              FloatingActionButton(
+                onPressed: () {
+                  _makePhoneCall('0941699575');
+                },
+                heroTag: "Call",
+                backgroundColor: Colors.redAccent,
+                child: const Icon(
+                  Icons.call,
+                  color: AppColor.whiteColor,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+      listener: (context, state) {
+        if (state is RequestSignInState) {
+          ShowDialogUtils.showDialogRequestSignIn(context, () {
+            context.goNamed('signIn');
+          }, () {
+            context.read<HomeBloc>().add(OnCloseDialogEvent());
+          });
+        } else if (state is DialogCloseState) {
+          log('Dialog is closed');
+        } else if (state is ConfirmAddProductToCartState) {
+          numberCart = HiveService.getCartList().length;
+          log('Number Cart: $numberCart');
+        }
+      },
+    );
   }
 
   Future<void> _openChatBot() async {

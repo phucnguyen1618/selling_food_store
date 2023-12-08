@@ -35,6 +35,8 @@ class OnAddProductToCartEvent extends HomeEvent {
   OnAddProductToCartEvent(this.product);
 }
 
+class OnConfirmAddProductToCartEvent extends HomeEvent {}
+
 class OnTabItemClickedEvent extends HomeEvent {
   String content;
 

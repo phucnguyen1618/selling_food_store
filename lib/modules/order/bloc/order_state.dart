@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:momo_vn/momo_vn.dart';
 import 'package:selling_food_store/models/cart.dart';
 
 abstract class OrderState extends Equatable {
@@ -46,16 +45,6 @@ class DisplayUserInfoState extends OrderState {
   List<Object?> get props => [name, address];
 }
 
-class RequestOrderProductSuccessState extends OrderState {
-  final String name;
-  final String address;
-
-  RequestOrderProductSuccessState(this.name, this.address);
-
-  @override
-  List<Object?> get props => [name, address];
-}
-
 class RequestOrderProductFailureState extends OrderState {
   final String message;
 
@@ -71,11 +60,11 @@ class ChoosePaymentMethodState extends OrderState {
   List<Object?> get props => [value];
 }
 
-class PaymentSuccessState extends OrderState {
-  final PaymentResponse response;
+class AddTrackingOrderState extends OrderState {
+  final String idInvoice;
 
-  PaymentSuccessState(this.response);
+  AddTrackingOrderState(this.idInvoice);
 
   @override
-  List<Object?> get props => [response];
+  List<Object?> get props => [idInvoice];
 }

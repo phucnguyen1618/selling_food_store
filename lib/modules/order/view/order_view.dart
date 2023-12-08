@@ -44,7 +44,7 @@ class _RequestOrderViewState extends State<RequestOrderView> {
             centerTitle: true,
             leading: IconButton(
                 onPressed: () {
-                  context.pop();
+                  Navigator.pop(context);
                 },
                 icon: const Icon(
                   Icons.arrow_back,
@@ -93,15 +93,12 @@ class _RequestOrderViewState extends State<RequestOrderView> {
         );
       }),
       listener: (context, state) {
-        if (state is RequestOrderProductSuccessState) {
-          context.goNamed('confirmOrder', extra: {
-            "name": state.name,
-            "address": state.address,
-          });
-        } else if (state is RequestOrderProductFailureState) {
+        if (state is RequestOrderProductFailureState) {
           EasyLoading.showError(state.message);
         } else if (state is ChoosePaymentMethodState) {
           log('Payment method is ${state.value}');
+        } else if (state is AddTrackingOrderState) {
+          context.goNamed('trackingOrder', extra: state.idInvoice);
         }
       },
     );

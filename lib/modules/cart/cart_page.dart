@@ -4,7 +4,6 @@ import 'package:selling_food_store/modules/cart/bloc/cart_bloc.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
 import 'package:selling_food_store/modules/cart/view/cart_view.dart';
-import 'package:selling_food_store/shared/widgets/general/cart/cart_bloc.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -16,7 +15,6 @@ class CartPage extends StatelessWidget {
         BlocProvider(
             create: (context) => CartBloc()..add(LoadingCartListEvent())),
         BlocProvider(create: (context) => ItemCartBloc()),
-        BlocProvider(create: (context) => CartButtonBloc()),
       ],
       child: const CartView(),
     );

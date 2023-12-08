@@ -69,7 +69,7 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.trailing,
             title: Text(
-              'momoPaymentMethod'.tr(),
+              'paypalPaymentMethod'.tr(),
               style: const TextStyle(
                 fontSize: 14.0,
                 color: AppColor.blackColor,
@@ -78,6 +78,26 @@ class _ChoosePaymentMethodState extends State<ChoosePaymentMethod> {
             onChanged: (value) {
               setState(() {
                 paymentMethodValue = 1;
+                context.read<OrderBloc>().add(
+                    OnChoosePaymentMethodEvent(value ?? paymentMethodValue));
+              });
+            },
+          ),
+          RadioListTile(
+            value: 2,
+            groupValue: paymentMethodValue,
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.trailing,
+            title: Text(
+              'momoPaymentMethod'.tr(),
+              style: const TextStyle(
+                fontSize: 14.0,
+                color: AppColor.blackColor,
+              ),
+            ),
+            onChanged: (value) {
+              setState(() {
+                paymentMethodValue = 2;
                 context.read<OrderBloc>().add(
                     OnChoosePaymentMethodEvent(value ?? paymentMethodValue));
               });

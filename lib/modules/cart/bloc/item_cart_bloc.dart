@@ -58,6 +58,6 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
 
   void _onCancelDeleteCart(
       OnCancelDeleteCart event, Emitter<CartState> emitter) {
-    emitter(CancelDeleteCartState());
+    emitter(CancelDeleteCartState(_totalPrice));
   }
 }

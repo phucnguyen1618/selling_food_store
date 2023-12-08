@@ -21,17 +21,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<OnChangeLanguageEvent>(_onChangeLanguage);
   }
 
-  void _getUserInfo(
-      OnLoadingProfileEvent event, Emitter<ProfileState> emitter) {
-    FirebaseService.getUserInfo((dataInfo) {
-      if (dataInfo != null) {
-        add(OnDisplayProfileEvent(dataInfo));
-      } else {
-        add(OnDisplayProfileEvent(null));
-      }
-    }, (error) {
-      add(OnErrorEvent(error));
-    });
+  Future<void> _getUserInfo(
+      OnLoadingProfileEvent event, Emitter<ProfileState> emitter) async {
+    final userInfo =
+        await FirebaseService.getUserInfo((error) => add(OnErrorEvent(error)));
+    if (userInfo != null) {
+      add(OnDisplayProfileEvent(userInfo));
+    } else {
+      add(OnDisplayProfileEvent(null));
+    }
   }
 
   void _onDisplayUserInfo(

@@ -18,6 +18,7 @@ import 'package:selling_food_store/modules/splash/splash_page.dart';
 import 'package:selling_food_store/modules/signUp/signUp_page.dart';
 
 import 'models/product.dart';
+import 'modules/tracking_order/tracking_order_page.dart';
 
 final GoRouter appRouter = GoRouter(
   routes: <RouteBase>[
@@ -175,16 +176,25 @@ final GoRouter appRouter = GoRouter(
                   return RequestOrderPage(carts: cartList, isBuyNow: isBuyNow);
                 },
               ),
+              //Tracking Order
+              GoRoute(
+                path: 'requestOrder/trackingOrder',
+                name: 'trackingOrder',
+                builder: (BuildContext context, GoRouterState state) {
+                  final trackingId = state.extra as String;
+                  return TrackingOrderPage(id: trackingId);
+                },
+              ),
             ]),
+
         //Confirm Order Page
         GoRoute(
             path: 'confirmOrder',
             name: 'confirmOrder',
             builder: (BuildContext context, GoRouterState state) {
-              final dataValue = state.extra as Map<String, dynamic>;
-              String name = dataValue['name'];
-              String address = dataValue['address'];
-              return ConfirmOrderPage(name: name, address: address);
+              return const ConfirmOrderPage(
+                  name: 'Nguyễn Hoàng Phúc',
+                  address: 'Khối 10, phường Hồng Sơn, tp.Vinh, tỉnh Nghệ An');
             }),
       ],
     ),

@@ -3,14 +3,13 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/modules/home/bloc/home_bloc.dart';
 import 'package:selling_food_store/modules/home/bloc/home_event.dart';
 import 'package:selling_food_store/modules/home/bloc/home_state.dart';
-import 'package:selling_food_store/shared/widgets/general/cart/cart_bloc.dart';
-import 'package:selling_food_store/shared/widgets/general/cart/cart_event.dart'
-    as cart;
+
 import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 import 'package:selling_food_store/shared/widgets/general/loading_data_widget.dart';
 
@@ -42,13 +41,15 @@ class _RecommendProductListState extends State<RecommendProductList> {
                 context: context,
                 product: state.product,
                 onAdd: (productSelected, quantity) {
-                  productSelected.addCart(quantity, () {
+                  if (productSelected
+                      .isProductExistsInCart(productSelected.idProduct)) {
+                    EasyLoading.showToast('isProductExistsInCart'.tr());
+                  } else {
+                    productSelected.addCart(quantity);
                     context
-                        .read<CartButtonBloc>()
-                        .add(cart.OnAddProductToCartEvent(1));
-                  }, (error) {
-                    log('Error: $error');
-                  });
+                        .read<HomeBloc>()
+                        .add(OnConfirmAddProductToCartEvent());
+                  }
                 },
                 onClose: () {
                   context.read<HomeBloc>().add(OnBottomSheetCloseEvent());

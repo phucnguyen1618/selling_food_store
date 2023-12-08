@@ -8,17 +8,17 @@ part of 'invoice_request.dart';
 
 InvoiceRequest _$InvoiceRequestFromJson(Map<String, dynamic> json) =>
     InvoiceRequest(
-      Detail.fromJson(json['detail'] as Map<String, dynamic>),
-      json['invoicer'] == null
+      detail: Detail.fromJson(json['detail'] as Map<String, dynamic>),
+      invoicer: json['invoicer'] == null
           ? null
           : Invoicer.fromJson(json['invoicer'] as Map<String, dynamic>),
-      (json['primary_recipients'] as List<dynamic>?)
+      recipients: (json['primary_recipients'] as List<dynamic>?)
           ?.map((e) => Recipient.fromJson(e as Map<String, dynamic>))
           .toList(),
-      (json['items'] as List<dynamic>)
+      items: (json['items'] as List<dynamic>)
           .map((e) => Item.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['amount'] == null
+      amount: json['amount'] == null
           ? null
           : InvoiceAmount.fromJson(json['amount'] as Map<String, dynamic>),
     );

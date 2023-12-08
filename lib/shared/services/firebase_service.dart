@@ -404,18 +404,21 @@ class FirebaseService {
         .onError((error, stackTrace) => onError(error.toString()));
   }
 
-  static Future<void> getUserInfo(
-      Function(user.UserInfo?) onComplete, Function(String) onError) async {
+  static Future<user.UserInfo?> getUserInfo(Function(String) onError) async {
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
-      _dbRef.child('Users').child(idUser).get().then((snapshot) {
-        final dataSnapshot =
-            jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
-        user.UserInfo userInfo = user.UserInfo.fromJson(dataSnapshot);
-        onComplete(userInfo);
-      }).onError((error, stackTrace) => onError(error.toString()));
+      final DataSnapshot snapshot = await _dbRef
+          .child('Users')
+          .child(idUser)
+          .get()
+          .onError((error, stackTrace) => onError(error.toString()));
+      final data =
+          jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
+      user.UserInfo userInfo = user.UserInfo.fromJson(data);
+      return userInfo;
     } else {
-      onComplete(null);
+      onError('unknow'.tr());
+      return null;
     }
   }
 
@@ -502,21 +505,17 @@ class FirebaseService {
   }
 
   //Order
-  static void requestOrder(
+  static void createOrder(
     Order order,
     Function() onComplete,
     Function(String) onError,
   ) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef
-          .child('Orders')
-          .child(idUser)
-          .child(order.idOrder)
-          .set(order.convertToJson())
-          .then((value) => onComplete())
-          .onError((error, stackTrace) => onError(error.toString()));
-    }
+    _dbRef
+        .child('Orders')
+        .child(order.orderId)
+        .set(order.convertToJson())
+        .then((value) => onComplete())
+        .onError((error, stackTrace) => onError(error.toString()));
   }
 
   static void getOrderList(

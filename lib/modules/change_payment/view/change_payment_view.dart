@@ -51,26 +51,47 @@ class ChangePaymentView extends StatelessWidget {
               value: 0,
               groupValue: payment,
               title: Text('codPaymentMethod'.tr()),
-              secondary: const Icon(Icons.local_atm_outlined),
+              secondary: Image.asset(
+                ImageConstants.iconCOD,
+                width: 56.0,
+                height: 56.0,
+              ),
               onChanged: (value) {
                 context
                     .read<ChangePaymentBloc>()
                     .add(OnChoosePaymentMethodEvent(value ?? 0));
               },
             ),
+            const SizedBox(height: 12.0),
             RadioListTile(
               value: 1,
               groupValue: payment,
-              title: Text('momoPaymentMethod'.tr()),
+              title: Text('paypalPaymentMethod'.tr()),
               secondary: Image.asset(
-                ImageConstants.iconMOMO,
-                width: 24.0,
-                height: 24.0,
+                ImageConstants.iconPayPal,
+                width: 56.0,
+                height: 56.0,
               ),
               onChanged: (value) {
                 context
                     .read<ChangePaymentBloc>()
                     .add(OnChoosePaymentMethodEvent(value ?? 1));
+              },
+            ),
+            const SizedBox(height: 12.0),
+            RadioListTile(
+              value: 2,
+              groupValue: payment,
+              title: Text('momoPaymentMethod'.tr()),
+              secondary: Image.asset(
+                ImageConstants.iconMOMO,
+                width: 48.0,
+                height: 48.0,
+              ),
+              onChanged: (value) {
+                context
+                    .read<ChangePaymentBloc>()
+                    .add(OnChoosePaymentMethodEvent(value ?? 2));
               },
             ),
           ],

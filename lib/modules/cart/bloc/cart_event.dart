@@ -48,4 +48,8 @@ class OnConfirmDeleteCart extends CartEvent {
   OnConfirmDeleteCart(this.removeCartList);
 }
 
-class OnCancelDeleteCart extends CartEvent {}
+class OnCancelDeleteCart extends CartEvent {
+  double value;
+
+  OnCancelDeleteCart(this.value);
+}

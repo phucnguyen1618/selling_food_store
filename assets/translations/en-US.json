@@ -108,6 +108,7 @@
     "shippingFee": "Shipping fee",
     "paymentMethod": "Payment methods",
     "codPaymentMethod": "Payment on delivery",
+    "paypalPaymentMethod": "Payment with PayPal",
     "momoPaymentMethod": "MOMO e-wallet",
     "shippingOrderDate": "Delivery date:",
     "titleConfirmOrder": "Your order has been confirmed",
@@ -156,5 +157,6 @@
     "text_canceled": "Order was cancelled",
     "notification": "Notification",
     "sign_up_title": "Registration information",
-    "user_info": "Personal information"
+    "user_info": "Personal information",
+    "isProductExistsInCart": "The product already exists in the shopping cart"
 }

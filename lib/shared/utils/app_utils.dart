@@ -96,4 +96,19 @@ class AppUtils {
     }
     return nameAvatar;
   }
+
+  static String convertVNDToUSD(double value) {
+    final result = value * 0.000041;
+    return result.toString();
+  }
+
+  static String getInvoiceNumber(String value) {
+    if (value.contains(':')) {
+      final splitted = value.split(':');
+      String dataStr = splitted[2];
+      String data1 = dataStr.replaceAll('"', '').replaceAll('}', '');
+      return data1.substring(1, data1.length - 1);
+    }
+    return value;
+  }
 }
