@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:selling_food_store/dependency_injection.dart';
 import 'package:selling_food_store/models/credential.dart';
 import 'package:selling_food_store/models/product_detail.dart';
+
 // ignore: library_prefixes
 import 'package:selling_food_store/models/user_info.dart' as user;
 import 'package:selling_food_store/models/category.dart';
@@ -18,6 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/brand.dart';
 import '../../models/cart.dart';
 import '../../models/detail_brand.dart';
+import '../../models/order_item.dart';
 import '../../models/product.dart';
 import '../../models/order.dart';
 import '../../models/review.dart';
@@ -481,13 +483,15 @@ class FirebaseService {
 
   //Brand
   static void fetchDetailBrand(
-      String id, Function(DetailBrand) onComplete, Function(String) onError) {
+      String id, Function(DetailBrand?) onComplete, Function(String) onError) {
     _dbRef.child('DetailBrands').child(id).get().then((snapshot) {
       if (snapshot.exists) {
         final dataValue =
             jsonDecode(jsonEncode(snapshot.value)) as Map<String, dynamic>;
         DetailBrand detailBrand = DetailBrand.fromJson(dataValue);
         onComplete(detailBrand);
+      } else {
+        onComplete(null);
       }
     }).onError((error, stackTrace) => onError(error.toString()));
   }
@@ -525,19 +529,36 @@ class FirebaseService {
     List<Order> orderList = [];
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
-      _dbRef.child('Orders').child(idUser).get().then((snapshot) {
-        if (snapshot.exists) {
-          for (DataSnapshot dataSnapshot in snapshot.children) {
-            final dataValue = jsonDecode(jsonEncode(dataSnapshot.value))
-                as Map<String, dynamic>;
-            final requestOrder = Order.fromJson(dataValue);
-            orderList.add(requestOrder);
-          }
-          onComplete(orderList);
-        } else {
-          onComplete(orderList);
+      _dbRef.child('userOrders').child(idUser).get().then((snapshot) {
+        for (DataSnapshot dataSnapshot in snapshot.children) {
+          final data = dataSnapshot.value as String;
+          log('Id order: $data');
+          _dbRef.child('Orders').child(data).get().then((snapshot) {
+            if (snapshot.exists) {
+              final dataValue = jsonDecode(jsonEncode(snapshot.value))
+                  as Map<String, dynamic>;
+              final requestOrder = Order.fromJson(dataValue);
+              orderList.add(requestOrder);
+              onComplete(orderList);
+            } else {
+              onComplete([]);
+            }
+          }).onError((error, stackTrace) => onError(error.toString()));
         }
-      }).onError((error, stackTrace) => onError(error.toString()));
+      });
+    }
+  }
+
+  static void writeOrderByUser(String id) {
+    final idUser = prefs.getString(Strings.idUser);
+    if (idUser != null) {
+      _dbRef.child('userOrders').child(idUser).child(id).set(id);
+    }
+  }
+
+  static void writeOrderByStore(String id, List<OrderItem> orderItem) {
+    for (var item in orderItem) {
+      _dbRef.child('storeOrders').child(item.brandId).child(id).set(id);
     }
   }
 
@@ -547,15 +568,12 @@ class FirebaseService {
     Function() onComplete,
     Function(String) onError,
   ) {
-    final idUser = prefs.getString(Strings.idUser);
-    if (idUser != null) {
-      _dbRef.child('Orders').child(idUser).child(idOrder).update({
-        'status': 3,
-        'reasonCancelOrder': reason,
-      }).then((value) {
-        onComplete();
-      }).onError((error, stackTrace) => onError(error.toString()));
-    }
+    _dbRef.child('Orders').child(idOrder).update({
+      'status': 'CANCEL',
+      'reasonCancelOrder': reason,
+    }).then((value) {
+      onComplete();
+    }).onError((error, stackTrace) => onError(error.toString()));
   }
 
   static void getUserCredential(

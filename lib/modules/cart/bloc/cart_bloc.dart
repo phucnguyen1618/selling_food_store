@@ -22,6 +22,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         add(DisplayCartListEvent(dataList));
       } else {
         FirebaseService.fetchProductListToCart((carts) {
+          if(carts.isEmpty) {
+            
+          }
           HiveService.addAllCartList(carts);
           add(DisplayCartListEvent(carts));
         }, (error) {

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/modules/cart/bloc/item_cart_bloc.dart';
+import 'package:selling_food_store/modules/home/bloc/home_bloc.dart';
+import 'package:selling_food_store/modules/home/bloc/home_event.dart';
 
 import '../../../models/cart.dart';
 import '../../../shared/utils/app_color.dart';
@@ -30,19 +32,15 @@ class BottomCartPanel extends StatelessWidget {
         totalPrice = state.value;
       } else if (state is ConfirmDeleteCartState) {
         isVisibleTotalPricePanel = false;
-      } else if (state is OnDeleteItemCartState) {
-        isVisibleTotalPricePanel = state.value;
+        context.read<HomeBloc>().add(OnConfirmRemoveItemCartEvent());
+      } else if (state is OnDeleteCartState) {
+        isVisibleTotalPricePanel = !state.value;
       } else if (state is CancelDeleteCartState) {
         isVisibleTotalPricePanel = true;
         totalPrice = state.value;
       }
-      return !isVisibleTotalPricePanel
-          ? _buildBottomDelete(onCancel: () {
-              context.read<ItemCartBloc>().add(OnCancelDeleteCart(totalPrice));
-            }, onConfirm: () {
-              onConfirmDelete();
-            })
-          : Padding(
+      return isVisibleTotalPricePanel
+          ? Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
               child: Row(
@@ -94,7 +92,12 @@ class BottomCartPanel extends StatelessWidget {
                   )
                 ],
               ),
-            );
+            )
+          : _buildBottomDelete(onCancel: () {
+              context.read<ItemCartBloc>().add(OnCancelDeleteCart(totalPrice));
+            }, onConfirm: () {
+              onConfirmDelete();
+            });
     });
   }
 

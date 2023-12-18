@@ -30,7 +30,7 @@ class Order {
       "userID": userID,
       "orderDate": orderDate.toIso8601String(),
       "status": status,
-      "orderItems": orderItems,
+      "orderItems": orderItems.map((e) => e.toJson()).toList(),
       "cancelReason": cancelReason,
     };
   }

@@ -26,6 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       on<OnTabItemClickedEvent>(_onTabItemClicked);
       on<OnReloadProductListEvent>(_onReloadProductListWithType);
       on<OnConfirmAddProductToCartEvent>(_onConfirmAddProductToCart);
+      on<OnConfirmRemoveItemCartEvent>(_onConfirmRemoveItemCart);
     }
   }
 
@@ -90,6 +91,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _onConfirmAddProductToCart(
       OnConfirmAddProductToCartEvent event, Emitter<HomeState> emitter) {
     emitter(ConfirmAddProductToCartState());
+  }
+
+  void _onConfirmRemoveItemCart(
+      OnConfirmRemoveItemCartEvent event, Emitter<HomeState> emitter) {
+    emitter(ConfirmRemoveItemCartState());
   }
 
   void _onRequestSignIn(

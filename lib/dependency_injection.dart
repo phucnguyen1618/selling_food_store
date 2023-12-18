@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:paypal_api/network/dio_client.dart';
 import 'package:paypal_api/paypal_api.dart';
 import 'package:selling_food_store/models/cart.dart';
 import 'package:shared_preferences/shared_preferences.dart';

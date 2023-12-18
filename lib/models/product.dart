@@ -7,6 +7,7 @@ import 'package:selling_food_store/shared/utils/app_utils.dart';
 import 'package:uuid/uuid.dart';
 
 import '../shared/services/hive_service.dart';
+import 'order_item.dart';
 
 part 'product.g.dart';
 
@@ -77,5 +78,9 @@ class Product {
         quantity.toString(),
         UnitAmount('USD', AppUtils.convertVNDToUSD(cost)),
         discount != null ? Discount(discount.toString(), null) : null);
+  }
+
+  OrderItem mapProductToOrderItem(int quantity) {
+    return OrderItem(idProduct, quantity, getPrice(), brand.idBrand);
   }
 }

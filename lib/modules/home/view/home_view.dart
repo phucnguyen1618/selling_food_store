@@ -43,6 +43,9 @@ class HomeView extends StatelessWidget {
       builder: (context, state) {
         if (state is DisplayProductListState) {
           numberCart = HiveService.getCartList().length;
+        } else if (state is ConfirmRemoveItemCartState) {
+          numberCart = HiveService.getCartList().length;
+          log('Number Cart: $numberCart');
         }
         return Scaffold(
           backgroundColor: AppColor.whiteColor,

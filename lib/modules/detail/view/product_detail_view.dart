@@ -148,13 +148,15 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                       width: 50.0,
                                     ),
                                     const SizedBox(width: 4.0),
-                                    Text(
-                                      ' - ${productDetail!.discount!.toInt()}%',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: AppColor.hintGreyColor,
-                                      ),
-                                    ),
+                                    productDetail!.discount != null
+                                        ? Text(
+                                            ' - ${productDetail!.discount!.toInt()}%',
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: AppColor.hintGreyColor,
+                                            ),
+                                          )
+                                        : const SizedBox(),
                                   ],
                                 ),
                               ],
@@ -176,8 +178,11 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                       ProductDetailTabView(detail: productDetail!),
                       Container(height: 12.0, color: AppColor.divider100Color),
                       const BrandInfo(),
-                      Container(height: 12.0, color: AppColor.divider100Color),
-                      const EvaluteProductTabView(),
+                      Container(
+                        margin: const EdgeInsets.only(top: 12.0),
+                        color: AppColor.divider100Color,
+                        child: const EvaluteProductTabView(),
+                      ),
                     ],
                   ),
                 ),

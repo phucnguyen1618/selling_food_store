@@ -19,6 +19,7 @@ class BrandInfoBloc extends Bloc<BrandInfoEvent, BrandInfoState> {
       add(DisplayBrandDetailEvent(dataValue));
     }, (error) {
       log(error);
+      add(DisplayBrandDetailEvent(null));
       EasyLoading.showError(error);
     });
   }

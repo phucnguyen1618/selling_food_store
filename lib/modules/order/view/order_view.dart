@@ -98,7 +98,12 @@ class _RequestOrderViewState extends State<RequestOrderView> {
         } else if (state is ChoosePaymentMethodState) {
           log('Payment method is ${state.value}');
         } else if (state is AddTrackingOrderState) {
-          context.goNamed('trackingOrder', extra: state.idInvoice);
+          context.goNamed('trackingOrder', extra: {
+            'trackingId': state.idInvoice,
+            'idAccount': state.idAccount,
+          });
+        } else if (state is ConfirmOrderState) {
+          context.goNamed('confirmOrder');
         }
       },
     );

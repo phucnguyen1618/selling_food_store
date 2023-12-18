@@ -32,14 +32,20 @@ class CartView extends StatefulWidget {
 class _CartViewState extends State<CartView> {
   List<Cart> _cartItems = [];
   bool isNotSignIn = false;
-  bool isDeleteItem = false;
+  bool isDeleteCart = false;
+  bool isLoading = false;
 
   List<Cart> removeCartList = [];
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(builder: (context, state) {
-      if (state is DisplayCartListState) {
+      if (state is DisplayNotSignInState) {
+        isNotSignIn = true;
+      } else if (state is LoadingCartListState) {
+        isLoading = true;
+      } else if (state is DisplayCartListState) {
+        isLoading = false;
         _cartItems = state.cartList;
       }
       return Scaffold(
@@ -58,61 +64,75 @@ class _CartViewState extends State<CartView> {
                 Icons.arrow_back,
                 color: AppColor.blackColor,
               )),
-          title: searchBar.SearchBar(
-            hintText: 'searchCartText'.tr(),
-            backgroundColor: AppColor.shimer200Color,
-            onSearch: () {
-              showSearch(
-                context: context,
-                delegate: CartDelegate(),
-              );
-            },
-          ),
-          actions: [
-            BlocBuilder<ItemCartBloc, CartState>(builder: (context, state) {
-              if (state is OnDeleteItemCartState) {
-                isDeleteItem = state.value;
-              } else if (state is CancelDeleteCartState) {
-                isDeleteItem = false;
-              } else if (state is ConfirmDeleteCartState) {
-                isDeleteItem = false;
-              }
-              return isDeleteItem
-                  ? const SizedBox()
-                  : IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isDeleteItem = !isDeleteItem;
-                          context
-                              .read<ItemCartBloc>()
-                              .add(OnDeleteItemEvent(false));
-                        });
+          title: isNotSignIn
+              ? null
+              : _cartItems.isEmpty
+                  ? Text('yourCart'.tr(),
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ))
+                  : searchBar.SearchBar(
+                      hintText: 'searchCartText'.tr(),
+                      backgroundColor: AppColor.shimer200Color,
+                      onSearch: () {
+                        showSearch(
+                          context: context,
+                          delegate: CartDelegate(),
+                        );
                       },
-                      splashColor: AppColor.transparentColor,
-                      highlightColor: AppColor.transparentColor,
-                      focusColor: AppColor.transparentColor,
-                      hoverColor: AppColor.transparentColor,
-                      icon: const Icon(Icons.delete),
-                      color: AppColor.hintGreyColor,
-                    );
-            }),
-            const SizedBox(width: 8.0),
-          ],
+                    ),
+          actions: isNotSignIn
+              ? null
+              : _cartItems.isEmpty
+                  ? null
+                  : [
+                      BlocBuilder<ItemCartBloc, CartState>(
+                          builder: (context, state) {
+                        if (state is OnDeleteCartState) {
+                          isDeleteCart = state.value;
+                        } else if (state is CancelDeleteCartState) {
+                          isDeleteCart = false;
+                        } else if (state is ConfirmDeleteCartState) {
+                          isDeleteCart = false;
+                        }
+                        return isDeleteCart
+                            ? const SizedBox()
+                            : IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isDeleteCart = !isDeleteCart;
+                                    context
+                                        .read<ItemCartBloc>()
+                                        .add(OnDeleteCartEvent(isDeleteCart));
+                                  });
+                                },
+                                splashColor: AppColor.transparentColor,
+                                highlightColor: AppColor.transparentColor,
+                                focusColor: AppColor.transparentColor,
+                                hoverColor: AppColor.transparentColor,
+                                icon: const Icon(Icons.delete),
+                                color: AppColor.hintGreyColor,
+                              );
+                      }),
+                      const SizedBox(width: 8.0),
+                    ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            state is LoadingCartListState
-                ? const LoadingDataWidget(
-                    loadingType: LoadingDataType.loadingCartList)
-                : state is DisplayNotSignInState
-                    ? EmptyDataWidget(
-                        emptyType: EmptyType.profileEmpty,
-                        onClick: () {
-                          context.pushNamed('signIn');
-                        })
+            isNotSignIn
+                ? EmptyDataWidget(
+                    emptyType: EmptyType.profileEmpty,
+                    onClick: () {
+                      context.pushNamed('signIn');
+                    })
+                : isLoading
+                    ? const LoadingDataWidget(
+                        loadingType: LoadingDataType.loadingCartList)
                     : _cartItems.isNotEmpty
                         ? Expanded(
                             child: Column(
@@ -125,8 +145,13 @@ class _CartViewState extends State<CartView> {
                                     itemCount: _cartItems.length,
                                     itemBuilder: (context, index) => ItemCart(
                                       cart: _cartItems[index],
-                                      onChecked: (itemCart) {
+                                      onAddItem: (itemCart) {
                                         removeCartList.add(itemCart);
+                                      },
+                                      onRemoveItem: (itemCart) {
+                                        if (removeCartList.contains(itemCart)) {
+                                          removeCartList.remove(itemCart);
+                                        }
                                       },
                                     ),
                                     separatorBuilder:

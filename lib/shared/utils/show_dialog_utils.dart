@@ -3,8 +3,6 @@ import 'package:selling_food_store/shared/widgets/dialog/feedback_product_dialog
 import 'package:selling_food_store/shared/widgets/dialog/notify_dialog.dart';
 import 'package:selling_food_store/shared/widgets/dialog/request_signIn_dialog.dart';
 
-import '../../models/cart.dart';
-
 class ShowDialogUtils {
   static void showDialogRequestSignIn(
     BuildContext context,
@@ -49,7 +47,6 @@ class ShowDialogUtils {
 
   static void showDialogFeedback(
     BuildContext context,
-    Cart cart,
     Function(double, String) onFeedback,
   ) {
     showDialog(

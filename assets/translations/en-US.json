@@ -111,12 +111,12 @@
     "paypalPaymentMethod": "Payment with PayPal",
     "momoPaymentMethod": "MOMO e-wallet",
     "shippingOrderDate": "Delivery date:",
-    "titleConfirmOrder": "Your order has been confirmed",
+    "titleConfirmOrder": "Your order has been sent",
     "shippingInfoOrder": "Your order shipping information: ",
     "homeComeBack": "Back to home",
     "titleOrderList": "Your order",
     "allTab": "All",
-    "confirmOrderTab": "Order confirmed",
+    "confirmOrderTab": "Ordered",
     "shippingTab": "Delivering",
     "shippingSuccessTab": "Successful delivery",
     "cancelOrderTab": "Cancel order",
@@ -158,5 +158,8 @@
     "notification": "Notification",
     "sign_up_title": "Registration information",
     "user_info": "Personal information",
-    "isProductExistsInCart": "The product already exists in the shopping cart"
+    "isProductExistsInCart": "The product already exists in the shopping cart",
+    "notifyChoosItemCart": "Please select an item to delete",
+    "choosePaymentMethod": "Please select payment method",
+    "feature_in_development": "The feature is in development"
 }

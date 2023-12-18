@@ -9,12 +9,28 @@ abstract class OrderListState extends Equatable {
 class LoadingOrderListState extends OrderListState {}
 
 class DisplayOrderListState extends OrderListState {
-  final List<Order> orders;
+  final List<Order> allOrders;
+  final List<Order> requestOrders;
+  final List<Order> confirmOrders;
+  final List<Order> successOrders;
+  final List<Order> cancelOrders;
 
-  DisplayOrderListState(this.orders);
+  DisplayOrderListState(
+    this.allOrders,
+    this.requestOrders,
+    this.confirmOrders,
+    this.successOrders,
+    this.cancelOrders,
+  );
 
   @override
-  List<Object?> get props => [orders];
+  List<Object?> get props => [
+        allOrders,
+        requestOrders,
+        confirmOrders,
+        successOrders,
+        cancelOrders,
+      ];
 }
 
 class CancelOrderState extends OrderListState {

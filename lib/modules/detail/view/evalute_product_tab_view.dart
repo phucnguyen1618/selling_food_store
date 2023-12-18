@@ -18,7 +18,8 @@ class EvaluteProductTabView extends StatelessWidget {
       if (state is DisplayProductDetailState) {
         reviewList = state.reviews;
       }
-      return Padding(
+      return Container(
+        color: AppColor.whiteColor,
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -35,7 +35,7 @@ class _ItemOrderState extends State<ItemOrder> {
                   orderItem: widget.order.orderItems[index],
                   status: widget.order.status,
                 )),
-        widget.order.status == 0
+        widget.order.status == 'CREATED'
             ? InkWell(
                 onTap: () {
                   context

@@ -5,94 +5,75 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
-import 'package:selling_food_store/models/order.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/modules/order_list/bloc/order_list_state.dart';
+import 'package:selling_food_store/modules/order_list/view/all_order_list.dart';
+import 'package:selling_food_store/modules/order_list/view/cancel_order_list.dart';
+import 'package:selling_food_store/modules/order_list/view/confirm_order_list.dart';
+import 'package:selling_food_store/modules/order_list/view/ordered_list.dart';
 import 'package:selling_food_store/shared/utils/bottomsheet_utils.dart';
-import 'package:selling_food_store/shared/widgets/general/empty_data_widget.dart';
 
 import '../../../shared/utils/app_color.dart';
-import '../../../shared/widgets/items/item_order.dart';
+import 'success_order_list.dart';
 
 class OrderListView extends StatelessWidget {
   const OrderListView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<Order> orders = [];
-    bool isLoading = true;
     return BlocConsumer<OrderListBloc, OrderListState>(
       builder: (context, state) {
-        if (state is DisplayOrderListState) {
-          isLoading = false;
-          orders = state.orders;
-        }
         return DefaultTabController(
           length: 5,
           child: Scaffold(
-            backgroundColor: AppColor.whiteColor,
-            appBar: AppBar(
               backgroundColor: AppColor.whiteColor,
-              elevation: 1.0,
-              centerTitle: true,
-              title: Text(
-                'titleOrderList'.tr(),
-                style: const TextStyle(
-                  color: AppColor.blackColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
-              ),
-              bottom: TabBar(
-                tabs: [
-                  Tab(text: 'allTab'.tr()),
-                  Tab(text: 'confirmOrderTab'.tr()),
-                  Tab(text: 'shippingTab'.tr()),
-                  Tab(text: 'shippingSuccessTab'.tr()),
-                  Tab(text: 'cancelOrderTab'.tr()),
-                ],
-                labelColor: Colors.blue,
-                indicatorSize: TabBarIndicatorSize.tab,
-                isScrollable: true,
-                unselectedLabelColor: Colors.grey,
-                onTap: (value) {
-                  context
-                      .read<OrderListBloc>()
-                      .add(OnFilterOrderListEvent(value));
-                },
-              ),
-              leading: IconButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_back,
+              appBar: AppBar(
+                backgroundColor: AppColor.whiteColor,
+                elevation: 1.0,
+                centerTitle: true,
+                title: Text(
+                  'titleOrderList'.tr(),
+                  style: const TextStyle(
                     color: AppColor.blackColor,
-                  )),
-            ),
-            body: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : orders.isNotEmpty
-                    ? Column(
-                        children: [
-                          Expanded(
-                            child: ListView.separated(
-                              itemCount: orders.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) =>
-                                  ItemOrder(order: orders[index]),
-                              separatorBuilder: (context, index) => Container(
-                                height: 10.0,
-                                color: Colors.grey.shade100,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : const EmptyDataWidget(
-                        emptyType: EmptyType.orderListEmpty),
-          ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                  ),
+                ),
+                bottom: TabBar(
+                  tabs: [
+                    Tab(text: 'allTab'.tr()),
+                    Tab(text: 'confirmOrderTab'.tr()),
+                    Tab(text: 'shippingTab'.tr()),
+                    Tab(text: 'shippingSuccessTab'.tr()),
+                    Tab(text: 'cancelOrderTab'.tr()),
+                  ],
+                  labelColor: Colors.blue,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  isScrollable: true,
+                  unselectedLabelColor: Colors.grey,
+                ),
+                leading: IconButton(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: AppColor.blackColor,
+                    )),
+              ),
+              body: const Column(
+                children: [
+                  Expanded(
+                      child: TabBarView(children: [
+                    AllOrderList(),
+                    OrderedList(),
+                    ConfirmOrderList(),
+                    SuccessOrderList(),
+                    CancelOrderList(),
+                  ]))
+                ],
+              )),
         );
       },
       listener: (context, state) {
@@ -107,9 +88,6 @@ class OrderListView extends StatelessWidget {
               onClose: () {
                 context.read<OrderListBloc>().add(OnCloseBottomSheetEvent());
               });
-        } else if (state is DisplayOrderListState) {
-          isLoading = false;
-          orders = state.orders;
         } else if (state is CloseBottomSheetState) {
           log('bottom sheet is closed');
         } else if (state is ConfirmCancelOrderState) {

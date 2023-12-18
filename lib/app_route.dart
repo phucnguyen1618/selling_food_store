@@ -4,7 +4,7 @@ import 'package:selling_food_store/models/user_info.dart';
 import 'package:selling_food_store/modules/cart/cart_page.dart';
 import 'package:selling_food_store/modules/change_password/change_password_page.dart';
 import 'package:selling_food_store/modules/change_payment/change_payment_page.dart';
-import 'package:selling_food_store/modules/confirm_order.dart/confirm_order_page.dart';
+import 'package:selling_food_store/modules/confirm_order/confirm_order_page.dart';
 import 'package:selling_food_store/modules/detail/product_detail_page.dart';
 import 'package:selling_food_store/modules/edit_profile/edit_profile_page.dart';
 import 'package:selling_food_store/modules/forgotPassword/forgot_password_page.dart';
@@ -181,20 +181,20 @@ final GoRouter appRouter = GoRouter(
                 path: 'requestOrder/trackingOrder',
                 name: 'trackingOrder',
                 builder: (BuildContext context, GoRouterState state) {
-                  final trackingId = state.extra as String;
-                  return TrackingOrderPage(id: trackingId);
+                  final dataValue = state.extra as Map<String, String>;
+                  final trackingId = dataValue['trackingId'] as String;
+                  final idAccount = dataValue['idAccount'] as String;
+                  return TrackingOrderPage(
+                      id: trackingId, idAccount: idAccount);
                 },
               ),
             ]),
-
         //Confirm Order Page
         GoRoute(
             path: 'confirmOrder',
             name: 'confirmOrder',
             builder: (BuildContext context, GoRouterState state) {
-              return const ConfirmOrderPage(
-                  name: 'Nguyễn Hoàng Phúc',
-                  address: 'Khối 10, phường Hồng Sơn, tp.Vinh, tỉnh Nghệ An');
+              return const ConfirmOrderPage();
             }),
       ],
     ),

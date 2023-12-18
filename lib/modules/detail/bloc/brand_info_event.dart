@@ -9,7 +9,7 @@ class LoadingBrandInfoEvent extends BrandInfoEvent {
 }
 
 class DisplayBrandDetailEvent extends BrandInfoEvent {
-  DetailBrand detailBrand;
+  DetailBrand? detailBrand;
 
   DisplayBrandDetailEvent(this.detailBrand);
 

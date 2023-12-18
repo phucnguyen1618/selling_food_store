@@ -70,3 +70,5 @@ class AddProductToCartState extends HomeState {
 }
 
 class ConfirmAddProductToCartState extends HomeState {}
+
+class ConfirmRemoveItemCartState extends HomeState {}

@@ -53,45 +53,46 @@ class EmptyDataWidget extends StatelessWidget {
   }
 
   Widget _buildUserInfoEmpty(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            ImageConstants.imageUnLogin,
-            width: 200.0,
-            height: 200.0,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          ImageConstants.imageUnLogin,
+          width: 150.0,
+          height: 150.0,
+        ),
+        const SizedBox(height: 12.0),
+        Text('youNotLogin'.tr()),
+        const SizedBox(height: 12.0),
+        MaterialButton(
+          onPressed: () {
+            if (onClick != null) {
+              onClick!();
+            }
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            side: const BorderSide(color: AppColor.primaryAppColor),
           ),
-          const SizedBox(height: 12.0),
-          Text('youNotLogin'.tr()),
-          const SizedBox(height: 12.0),
-          MaterialButton(
-            onPressed: () {
-              if (onClick != null) {
-                onClick!();
-              }
-            },
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0),
-              side: const BorderSide(color: AppColor.primaryAppColor),
+          elevation: 0.0,
+          focusElevation: 0.0,
+          highlightElevation: 0.0,
+          disabledElevation: 0.0,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          color: AppColor.whiteColor,
+          child: Text(
+            'textSignIn'.tr(),
+            style: const TextStyle(
+              color: AppColor.primaryAppColor,
             ),
-            
-            elevation: 0.0,
-            focusColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            color: AppColor.whiteColor,
-            child: Text(
-              'textSignIn'.tr(),
-              style: const TextStyle(
-                color: AppColor.primaryAppColor,
-              ),
-            ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 

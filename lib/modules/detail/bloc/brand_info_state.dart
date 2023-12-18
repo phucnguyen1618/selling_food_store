@@ -10,7 +10,7 @@ class InitBrandInfoState extends BrandInfoState {}
 
 class DisplayBrandInfoState extends BrandInfoState {
 
-  final DetailBrand detailBrand;
+  final DetailBrand? detailBrand;
 
   DisplayBrandInfoState(this.detailBrand);
 

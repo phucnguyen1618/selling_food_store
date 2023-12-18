@@ -174,13 +174,13 @@ class _ProfileViewState extends State<ProfileView> {
                                   .add(OnChangeLanguageEvent(locale));
                             },
                           ),
-                          const SizedBox(height: 8.0),
-                          _buildLabel(
-                              name: 'changePassword'.tr(),
-                              icon: Icons.autorenew,
-                              onClicked: () {
-                                context.goNamed('changePassword');
-                              }),
+                          // const SizedBox(height: 8.0),
+                          // _buildLabel(
+                          //     name: 'changePassword'.tr(),
+                          //     icon: Icons.autorenew,
+                          //     onClicked: () {
+                          //       context.goNamed('changePassword');
+                          //     }),
                           const SizedBox(height: 24.0),
                           GeneralButton(
                             title: 'signOut'.tr(),

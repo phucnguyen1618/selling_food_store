@@ -18,11 +18,13 @@ import '../general/loading_data_widget.dart';
 
 class ItemCart extends StatefulWidget {
   final Cart cart;
-  final Function(Cart) onChecked;
+  final Function(Cart) onAddItem;
+  final Function(Cart) onRemoveItem;
   const ItemCart({
     super.key,
     required this.cart,
-    required this.onChecked,
+    required this.onAddItem,
+    required this.onRemoveItem,
   });
 
   @override
@@ -34,6 +36,7 @@ class _ItemCartState extends State<ItemCart> {
   double? price;
   Product? product;
   bool? isDeleteItem;
+  bool isChoose = false;
 
   @override
   void initState() {
@@ -55,13 +58,14 @@ class _ItemCartState extends State<ItemCart> {
   Widget build(BuildContext context) {
     return BlocBuilder<ItemCartBloc, CartState>(
       builder: (context, state) {
-        if (state is OnDeleteItemCartState) {
-          isDeleteItem = state.value;
+        if (state is OnDeleteCartState) {
+          isDeleteItem = !state.value;
         } else if (state is ConfirmDeleteCartState) {
           isDeleteItem = null;
           context.read<CartBloc>().add(LoadingCartListEvent());
         } else if (state is CancelDeleteCartState) {
           isDeleteItem = null;
+          isChoose = false;
         }
         return Card(
           color: AppColor.whiteColor,
@@ -105,12 +109,14 @@ class _ItemCartState extends State<ItemCart> {
                         ),
                         trailing: isDeleteItem != null
                             ? Checkbox(
-                                value: isDeleteItem,
+                                value: isChoose,
                                 onChanged: (value) {
                                   setState(() {
-                                    isDeleteItem = value;
-                                    if (isDeleteItem == true) {
-                                      widget.onChecked(widget.cart);
+                                    isChoose = value ?? false;
+                                    if (isChoose == true) {
+                                      widget.onAddItem(widget.cart);
+                                    } else {
+                                      widget.onRemoveItem(widget.cart);
                                     }
                                   });
                                 })

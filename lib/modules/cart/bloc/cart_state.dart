@@ -38,10 +38,10 @@ class OnInitQuantityState extends CartState {
   List<Object?> get props => [];
 }
 
-class OnDeleteItemCartState extends CartState {
+class OnDeleteCartState extends CartState {
   final bool value;
 
-  OnDeleteItemCartState(this.value);
+  OnDeleteCartState(this.value);
 
   @override
   List<Object?> get props => [value];

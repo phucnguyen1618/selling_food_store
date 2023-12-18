@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_event.dart';
 import 'package:selling_food_store/modules/cart/bloc/cart_state.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
@@ -12,7 +14,7 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
   ItemCartBloc() : super(OnInitQuantityState()) {
     if (!isClosed) {
       on<OnDisplayTotalPriceEvent>(_onDisplayTotalPrice);
-      on<OnDeleteItemEvent>(_onDeleteItemCart);
+      on<OnDeleteCartEvent>(_onDeleteCart);
       on<OnIncreaseQuantityEvent>(_onIncreaseQuantity);
       on<OnDecreaseQuantityEvent>(_onDecreaseQuantity);
       on<OnConfirmDeleteCart>(_onConfirmDeleteCart);
@@ -45,15 +47,19 @@ class ItemCartBloc extends Bloc<CartEvent, CartState> {
     add(OnDisplayTotalPriceEvent(_totalPrice));
   }
 
-  void _onDeleteItemCart(OnDeleteItemEvent event, Emitter<CartState> emitter) {
-    emitter(OnDeleteItemCartState(event.isDeleteItem));
+  void _onDeleteCart(OnDeleteCartEvent event, Emitter<CartState> emitter) {
+    emitter(OnDeleteCartState(event.isDelete));
   }
 
   void _onConfirmDeleteCart(
       OnConfirmDeleteCart event, Emitter<CartState> emitter) {
-    HiveService.deleteItemCart(event.removeCartList);
-    FirebaseService.removeCartList(cartList: event.removeCartList);
-    emitter(ConfirmDeleteCartState());
+    if (event.removeCartList.isEmpty) {
+      EasyLoading.showToast('notifyChoosItemCart'.tr());
+    } else {
+      HiveService.deleteItemCart(event.removeCartList);
+      FirebaseService.removeCartList(cartList: event.removeCartList);
+      emitter(ConfirmDeleteCartState());
+    }
   }
 
   void _onCancelDeleteCart(

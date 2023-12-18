@@ -87,16 +87,19 @@ class ProductDetailTabView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 8.0),
-                ListView.builder(
-                    itemCount: detail.uses.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) =>
-                        ItemUse(use: detail.uses[index])),
-                const SizedBox(height: 12.0),
+                detail.uses.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: ListView.builder(
+                            itemCount: detail.uses.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) =>
+                                ItemUse(use: detail.uses[index])),
+                      )
+                    : const SizedBox(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
+                  padding: const EdgeInsets.only(left: 12.0, top: 12.0),
                   child: Text(
                     'howToUse'.tr(),
                     style: const TextStyle(
@@ -106,28 +109,30 @@ class ProductDetailTabView extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: detail.howToUse
-                          .map(
-                            (e) => Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 8.0, right: 12.0),
-                              child: Text(
-                                e,
-                                maxLines: 20,
-                                style: const TextStyle(
-                                  fontSize: 14.0,
-                                  overflow: TextOverflow.ellipsis,
+                detail.howToUse.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: detail.howToUse
+                              .map(
+                                (e) => Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 8.0, right: 12.0),
+                                  child: Text(
+                                    e,
+                                    maxLines: 20,
+                                    style: const TextStyle(
+                                      fontSize: 14.0,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    )),
+                              )
+                              .toList(),
+                        ))
+                    : const SizedBox(),
                 const SizedBox(height: 24.0),
               ],
             ));

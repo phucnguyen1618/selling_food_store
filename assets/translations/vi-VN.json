@@ -111,12 +111,12 @@
     "paypalPaymentMethod": "Thanh toán với PayPal",
     "momoPaymentMethod": "Ví điện tử MOMO",
     "shippingOrderDate": "Ngày giao hàng: ",
-    "titleConfirmOrder": "Đã xác nhận đơn hàng của bạn",
+    "titleConfirmOrder": "Đã gửi đơn hàng của bạn",
     "shippingInfoOrder": "Thông tin vận chuyển đơn hàng của bạn: ",
     "homeComeBack": "Quay lại màn hình chính",
     "titleOrderList": "Đơn hàng của bạn",
     "allTab": "Tất cả",
-    "confirmOrderTab": "Đơn hàng xác nhận",
+    "confirmOrderTab": "Đã đặt hàng",
     "shippingTab": "Đang giao hàng",
     "shippingSuccessTab": "Giao hàng thành công",
     "cancelOrderTab": "Huỷ đơn hàng",
@@ -158,5 +158,8 @@
     "notification": "Thông báo",
     "sign_up_title": "Thông tin đăng ký",
     "user_info": "Thông tin cá nhân",
-    "isProductExistsInCart": "Sản phẩm đã tồn tại trong giỏ hàng"
+    "isProductExistsInCart": "Sản phẩm đã tồn tại trong giỏ hàng",
+    "notifyChoosItemCart": "Vui lòng chọn item để xoá",
+    "choosePaymentMethod": "Vui lòng chọn phương thức thanh toán",
+    "feature_in_development": "Tính năng đang trong giai đoạn phát triển"
 }

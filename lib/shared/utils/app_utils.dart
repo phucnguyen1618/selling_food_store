@@ -24,30 +24,30 @@ class AppUtils {
     return totalPrice;
   }
 
-  static String formatOrderStatus(int status) {
+  static String formatOrderStatus(String status) {
     switch (status) {
-      case 0:
+      case 'CREATED':
         return 'ordered'.tr();
-      case 1:
+      case 'CONFIRM':
         return 'delivering'.tr();
-      case 2:
+      case 'SUCCESS':
         return 'accomplished'.tr();
-      case 3:
+      case 'CANCEL':
         return 'canceled'.tr();
       default:
         return 'delivering'.tr();
     }
   }
 
-  static String formatOrderTitleStatus(int status) {
+  static String formatOrderTitleStatus(String status) {
     switch (status) {
-      case 0:
+      case 'CREATED':
         return 'text_ordered'.tr();
-      case 1:
+      case 'CONFIRM':
         return 'text_delivering'.tr();
-      case 2:
+      case 'SUCCESS':
         return 'text_order_success'.tr();
-      case 3:
+      case 'CANCEL':
         return 'text_canceled'.tr();
       default:
         return 'text_delivering'.tr();
@@ -88,6 +88,21 @@ class AppUtils {
     }
   }
 
+  static Color mapColorByStatus(String status) {
+    switch (status) {
+      case 'CREATED':
+        return Colors.black;
+      case 'CONFIRM':
+        return Colors.orange;
+      case 'SUCCESS':
+        return Colors.green;
+      case 'CANCEL':
+        return Colors.red;
+      default:
+        return Colors.black;
+    }
+  }
+
   static String generateNameAvatar(String fullName) {
     String nameAvatar = '';
     final splitted = fullName.split(' ');
@@ -100,15 +115,5 @@ class AppUtils {
   static String convertVNDToUSD(double value) {
     final result = value * 0.000041;
     return result.toString();
-  }
-
-  static String getInvoiceNumber(String value) {
-    if (value.contains(':')) {
-      final splitted = value.split(':');
-      String dataStr = splitted[2];
-      String data1 = dataStr.replaceAll('"', '').replaceAll('}', '');
-      return data1.substring(1, data1.length - 1);
-    }
-    return value;
   }
 }

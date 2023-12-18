@@ -35,12 +35,21 @@ class ItemRecommendProduct extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Stack(
+              alignment: Alignment.topCenter,
               children: [
                 CachedNetworkImage(
                   width: double.infinity,
                   height: 220.0,
                   imageUrl: product.image,
                   fit: BoxFit.cover,
+                  imageBuilder: (context, provider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: provider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
                           value: downloadProgress.progress),
@@ -87,7 +96,7 @@ class ItemRecommendProduct extends StatelessWidget {
             const SizedBox(height: 8.0),
             Text(
               product.name,
-              maxLines: 2,
+              maxLines: 1,
               style: const TextStyle(
                 color: Colors.black,
                 overflow: TextOverflow.ellipsis,
@@ -109,7 +118,10 @@ class ItemRecommendProduct extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColor.baseColor,
-                      image: DecorationImage(image: imageProvider),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
@@ -131,12 +143,14 @@ class ItemRecommendProduct extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8.0),
-            RichText(
-                text: TextSpan(
-                    text: AppUtils.formatPrice(product.cost),
-                    style: TextStyle(
-                        decoration: TextDecoration.lineThrough,
-                        color: AppColor.hintGreyColor))),
+            product.discount != null
+                ? RichText(
+                    text: TextSpan(
+                        text: AppUtils.formatPrice(product.cost),
+                        style: TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            color: AppColor.hintGreyColor)))
+                : const SizedBox(height: 16.0),
             const SizedBox(height: 2.0),
             Text(
               AppUtils.formatPrice(product.getPrice()),

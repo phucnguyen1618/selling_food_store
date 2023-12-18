@@ -12,11 +12,14 @@ import '../../../shared/utils/strings.dart';
 
 class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   List<Order> orderList = [];
+  List<Order> orderedList = [];
+  List<Order> confirmOrderList = [];
+  List<Order> successOrderList = [];
+  List<Order> cancelOrderList = [];
 
   OrderListBloc() : super(LoadingOrderListState()) {
     on<OnLoadingOrderListEvent>(_onLoadingOrderList);
     on<OnDisplayOrderListEvent>(_onDisplayOrderList);
-    on<OnFilterOrderListEvent>(_onFilterOrderList);
     on<OnCancelOrderEvent>(_onCancelOrder);
     on<OnCloseBottomSheetEvent>(_onCloseBottomSheet);
     on<OnConfirmCancelOrderEvent>(_onConfirmCancelOrder);
@@ -29,8 +32,12 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
       OnLoadingOrderListEvent event, Emitter<OrderListState> emitter) {
     FirebaseService.getOrderList((dataList) {
       orderList = dataList;
-      orderList.sort((a, b) => b.orderDate.compareTo(a.orderDate));
-      add(OnDisplayOrderListEvent(orderList));
+      orderedList = filterOrderListFromStatus('CREATED');
+      confirmOrderList = filterOrderListFromStatus('CONFIRM');
+      successOrderList = filterOrderListFromStatus('SUCCESS');
+      cancelOrderList = filterOrderListFromStatus('CANCEL');
+      add(OnDisplayOrderListEvent(orderList, orderedList, confirmOrderList,
+          successOrderList, cancelOrderList));
     }, (error) {
       add(OnErrorEvent(error));
     });
@@ -38,13 +45,8 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
 
   void _onDisplayOrderList(
       OnDisplayOrderListEvent event, Emitter<OrderListState> emitter) {
-    emitter(DisplayOrderListState(event.requestOrders));
-  }
-
-  void _onFilterOrderList(
-      OnFilterOrderListEvent event, Emitter<OrderListState> emitter) {
-    List<Order> requestOrders = filterOrderListFromStatus(event.value);
-    emitter(DisplayOrderListState(requestOrders));
+    emitter(DisplayOrderListState(event.allOrders, event.requestOrders,
+        event.confirmOrders, event.successOrders, event.cancelOrders));
   }
 
   void _onCancelOrder(
@@ -73,7 +75,7 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     final idUser = prefs.getString(Strings.idUser);
     if (idUser != null) {
       final review = Review(idReview, idUser, event.review, event.rating ?? 0);
-      FirebaseService.writeReviewForProduct(event.product.idProduct, review);
+      FirebaseService.writeReviewForProduct(event.idProduct, review);
       emitter(FeedbackProductState());
     }
   }
@@ -88,26 +90,9 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
     emitter(ErrorCancelOrderState(event.error));
   }
 
-  List<Order> filterOrderListFromStatus(int value) {
-    switch (value) {
-      case 1:
-        List<Order> dataList =
-            orderList.where((element) => element.status == 0).toList();
-        return dataList;
-      case 2:
-        List<Order> dataList =
-            orderList.where((element) => element.status == 1).toList();
-        return dataList;
-      case 3:
-        List<Order> dataList =
-            orderList.where((element) => element.status == 2).toList();
-        return dataList;
-      case 4:
-        List<Order> dataList =
-            orderList.where((element) => element.status == 3).toList();
-        return dataList;
-      default:
-        return orderList;
-    }
+  List<Order> filterOrderListFromStatus(String value) {
+    List<Order> dataList =
+        orderList.where((element) => element.status == value).toList();
+    return dataList;
   }
 }

@@ -1,3 +1,6 @@
+import 'package:paypal_api/models/models.dart';
+import 'package:selling_food_store/models/order_item.dart';
+
 abstract class TrackingOrderEvent {}
 
 class OnInitTrackingOrderEvent extends TrackingOrderEvent {
@@ -6,13 +9,23 @@ class OnInitTrackingOrderEvent extends TrackingOrderEvent {
   OnInitTrackingOrderEvent(this.id);
 }
 
-class OnGetIDInvoiceEvent extends TrackingOrderEvent {
-  final String idInvoice;
+class OnGetInvoiceDetailEvent extends TrackingOrderEvent {
+  final InvoiceDetail detailInvoice;
 
-  OnGetIDInvoiceEvent(this.idInvoice);
+  OnGetInvoiceDetailEvent(this.detailInvoice);
 }
 
-class OnRequestPaymentEvent extends TrackingOrderEvent {
+class OnPaymentEvent extends TrackingOrderEvent {
   final String id;
-  OnRequestPaymentEvent(this.id);
+  OnPaymentEvent(this.id);
+}
+
+class OnConfirmCancelPaymentEvent extends TrackingOrderEvent {}
+
+class OnCancelPaymentEvent extends TrackingOrderEvent {}
+
+class OnAddProductToTrackingOrderEvent extends TrackingOrderEvent {
+  final OrderItem orderItem;
+
+  OnAddProductToTrackingOrderEvent(this.orderItem);
 }

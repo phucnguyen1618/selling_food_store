@@ -31,4 +31,5 @@ class Strings {
 
   static const String language = 'language';
   static const String paymentMethod = 'paymentMethod';
+  static const String accessToken = 'accessToken';
 }

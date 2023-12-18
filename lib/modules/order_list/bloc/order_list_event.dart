@@ -1,4 +1,3 @@
-import 'package:selling_food_store/models/product.dart';
 import 'package:selling_food_store/models/order.dart';
 
 abstract class OrderListEvent {}
@@ -6,15 +5,19 @@ abstract class OrderListEvent {}
 class OnLoadingOrderListEvent extends OrderListEvent {}
 
 class OnDisplayOrderListEvent extends OrderListEvent {
+  List<Order> allOrders;
   List<Order> requestOrders;
+  List<Order> confirmOrders;
+  List<Order> successOrders;
+  List<Order> cancelOrders;
 
-  OnDisplayOrderListEvent(this.requestOrders);
-}
-
-class OnFilterOrderListEvent extends OrderListEvent {
-  int value;
-
-  OnFilterOrderListEvent(this.value);
+  OnDisplayOrderListEvent(
+    this.allOrders,
+    this.requestOrders,
+    this.confirmOrders,
+    this.successOrders,
+    this.cancelOrders,
+  );
 }
 
 class OnCancelOrderEvent extends OrderListEvent {
@@ -33,12 +36,12 @@ class OnConfirmCancelOrderEvent extends OrderListEvent {
 class OnFeedbackProductEvent extends OrderListEvent {
   double? rating;
   String review;
-  Product product;
+  String idProduct;
 
   OnFeedbackProductEvent(
     this.rating,
     this.review,
-    this.product,
+    this.idProduct,
   );
 }
 

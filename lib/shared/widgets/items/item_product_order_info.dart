@@ -73,7 +73,10 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: AppColor.primaryAppColor,
-                          image: DecorationImage(image: provider),
+                          image: DecorationImage(
+                            image: provider,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       progressIndicatorBuilder:
@@ -234,7 +237,8 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
               .read<UpdateNumberProductBloc>()
               .add(OnCalculateTotalPriceEvent(pricePerItem));
           context.read<OrderBloc>().add(OnAddProductToOrderInfoEvent(
-              product!.convertProductToItem(quantity)));
+              product!.convertProductToItem(quantity),
+              product!.mapProductToOrderItem(quantity)));
         }
       });
     }, (error) => log('Error: $error'));
@@ -243,7 +247,6 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
   void increaseNumberProduct() {
     setState(() {
       quantity++;
-      widget.cart.updateQuantity(quantity);
       price = product!.getPrice();
       widget.onUpdate(price);
     });
@@ -254,10 +257,13 @@ class _ItemProductOrderInfoState extends State<ItemProductOrderInfo> {
       quantity--;
       if (quantity <= 0) {
         quantity = 1;
+      } else {
+        price = product!.getPrice();
+        widget.onUpdate(-price);
       }
-      widget.cart.updateQuantity(quantity);
-      price = product!.getPrice();
-      widget.onUpdate(-price);
+      if (product!.isProductExistsInCart(product!.idProduct)) {
+        widget.cart.updateQuantity(quantity);
+      }
     });
   }
 }

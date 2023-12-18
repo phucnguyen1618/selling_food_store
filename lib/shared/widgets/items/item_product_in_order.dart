@@ -5,15 +5,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:selling_food_store/models/cart.dart';
 import 'package:selling_food_store/models/order_item.dart';
 import 'package:selling_food_store/models/product.dart';
-import 'package:selling_food_store/modules/order_list/bloc/order_list_bloc.dart';
-import 'package:selling_food_store/modules/order_list/bloc/order_list_event.dart';
 import 'package:selling_food_store/shared/services/firebase_service.dart';
 import 'package:selling_food_store/shared/utils/app_utils.dart';
-import 'package:selling_food_store/shared/utils/show_dialog_utils.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../modules/order_list/bloc/order_list_bloc.dart';
+import '../../../modules/order_list/bloc/order_list_event.dart';
 import '../../utils/app_color.dart';
+import '../../utils/show_dialog_utils.dart';
 
 class ItemProductInOrder extends StatefulWidget {
   final OrderItem orderItem;
@@ -48,14 +50,28 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
               children: [
                 ListTile(
                   horizontalTitleGap: 0.0,
-                  leading: Container(
-                      width: 30.0,
-                      height: 30.0,
+                  leading: CachedNetworkImage(
+                    width: 30.0,
+                    height: 30.0,
+                    imageUrl: product!.brand.logoBrand,
+                    fit: BoxFit.cover,
+                    imageBuilder: (context, imageProvider) => Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        color: AppColor.baseColor,
                         image: DecorationImage(
-                            image: NetworkImage(product!.brand.logoBrand)),
-                      )),
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) =>
+                        Icon(Icons.error, color: AppColor.hintGreyColor),
+                  ),
                   contentPadding: EdgeInsets.zero,
                   title: Text(
                     product!.brand.name,
@@ -66,9 +82,9 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                     ),
                   ),
                   trailing: Text(
-                    widget.status,
-                    style: const TextStyle(
-                      color: AppColor.blackColor,
+                    AppUtils.formatOrderStatus(widget.status),
+                    style: TextStyle(
+                      color: AppUtils.mapColorByStatus(widget.status),
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -112,7 +128,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                widget.status,
+                                AppUtils.formatOrderTitleStatus(widget.status),
                                 style: const TextStyle(
                                   color: AppColor.blackColor,
                                   fontSize: 14.0,
@@ -151,7 +167,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                   ],
                 ),
                 const SizedBox(height: 16.0),
-                widget.status == 2
+                widget.status == 'SUCCESS'
                     ? Align(
                         alignment: Alignment.centerRight,
                         child: Row(
@@ -161,11 +177,7 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                           children: [
                             InkWell(
                               onTap: () {
-                                context
-                                    .goNamed('orderListRequestOrder', extra: {
-                                  "orderItems": [widget.orderItem],
-                                  "isBuyNow": true,
-                                });
+                                onRepurchasee();
                               },
                               child: Container(
                                 width: baseWidth / 3,
@@ -188,12 +200,12 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                             const SizedBox(width: 12.0),
                             InkWell(
                               onTap: () {
-                                // ShowDialogUtils.showDialogFeedback(
-                                //     context, widget.cart, (rating, review) {
-                                //   context.read<OrderListBloc>().add(
-                                //       OnFeedbackProductEvent(
-                                //           rating, review, product!));
-                                // });
+                                ShowDialogUtils.showDialogFeedback(context,
+                                    (rating, review) {
+                                  context.read<OrderListBloc>().add(
+                                      OnFeedbackProductEvent(rating, review,
+                                          widget.orderItem.productId));
+                                });
                               },
                               child: Container(
                                 width: baseWidth / 3,
@@ -215,11 +227,10 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
                           ],
                         ),
                       )
-                    : widget.status == 3
+                    : widget.status == 'CANCEL'
                         ? InkWell(
                             onTap: () {
-                              context.goNamed('orderListRequestOrder',
-                                  extra: [widget.orderItem]);
+                              onRepurchasee();
                             },
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -247,6 +258,16 @@ class _ItemProductInOrderState extends State<ItemProductInOrder> {
             )
           : const SizedBox(),
     );
+  }
+
+  void onRepurchasee() {
+    String idCart = const Uuid().v4();
+    Cart cart = Cart(idCart, widget.orderItem.productId,
+        widget.orderItem.quantity, DateTime.now());
+    context.goNamed('orderListRequestOrder', extra: {
+      "cartList": [cart],
+      "isBuyNow": true
+    });
   }
 
   void getProductInfo() {

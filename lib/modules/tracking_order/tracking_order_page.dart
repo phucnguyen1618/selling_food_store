@@ -6,17 +6,19 @@ import 'package:selling_food_store/modules/tracking_order/view/tracking_order_vi
 
 class TrackingOrderPage extends StatelessWidget {
   final String id;
+  final String idAccount;
 
   const TrackingOrderPage({
     super.key,
     required this.id,
+    required this.idAccount,
   });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          TrackingOrderBloc()..add(OnInitTrackingOrderEvent(id)),
+          TrackingOrderBloc(idAccount)..add(OnInitTrackingOrderEvent(id)),
       child: const TrackingOrderView(),
     );
   }

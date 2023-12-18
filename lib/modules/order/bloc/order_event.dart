@@ -1,5 +1,6 @@
 import 'package:paypal_api/models/models.dart';
 import 'package:selling_food_store/models/cart.dart';
+import 'package:selling_food_store/models/order_item.dart';
 
 abstract class OrderEvent {}
 
@@ -67,8 +68,9 @@ class OnCalculateTotalPriceEvent extends OrderEvent {
 
 class OnAddProductToOrderInfoEvent extends OrderEvent {
   Item item;
+  OrderItem orderItem;
 
-  OnAddProductToOrderInfoEvent(this.item);
+  OnAddProductToOrderInfoEvent(this.item, this.orderItem);
 }
 
 class OnAddTrackingOrderEvent extends OrderEvent {
@@ -76,3 +78,5 @@ class OnAddTrackingOrderEvent extends OrderEvent {
 
   OnAddTrackingOrderEvent(this.idInvoice);
 }
+
+class OnConfirmOrderEvent extends OrderEvent {}

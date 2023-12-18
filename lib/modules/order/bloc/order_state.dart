@@ -62,9 +62,15 @@ class ChoosePaymentMethodState extends OrderState {
 
 class AddTrackingOrderState extends OrderState {
   final String idInvoice;
+  final String idAccount;
 
-  AddTrackingOrderState(this.idInvoice);
+  AddTrackingOrderState(
+    this.idInvoice,
+    this.idAccount,
+  );
 
   @override
-  List<Object?> get props => [idInvoice];
+  List<Object?> get props => [idInvoice, idAccount];
 }
+
+class ConfirmOrderState extends OrderState {}
