@@ -14,11 +14,11 @@ class LoadingDataWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (loadingType) {
       case LoadingDataType.loadingRecommendProductList:
-        return _buidlLoadingRecommendListProduct(context);
+        return _buildLoadingRecommendListProduct(context);
       case LoadingDataType.loadingProductDetail:
         return _buildLoadingProductDetail(context);
       case LoadingDataType.loadingHotSellingProductList:
-        return _buidlLoadingHotSellingListProduct(context);
+        return _buildLoadingHotSellingListProduct(context);
       case LoadingDataType.loadingCartList:
         return _buildLoadingCartList();
       case LoadingDataType.loadingUserInfo:
@@ -30,7 +30,7 @@ class LoadingDataWidget extends StatelessWidget {
     }
   }
 
-  Widget _buidlLoadingRecommendListProduct(BuildContext context) {
+  Widget _buildLoadingRecommendListProduct(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -99,7 +99,7 @@ class LoadingDataWidget extends StatelessWidget {
     );
   }
 
-  Widget _buidlLoadingHotSellingListProduct(BuildContext context) {
+  Widget _buildLoadingHotSellingListProduct(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 360.0,
@@ -169,7 +169,7 @@ class LoadingDataWidget extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 280.0,
+            height: 200.0,
             decoration: BoxDecoration(color: AppColor.shimmerColor),
           ),
           const SizedBox(height: 8.0),
@@ -383,6 +383,20 @@ class LoadingDataWidget extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          const SizedBox(height: 8.0),
+          Container(
+            width: MediaQuery.of(context).size.width - 12 * 2,
+            height: 12.0,
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+            color: AppColor.shimmerColor,
+          ),
+          const SizedBox(height: 8.0),
+          Container(
+            width: MediaQuery.of(context).size.width - 12 * 2,
+            height: 12.0,
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+            color: AppColor.shimmerColor,
           ),
         ],
       ),
